@@ -1,9 +1,9 @@
 /**
  * 运动户外选题雷达 - 每日自动更新脚本
  * 数据来源: 微博热搜（免费）+ 百度热搜（免费）
- * AI 分析: Groq API（免费，每天14400次请求）
+ * AI 分析: DeepSeek API（deepseek-chat，极低成本）
  * 运行方式: node update.mjs
- * 环境变量: GROQ_API_KEY
+ * 环境变量: DEEPSEEK_API_KEY
  */
 
 import fs from 'fs';
@@ -11,10 +11,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
-if (!GROQ_API_KEY) {
-  console.error('❌ 缺少环境变量 GROQ_API_KEY');
+if (!DEEPSEEK_API_KEY) {
+  console.error('❌ 缺少环境变量 DEEPSEEK_API_KEY');
   process.exit(1);
 }
 
@@ -110,16 +110,16 @@ async function fetchHupuHot() {
   }
 }
 
-// ── 调用 Groq API ─────────────────────────────
-async function callGroq(prompt) {
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+// ── 调用 DeepSeek API ─────────────────────────────
+async function callDeepSeek(prompt) {
+  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${GROQ_API_KEY}`,
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: 'deepseek-chat',
       messages: [
         {
           role: 'system',
@@ -135,7 +135,7 @@ async function callGroq(prompt) {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Groq API 错误 ${res.status}: ${text.slice(0, 200)}`);
+    throw new Error(`DeepSeek API 错误 ${res.status}: ${text.slice(0, 200)}`);
   }
 
   const data = await res.json();
@@ -242,9 +242,9 @@ ${hupuList || '（获取失败）'}
 
   let rawContent;
   try {
-    console.log('🤖 正在调用 Groq AI 分析热点...');
-    rawContent = await callGroq(prompt);
-    console.log('✅ AI 分析完成');
+    console.log('🤖 正在调用 DeepSeek AI 分析热点...');
+    rawContent = await callDeepSeek(prompt);
+    console.log('✅ DeepSeek 分析完成');
   } catch (err) {
     console.error('❌ Groq API 调用失败:', err.message);
     process.exit(1);
