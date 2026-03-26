@@ -130,7 +130,7 @@ async function callDeepSeek(prompt) {
       temperature: 0.4,
       max_tokens: 3000,
     }),
-    signal: AbortSignal.timeout(60000),
+    signal: AbortSignal.timeout(120000),
   });
 
   if (!res.ok) {
@@ -246,7 +246,7 @@ ${hupuList || '（获取失败）'}
     rawContent = await callDeepSeek(prompt);
     console.log('✅ DeepSeek 分析完成');
   } catch (err) {
-    console.error('❌ Groq API 调用失败:', err.message);
+    console.error('❌ DeepSeek API 调用失败:', err.message);
     process.exit(1);
   }
 
