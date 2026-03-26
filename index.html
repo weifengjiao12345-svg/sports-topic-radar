@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏃 运动户外选题雷达</title>
+  <title>⚡ 选题雷达</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>
@@ -17,11 +17,8 @@
       cursor: pointer;
       border-left: 3px solid transparent;
     }
-    .sidebar-item:hover { background: rgba(37,99,235,0.08); }
-    .sidebar-item.active {
-      background: rgba(37,99,235,0.12);
-      border-left-color: #2563eb;
-    }
+    .sidebar-item:hover { background: rgba(0,0,0,0.05); }
+    .sidebar-item.active { background: rgba(0,0,0,0.08); }
 
     /* ── 卡片 ── */
     .topic-card {
@@ -32,15 +29,15 @@
       transition: box-shadow .2s, transform .15s;
     }
     .topic-card:hover {
-      box-shadow: 0 6px 28px rgba(37,99,235,.10);
+      box-shadow: 0 6px 28px rgba(0,0,0,.10);
       transform: translateY(-2px);
     }
 
     /* 左侧色条 */
     .card-stripe { width: 4px; min-height: 100%; flex-shrink: 0; }
-    .stripe-high { background: #2563eb; }
-    .stripe-mid  { background: #60a5fa; }
-    .stripe-low  { background: #93c5fd; }
+    .stripe-high { background: var(--cat-color, #2563eb); }
+    .stripe-mid  { background: var(--cat-color-light, #60a5fa); }
+    .stripe-low  { background: var(--cat-color-xlight, #93c5fd); }
 
     /* ── 热度 badge ── */
     .badge-high { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-weight:700; }
@@ -167,6 +164,25 @@
       text-align: center;
     }
 
+    /* ── 品类 Tab ── */
+    .cat-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; transition: all .15s;
+      border: 1.5px solid transparent;
+      white-space: nowrap;
+    }
+    .cat-tab:hover { opacity: .85; }
+    .cat-tab.active {
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    .cat-tab.inactive {
+      background: #f1f5f9; color: #64748b;
+      border-color: #e2e8f0;
+    }
+
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .sidebar.open { display: block; }
@@ -176,25 +192,41 @@
 <body class="bg-[#f0f5ff] text-slate-800 min-h-screen" x-data="radarApp()" x-cloak>
 
 <!-- ══ 顶部导航 ══ -->
-<header class="sticky top-0 z-50 bg-white border-b border-blue-100 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button @click="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-lg hover:bg-blue-50 text-blue-400">
+<header class="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+    <!-- 左：Logo -->
+    <div class="flex items-center gap-2.5 shrink-0">
+      <button @click="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-lg hover:bg-slate-100 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm">⚡</div>
-        <span class="text-base font-black tracking-tight text-slate-800">选题雷达</span>
-        <span class="hidden sm:inline text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 font-semibold">运动户外</span>
-      </div>
+      <div class="w-8 h-8 bg-slate-800 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm">⚡</div>
+      <span class="text-base font-black tracking-tight text-slate-800">选题雷达</span>
     </div>
-    <div class="flex items-center gap-2.5">
-      <span class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-bold border border-blue-100">
-        共 <span x-text="archives.length"></span> 期
+
+    <!-- 中：品类 Tabs -->
+    <div class="flex items-center gap-1.5 overflow-x-auto scrollbar-hide flex-1 justify-center px-2">
+      <template x-for="cat in categories" :key="cat.id">
+        <button
+          class="cat-tab"
+          :class="currentCat === cat.id ? 'active' : 'inactive'"
+          :style="currentCat === cat.id ? 'background:' + cat.color + '; border-color:' + cat.color : ''"
+          @click="switchCat(cat.id)"
+        >
+          <span x-text="cat.icon"></span>
+          <span x-text="cat.name"></span>
+        </button>
+      </template>
+    </div>
+
+    <!-- 右：期数 + 日期 -->
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="text-xs rounded-full font-bold border px-2.5 py-1"
+        :style="'background:' + activeCat.bgLight + '; color:' + activeCat.color + '; border-color:' + activeCat.borderLight">
+        共 <span x-text="activeArchives.length"></span> 期
       </span>
-      <span class="text-xs text-slate-400 hidden sm:inline" x-text="'更新于 ' + today"></span>
+      <span class="text-xs text-slate-400 hidden sm:inline" x-text="'更新于 ' + activeCat.today"></span>
     </div>
   </div>
 </header>
@@ -202,14 +234,24 @@
 <div class="max-w-7xl mx-auto flex min-h-screen">
 
   <!-- ══ 左侧存档侧边栏 ══ -->
-  <aside class="sidebar md:block w-56 shrink-0 bg-white border-r border-blue-100 sticky top-14 self-start h-[calc(100vh-56px)] overflow-y-auto"
+  <aside class="sidebar md:block w-56 shrink-0 bg-white border-r border-slate-100 sticky top-14 self-start h-[calc(100vh-56px)] overflow-y-auto"
     :class="sidebarOpen ? 'open fixed top-14 left-0 z-40 shadow-xl w-56 h-screen bg-white overflow-y-auto' : ''">
     <div class="p-4">
+      <!-- 品类标识 -->
+      <div class="mb-3 px-2 py-2 rounded-xl flex items-center gap-2"
+        :style="'background:' + activeCat.bgLight">
+        <span class="text-lg" x-text="activeCat.icon"></span>
+        <div>
+          <div class="text-xs font-black" :style="'color:' + activeCat.color" x-text="activeCat.name"></div>
+          <div class="text-xs text-slate-400">选题雷达</div>
+        </div>
+      </div>
       <div class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 px-1">历史存档</div>
       <div class="space-y-0.5">
-        <template x-for="(archive, idx) in archives" :key="archive.date">
+        <template x-for="(archive, idx) in activeArchives" :key="archive.date">
           <div class="sidebar-item rounded-xl px-3 py-3"
             :class="currentIndex === idx ? 'active' : ''"
+            :style="currentIndex === idx ? 'border-left-color:' + activeCat.color : ''"
             @click="selectArchive(idx); sidebarOpen = false">
             <div class="flex items-center justify-between">
               <div>
@@ -217,7 +259,8 @@
                 <div class="text-xs text-slate-400 mt-0.5" x-text="archive.weekday + ' · ' + archive.updateTime + ' 更新'"></div>
               </div>
               <div class="flex flex-col items-end gap-1">
-                <span x-show="idx === 0" class="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded-full font-bold leading-tight">最新</span>
+                <span x-show="idx === 0" class="text-xs text-white px-1.5 py-0.5 rounded-full font-bold leading-tight"
+                  :style="'background:' + activeCat.color">最新</span>
                 <span class="text-xs text-slate-300" x-text="archive.items + '条'"></span>
               </div>
             </div>
@@ -234,16 +277,18 @@
   <main class="flex-1 min-w-0 p-4 md:p-7">
 
     <!-- 顶部 Banner -->
-    <div class="mb-6 bg-gradient-to-br from-blue-700 to-blue-500 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden banner-grid">
+    <div class="mb-6 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden banner-grid"
+      :style="'background: linear-gradient(135deg, ' + activeCat.gradFrom + ', ' + activeCat.gradTo + ')'">
       <div class="absolute top-0 left-0 right-0 h-1 bg-white/20 rounded-t-2xl"></div>
       <div class="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <div class="flex items-center gap-2 mb-2">
+            <span class="text-xl" x-text="activeCat.icon"></span>
             <span class="text-xs bg-white/20 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider backdrop-blur">LIVE</span>
             <span class="text-xs text-white/60">过去24小时热点追踪</span>
           </div>
-          <h1 class="text-2xl font-black mb-1 tracking-tight leading-tight">运动户外选题雷达</h1>
-          <p class="text-white/60 text-sm">装备 · 赛事 · 消费 · 户外 · 全网舆情扫描</p>
+          <h1 class="text-2xl font-black mb-1 tracking-tight leading-tight" x-text="activeCat.name + '选题雷达'"></h1>
+          <p class="text-white/60 text-sm" x-text="activeCat.desc"></p>
         </div>
         <div class="text-right shrink-0">
           <div class="text-2xl font-black text-white/95 tabular-nums" x-text="current.date"></div>
@@ -266,31 +311,32 @@
       </div>
     </div>
 
-    <!-- 统计栏：3格 -->
+    <!-- 统计栏 -->
     <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="stat-card bg-white border border-blue-100 shadow-sm">
-        <div class="text-2xl font-black text-blue-700 tabular-nums" x-text="countByLevel('high')"></div>
+      <div class="stat-card bg-white border border-slate-100 shadow-sm">
+        <div class="text-2xl font-black tabular-nums" :style="'color:' + activeCat.color" x-text="countByLevel('high')"></div>
         <div class="text-xs text-slate-400 mt-1 font-semibold">高热度</div>
       </div>
-      <div class="stat-card bg-white border border-blue-100 shadow-sm">
+      <div class="stat-card bg-white border border-slate-100 shadow-sm">
         <div class="text-2xl font-black text-sky-500 tabular-nums" x-text="countByLevel('mid')"></div>
         <div class="text-xs text-slate-400 mt-1 font-semibold">中热度</div>
       </div>
-      <div class="stat-card bg-white border border-blue-100 shadow-sm">
+      <div class="stat-card bg-white border border-slate-100 shadow-sm">
         <div class="text-2xl font-black text-emerald-500 tabular-nums" x-text="countByLevel('low')"></div>
         <div class="text-xs text-slate-400 mt-1 font-semibold">观察中</div>
       </div>
     </div>
 
     <!-- ══ 选题目录 ══ -->
-    <div class="mb-7 bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-3.5 border-b border-blue-50">
+    <div class="mb-7 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-50">
         <div class="flex items-center gap-2">
           <span class="text-sm font-black text-slate-700">📋 今日选题目录</span>
           <span class="text-xs text-slate-400 font-medium" x-text="'共 ' + (hotItems.length + watchItems.length) + ' 条'"></span>
         </div>
         <button @click="tocOpen = !tocOpen"
-          class="text-xs text-blue-400 hover:text-blue-600 font-semibold transition-colors flex items-center gap-1">
+          class="text-xs font-semibold transition-colors flex items-center gap-1"
+          :style="'color:' + activeCat.color">
           <span x-text="tocOpen ? '收起' : '展开'"></span>
           <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="tocOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
@@ -298,26 +344,24 @@
         </button>
       </div>
       <div x-show="tocOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
-        <!-- 🔥 已热起来 -->
         <div class="px-5 pt-3.5 pb-1" x-show="hotItems.length > 0">
           <div class="flex items-center gap-1.5 mb-2">
-            <span class="w-2 h-2 rounded-full bg-blue-600 inline-block"></span>
-            <span class="text-xs font-black text-blue-600 uppercase tracking-wider">已热起来</span>
+            <span class="w-2 h-2 rounded-full inline-block" :style="'background:' + activeCat.color"></span>
+            <span class="text-xs font-black uppercase tracking-wider" :style="'color:' + activeCat.color">已热起来</span>
             <span class="text-xs text-slate-300 font-medium" x-text="hotItems.length + ' 条'"></span>
           </div>
           <div class="space-y-1.5">
             <template x-for="(item, idx) in hotItems" :key="'toc-hot-' + item.id">
               <a :href="'#card-' + item.id"
-                class="flex items-start gap-2.5 group py-1 px-2 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
+                class="flex items-start gap-2.5 group py-1 px-2 rounded-lg transition-colors cursor-pointer hover:bg-slate-50"
                 @click.prevent="document.getElementById('card-' + item.id)?.scrollIntoView({behavior:'smooth', block:'center'})">
                 <span class="text-xs font-black text-slate-300 tabular-nums mt-0.5 shrink-0 w-5" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
-                <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5" :class="'badge-' + item.level" x-text="item.levelLabel"></span>
-                <span class="text-xs text-slate-600 leading-snug group-hover:text-blue-700 transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
+                <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5 badge-high" x-text="item.levelLabel"></span>
+                <span class="text-xs text-slate-600 leading-snug transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
               </a>
             </template>
           </div>
         </div>
-        <!-- 👀 潜力盯 -->
         <div class="px-5 pt-2.5 pb-3.5" x-show="watchItems.length > 0">
           <div class="flex items-center gap-1.5 mb-2">
             <span class="w-2 h-2 rounded-full bg-sky-400 inline-block"></span>
@@ -330,8 +374,8 @@
                 class="flex items-start gap-2.5 group py-1 px-2 rounded-lg hover:bg-sky-50 transition-colors cursor-pointer"
                 @click.prevent="document.getElementById('card-' + item.id)?.scrollIntoView({behavior:'smooth', block:'center'})">
                 <span class="text-xs font-black text-slate-300 tabular-nums mt-0.5 shrink-0 w-5" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
-                <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5" :class="'badge-' + item.level" x-text="item.levelLabel"></span>
-                <span class="text-xs text-slate-600 leading-snug group-hover:text-sky-700 transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
+                <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5 badge-mid" x-text="item.levelLabel"></span>
+                <span class="text-xs text-slate-600 leading-snug hover:text-sky-700 transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
               </a>
             </template>
           </div>
@@ -342,24 +386,22 @@
     <!-- ══ 第一部分：已热起来 ══ -->
     <section class="mb-8" x-show="hotItems.length > 0">
       <div class="section-header">
-        <div class="section-icon bg-blue-600">🔥</div>
+        <div class="section-icon text-white" :style="'background:' + activeCat.color">🔥</div>
         <div>
           <h2 class="text-sm font-black text-slate-700 uppercase tracking-wider">已经热起来的</h2>
           <p class="text-xs text-slate-400 mt-0.5">当前已确认热度的选题</p>
         </div>
-        <span class="ml-auto text-xs bg-blue-600 text-white px-2.5 py-1 rounded-full font-bold" x-text="hotItems.length + ' 条'"></span>
+        <span class="ml-auto text-xs text-white px-2.5 py-1 rounded-full font-bold" :style="'background:' + activeCat.color" x-text="hotItems.length + ' 条'"></span>
       </div>
 
       <div class="space-y-3">
         <template x-for="(item, idx) in hotItems" :key="item.id">
           <div class="topic-card flex" :id="'card-' + item.id">
-            <div class="card-stripe" :class="'stripe-' + item.level"></div>
+            <div class="card-stripe" :style="'background:' + activeCat.color"></div>
             <div class="flex-1 p-5">
-
-              <!-- 行1：序号 + badge + 平台 -->
               <div class="flex flex-wrap items-center gap-2 mb-2.5">
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
-                <span class="text-xs px-2.5 py-0.5 rounded-full" :class="'badge-' + item.level" x-text="item.levelLabel"></span>
+                <span class="text-xs px-2.5 py-0.5 rounded-full badge-high" x-text="item.levelLabel"></span>
                 <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
@@ -368,8 +410,6 @@
                   </a>
                 </template>
               </div>
-
-              <!-- 标题 + 时间线 -->
               <div class="flex items-start justify-between gap-3 mb-3">
                 <h3 class="font-black text-slate-900 leading-snug text-base flex-1" x-text="item.title"></h3>
                 <span class="heat-timeline shrink-0 mt-0.5" :class="item.heatInfo.type === 'resurge' ? 'resurge' : ''">
@@ -377,39 +417,36 @@
                   <span x-text="item.heatInfo.label"></span>
                 </span>
               </div>
-
-              <!-- 导语 -->
-              <p class="text-sm text-slate-500 leading-relaxed mb-3 border-l-2 border-blue-400 pl-3 bg-blue-50/60 py-2 rounded-r-lg" x-text="item.summary"></p>
-
-              <!-- 标签 -->
+              <p class="text-sm text-slate-500 leading-relaxed mb-3 border-l-2 pl-3 py-2 rounded-r-lg"
+                :style="'border-color:' + activeCat.color + '; background:' + activeCat.bgLight"
+                x-text="item.summary"></p>
               <div class="flex flex-wrap gap-0.5 mb-4">
                 <template x-for="tag in item.tags">
                   <span class="tag-base" :class="'tag-' + tag.type" x-text="'#' + tag.text"></span>
                 </template>
               </div>
-
-              <!-- 传播判断 -->
               <div class="propagation-block">
-                <div class="text-xs font-black text-blue-300 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
-                  <span class="w-1 h-3 bg-blue-500 rounded-full inline-block"></span>
+                <div class="text-xs font-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5"
+                  :style="'color:' + activeCat.colorMuted">
+                  <span class="w-1 h-3 rounded-full inline-block" :style="'background:' + activeCat.color"></span>
                   传播判断
                 </div>
                 <div class="prop-row">
-                  <div class="prop-icon bg-blue-50">😤</div>
+                  <div class="prop-icon bg-slate-50">😤</div>
                   <div>
                     <div class="prop-label">情绪 / 矛盾点</div>
                     <div class="prop-content" x-text="item.propagation.emotion"></div>
                   </div>
                 </div>
                 <div class="prop-row">
-                  <div class="prop-icon bg-blue-50">💡</div>
+                  <div class="prop-icon bg-slate-50">💡</div>
                   <div>
                     <div class="prop-label">参与动机</div>
                     <div class="prop-content" x-text="item.propagation.motivation"></div>
                   </div>
                 </div>
                 <div class="prop-row">
-                  <div class="prop-icon bg-blue-50">✍️</div>
+                  <div class="prop-icon bg-slate-50">✍️</div>
                   <div>
                     <div class="prop-label">推荐内容形式</div>
                     <div class="flex flex-wrap mt-1">
@@ -420,7 +457,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </template>
@@ -441,13 +477,11 @@
       <div class="space-y-3">
         <template x-for="(item, idx) in watchItems" :key="item.id">
           <div class="topic-card flex" :id="'card-' + item.id">
-            <div class="card-stripe" :class="'stripe-' + item.level"></div>
+            <div class="card-stripe bg-sky-400"></div>
             <div class="flex-1 p-5">
-
-              <!-- 行1：序号 + badge + 平台 -->
               <div class="flex flex-wrap items-center gap-2 mb-2.5">
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
-                <span class="text-xs px-2.5 py-0.5 rounded-full" :class="'badge-' + item.level" x-text="item.levelLabel"></span>
+                <span class="text-xs px-2.5 py-0.5 rounded-full badge-mid" x-text="item.levelLabel"></span>
                 <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
@@ -456,8 +490,6 @@
                   </a>
                 </template>
               </div>
-
-              <!-- 标题 + 时间线 -->
               <div class="flex items-start justify-between gap-3 mb-3">
                 <h3 class="font-black text-slate-900 leading-snug text-base flex-1" x-text="item.title"></h3>
                 <span class="heat-timeline shrink-0 mt-0.5" :class="item.heatInfo.type === 'resurge' ? 'resurge' : ''">
@@ -465,18 +497,12 @@
                   <span x-text="item.heatInfo.label"></span>
                 </span>
               </div>
-
-              <!-- 导语 -->
               <p class="text-sm text-slate-500 leading-relaxed mb-3 border-l-2 border-sky-300 pl-3 bg-sky-50/60 py-2 rounded-r-lg" x-text="item.summary"></p>
-
-              <!-- 标签 -->
               <div class="flex flex-wrap gap-0.5 mb-4">
                 <template x-for="tag in item.tags">
                   <span class="tag-base" :class="'tag-' + tag.type" x-text="'#' + tag.text"></span>
                 </template>
               </div>
-
-              <!-- 传播判断 -->
               <div class="propagation-block">
                 <div class="text-xs font-black text-sky-400 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
                   <span class="w-1 h-3 bg-sky-400 rounded-full inline-block"></span>
@@ -508,38 +534,64 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </template>
       </div>
     </section>
 
-    <!-- 底部说明 -->
-    <footer class="mt-10 pt-6 border-t border-blue-100 text-center text-xs text-slate-400 space-y-1">
-      <p>本简报由选题雷达系统每日自动生成，内容基于过去24小时公开信息检索</p>
-      <p>含微博 / 小红书 / 抖音 / 虎扑多平台 · 编辑筛选 · 每日更新 09:00（北京时间）</p>
+    <footer class="mt-10 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 space-y-1">
+      <p>本简报由选题雷达系统每日自动生成，内容基于过去24小时公开信息检索与编辑筛选</p>
+      <p>含微博 / 小红书 / 抖音 / 虎扑多平台 · 每日更新 09:00（北京时间）</p>
     </footer>
 
   </main>
 </div>
 
 <script>
-// ── 字段说明 ─────────────────────────────────
-// tag.type:  'topic' | 'platform' | 'emotion' | 'product'
-// src.cls:   pt-weibo | pt-xhs | pt-douyin | pt-hupu | pt-zhihu | pt-weixin | pt-baidu | pt-default
-// heatInfo.type: 'start' | 'resurge'
-// item.level:    'high' | 'mid' | 'low'
-// ─────────────────────────────────────────────
-
 function radarApp() {
   return {
     sidebarOpen: false,
     tocOpen: true,
     currentIndex: 0,
-    today: '2026-03-26',
+    currentCat: 'sports',
 
-    archives: [
+    // ══════════════════════════════════════════
+    // 品类配置
+    // ══════════════════════════════════════════
+    categories: [
+      {
+        id: 'sports',
+        name: '运动户外',
+        icon: '🏃',
+        desc: '装备 · 赛事 · 消费 · 户外 · 全网舆情扫描',
+        today: '2026-03-26',
+        color: '#2563eb',
+        colorMuted: '#93a8d4',
+        gradFrom: '#1e40af',
+        gradTo: '#3b82f6',
+        bgLight: 'rgba(37,99,235,0.06)',
+        borderLight: '#bfdbfe',
+      },
+      {
+        id: 'tech',
+        name: '数码科技',
+        icon: '💻',
+        desc: '手机 · AI · 芯片 · 消费电子 · 全网舆情扫描',
+        today: '2026-03-26',
+        color: '#7c3aed',
+        colorMuted: '#a78bca',
+        gradFrom: '#5b21b6',
+        gradTo: '#8b5cf6',
+        bgLight: 'rgba(124,58,237,0.06)',
+        borderLight: '#ddd6fe',
+      },
+    ],
+
+    // ══════════════════════════════════════════
+    // 运动户外数据
+    // ══════════════════════════════════════════
+    sportsArchives: [
       {
         date: '2026-03-26',
         weekday: '周四',
@@ -549,7 +601,7 @@ function radarApp() {
         keywords: ['速效救心丸暴增30倍', 'AED', '心率表', '运动护心', '必迈跑鞋', '重庆女子半马', '张雪峰二次发酵'],
         hotSection: [
           {
-            id: '20260326-01',
+            id: '20260326-s01',
             title: '#速效救心丸搜索暴增30倍# 冲上热搜第一——跑步的人，你包里有急救装备吗？',
             summary: '张雪峰离世20小时内，速效救心丸搜索量同比暴涨30倍，AED搜索环比增10倍，辅酶Q10增8倍；话题阅读量破1.2亿，120+媒体跟进——全民护心焦虑今日达到峰值，运动急救装备选题窗口正在开启。',
             tags: [
@@ -572,15 +624,14 @@ function radarApp() {
             }
           },
           {
-            id: '20260326-02',
+            id: '20260326-s02',
             title: '国产跑鞋"必迈"：没有明星代言，靠30万跑者测出来的鞋，凭什么成为中产新宠？',
             summary: '必迈11年只做跑步鞋，背靠1100+跑团、30万跑者做测试迭代，京东年营收"大几千万"，在无锡、武汉马拉松跑鞋榜单频繁上榜——没有明星、没有线下店，这家品牌是怎么赢的？',
             tags: [
               { text: '必迈', type: 'product' },
               { text: '国产跑鞋', type: 'topic' },
               { text: '中产消费', type: 'topic' },
-              { text: '严肃跑者', type: 'emotion' },
-              { text: '网易', type: 'platform' }
+              { text: '严肃跑者', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月21日起·中产运动消费叙事持续' },
             sources: [
@@ -594,7 +645,7 @@ function radarApp() {
             }
           },
           {
-            id: '20260326-03',
+            id: '20260326-s03',
             title: '3月29日重庆女子半马鸣枪，23名顶级选手集结——普通跑者的装备和她们的，差了多少？',
             summary: '2026重庆女子半马3月29日开赛，李春霞、刘君慧等11人PB优于赛事中国籍纪录；完赛奖牌、AI个人视频、专属号码服……这场比赛的"体验感"拉满——你的装备准备好了吗？',
             tags: [
@@ -607,9 +658,9 @@ function radarApp() {
             sources: [
               { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860255337178857209', icon: '🅱', cls: 'pt-baidu' }
             ],
-            level: 'mid', levelLabel: '🩵 中热',
+            level: 'mid', levelLabel: '🪵 中热',
             propagation: {
-              emotion: '"顶级选手 vs 普通跑者装备差距"是永恒的马拉松圈撕裂话题；"女子专属跑步装备"的细分需求在备赛期极其旺盛，卫生棉/头绳/女款跑鞋等细节选题此时流量极高。',
+              emotion: '"顶级选手 vs 普通跑者装备差距"是永恒的马拉松圈撕裂话题；"女子专属跑步装备"的细分需求在备赛期极其旺盛。',
               motivation: '备赛装备决策（还有3天该换什么）+ 女性跑者共鸣（这场比赛有没有考虑到我）+ 围观期待（顶级选手会不会破纪录）。',
               formats: ['📋 清单帖（女性跑马装备终极指南）', '⚔️ 对比帖（顶级选手 vs 普通跑者装备差在哪）', '🗳️ 互动帖（你备战半马花了多少在装备上）']
             }
@@ -617,7 +668,7 @@ function radarApp() {
         ],
         watchSection: [
           {
-            id: '20260326-04',
+            id: '20260326-s04',
             title: 'AED到底在哪能买到？跑步路上10公里内有几台——你现在查过吗？',
             summary: '速效救心丸热搜第一之后，大量用户开始搜索"AED在哪买"、"附近AED在哪"——但中国公共场所AED覆盖率仍不足，很多人跑了5年步，从未想过这件事。',
             tags: [
@@ -627,18 +678,16 @@ function radarApp() {
               { text: '社会焦虑', type: 'emotion' }
             ],
             heatInfo: { type: 'resurge', label: '3月26日·搜救装备潮衍生' },
-            sources: [
-              { name: '微博', url: 'https://weibo.com/6394380956/QxIEMtrel', icon: '🔴', cls: 'pt-weibo' }
-            ],
+            sources: [{ name: '微博', url: 'https://weibo.com/', icon: '🔴', cls: 'pt-weibo' }],
             level: 'high', levelLabel: '🔵 高潜力',
             propagation: {
-              emotion: '"我真的不知道附近有没有AED"的无力感是今日最强情绪之一——既有对公共设施不足的愤怒，也有对自身无备的自责，两种情绪叠加，参与动机极强。',
+              emotion: '"我真的不知道附近有没有AED"的无力感——既有对公共设施不足的愤怒，也有对自身无备的自责，两种情绪叠加，参与动机极强。',
               motivation: '自我安全建设（马上去查）+ 社会问题表达（公共AED太少了）+ 科普传播（帮更多人知道AED在哪）。',
               formats: ['🗺️ 实用帖（如何查询附近AED位置）', '📊 科普帖（中国跑步路线AED覆盖率有多低）', '💬 讨论帖（你路跑5年，查过周边AED吗）']
             }
           },
           {
-            id: '20260326-05',
+            id: '20260326-s05',
             title: '辅酶Q10搜索量暴涨8倍，跑步党正在把保健品当"护心符"——有用吗？',
             summary: '张雪峰事件后，辅酶Q10、鱼油等心脑血管保健品搜索量集体暴涨；但医学界对"运动人群需不需要补充辅酶Q10"其实争议很大——你的护心方式，选对了吗？',
             tags: [
@@ -648,20 +697,18 @@ function radarApp() {
               { text: '智商税', type: 'emotion' }
             ],
             heatInfo: { type: 'resurge', label: '3月26日·张雪峰事件延伸' },
-            sources: [
-              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860644552034853302', icon: '🅱', cls: 'pt-baidu' }
-            ],
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860644552034853302', icon: '🅱', cls: 'pt-baidu' }],
             level: 'high', levelLabel: '🔵 高潜力',
             propagation: {
               emotion: '"恐慌性购买 vs 科学依据不足"的反差是核心钩子——一边是8倍搜索量暴涨，另一边是医生说"健康跑者根本不用补"，这个信息差天然制造讨论。',
-              motivation: '求证心理（辅酶Q10到底有没有用）+ 避坑需求（别被焦虑情绪推着花冤枉钱）+ 科普传播欲（告诉朋友别乱买）。',
+              motivation: '求证心理（辅酶Q10到底有没有用）+ 避坑需求（别被焦虑情绪推着花冤枉钱）+ 科普传播欲。',
               formats: ['🔬 科普帖（跑者到底需不需要补辅酶Q10）', '🗳️ 投票帖（你跑步后会补充保健品吗）', '⚠️ 避坑帖（护心不是靠买·真正重要的是这几件事）']
             }
           },
           {
-            id: '20260326-06',
-            title: '2026 IWF上海国际健身展开幕，Vibram五指鞋亮相——"赤足跑"这条路，普通人该不该走？',
-            summary: 'Vibram携五指鞋亮相2026 IWF上海健身展，主打"回归本能、天然动作"；加上厦门越野赛选手成绩加持——这场健身展上，"极简主义装备"和"科技堆料装备"的路线之争再次开打。',
+            id: '20260326-s06',
+            title: 'Vibram五指鞋亮相IWF健身展——"赤足跑"这条路，普通人该不该走？',
+            summary: 'Vibram携五指鞋亮相2026 IWF上海健身展，主打"回归本能、天然动作"；在张雪峰运动安全事件的大背景下，"什么才是对身体更友好的跑法"这个问题格外敏感。',
             tags: [
               { text: 'Vibram', type: 'product' },
               { text: '五指鞋', type: 'topic' },
@@ -669,18 +716,16 @@ function radarApp() {
               { text: '极简跑法', type: 'topic' }
             ],
             heatInfo: { type: 'start', label: '3月23日起·IWF展会期间' },
-            sources: [
-              { name: '微博', url: 'https://weibo.com/vibramchina', icon: '🔴', cls: 'pt-weibo' }
-            ],
-            level: 'mid', levelLabel: '🩵 中潜力',
+            sources: [{ name: '微博', url: 'https://weibo.com/vibramchina', icon: '🔴', cls: 'pt-weibo' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
             propagation: {
-              emotion: '"五指鞋/赤足跑"是运动圈的长期争议话题，支持者说更自然、反对者说更容易受伤；在张雪峰运动安全事件的大背景下，"什么才是对身体更友好的跑法"这个问题格外敏感。',
+              emotion: '"五指鞋/赤足跑"是运动圈的长期争议话题，支持者说更自然、反对者说更容易受伤；在安全背景下格外敏感。',
               motivation: '好奇心（五指鞋到底是什么感受）+ 验证选择（我买的厚底鞋是不是对身体不好）+ 圈内争论参与欲。',
               formats: ['🔍 科普帖（赤足跑 vs 厚底跑：谁更科学）', '💬 讨论帖（你试过五指鞋吗）', '📹 体验视频（初跑者尝试Vibram五指鞋实录）']
             }
           },
           {
-            id: '20260326-07',
+            id: '20260326-s07',
             title: '跑了马拉松才发现：跑步圈的"护心文化"，为什么比装备文化落后十年？',
             summary: '速效救心丸热搜让人意识到：跑步圈在碳板、配速、装备上卷得飞起，但赛前心脏筛查、赛道AED、急救知识普及，基本是一片空白——这个反差，值得深聊。',
             tags: [
@@ -690,13 +735,11 @@ function radarApp() {
               { text: '装备 vs 安全', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月26日新角度·张雪峰事件深度延伸' },
-            sources: [
-              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860643499843874621', icon: '🅱', cls: 'pt-baidu' }
-            ],
-            level: 'mid', levelLabel: '🩵 中潜力',
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860643499843874621', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
             propagation: {
-              emotion: '"花几千买碳板，但不知道自己心脏有没有问题"——这个自我矛盾让很多跑者感到羞愧，同时对"圈子缺失安全文化"产生真实焦虑，情绪深度强于昨日的打卡文化帖。',
-              motivation: '自我反思（我应该去做心脏检查吗）+ 圈子文化批评（为什么跑步圈不重视这件事）+ 知识获取（赛前筛查应该查什么）。',
+              emotion: '"花几千买碳板，但不知道自己心脏有没有问题"——这个自我矛盾让很多跑者感到羞愧，同时对"圈子缺失安全文化"产生真实焦虑。',
+              motivation: '自我反思（我应该去做心脏检查吗）+ 圈子文化批评（为什么跑步圈不重视这件事）+ 知识获取。',
               formats: ['📖 深度帖（马拉松护心指南：赛前该做哪些检查）', '💬 讨论帖（你做过运动心脏筛查吗）', '📊 科普帖（跑步前心脏检查需要花多少钱·查什么）']
             }
           }
@@ -707,11 +750,11 @@ function radarApp() {
         weekday: '周三',
         updateTime: '09:00',
         items: 10,
-        editorNote: '今日背景色：春季户外消费大爆发 + 原料涨价焦虑并存，情绪张力极强。【突发】张雪峰于3月24日因心源性猝死离世，年仅41岁，事发于公司跑步后，当月跑量已达72公里，触发全网"运动安全"大讨论——心率监测/跑步科学相关选题时效窗口极短，务必今明两日发布。⚠️ 已过滤：品牌赞助马拉松稿、富光保温杯软文、展会白皮书类内容。',
+        editorNote: '今日背景色：春季户外消费大爆发 + 原料涨价焦虑并存，情绪张力极强。【突发】张雪峰于3月24日因心源性猝死离世，年仅41岁，事发于公司跑步后，当月跑量已达72公里，触发全网"运动安全"大讨论——心率监测/跑步科学相关选题时效窗口极短，务必今明两日发布。',
         keywords: ['涤纶涨价', '冲锋衣囤货', '始祖鸟焦虑', '安踏逆袭叙事', '跑步春季PB', '张雪峰猝死', '心率表', '跑步安全', '打卡文化'],
         hotSection: [
           {
-            id: '20260325-01',
+            id: '20260325-s01',
             title: '"油价涨了冲锋衣可能更贵"——这条话题已冲上微博热搜，网友：先囤一件再说',
             summary: '中东冲突推涨国际油价，冲锋衣主料涤纶一夜暴涨20%，网友在微博集体炸锅：始祖鸟还没涨价但供应商已发通知，今年秋冬可能涨5%~15%。',
             tags: [
@@ -721,18 +764,16 @@ function radarApp() {
               { text: '始祖鸟', type: 'product' }
             ],
             heatInfo: { type: 'start', label: '3月21日起热·微博热搜确认' },
-            sources: [
-              { name: '微博热搜', url: 'https://news.sohu.com/a/999281242_391599', icon: '🔴', cls: 'pt-weibo' }
-            ],
+            sources: [{ name: '微博热搜', url: 'https://news.sohu.com/a/999281242_391599', icon: '🔴', cls: 'pt-weibo' }],
             level: 'high', levelLabel: '🔵 爆热',
             propagation: {
               emotion: '石油涨价传导至冲锋衣的"物价失控感"引发集体恐慌；"冲锋衣90%是石油做的"这句话制造了认知冲击，让理性消费群体和装备控都产生强烈不安。',
-              motivation: '囤货自保心理（先买先保险）+ 晒焦虑博共鸣（我也慌了）+ 科普搬运欲（石油→涤纶→冲锋衣 产业链冷知识）。',
-              formats: ['📊 资讯科普帖（产业链图解）', '🗳️ 投票帖（你会提前囤吗）', '💬 讨论帖（评论区炸锅型）', '📱 双发（微博话题+小红书种草）']
+              motivation: '囤货自保心理（先买先保险）+ 晒焦虑博共鸣（我也慌了）+ 科普搬运欲（产业链冷知识）。',
+              formats: ['📊 资讯科普帖（产业链图解）', '🗳️ 投票帖（你会提前囤吗）', '💬 讨论帖（评论区炸锅型）']
             }
           },
           {
-            id: '20260325-02',
+            id: '20260325-s02',
             title: '安踏市值反超阿迪达斯，坐上全球第二——但你还是觉得穿安踏没面子吗？',
             summary: '安踏2025年盈利率16.9%，反超耐克（6.95%）阿迪（5.40%）；市值登全球第二宝座——数据赢了，但街上穿安踏的人心气赢了吗？',
             tags: [
@@ -742,19 +783,16 @@ function radarApp() {
               { text: '小红书', type: 'platform' }
             ],
             heatInfo: { type: 'start', label: '3月25日起热·财报发布触发' },
-            sources: [
-              { name: '腾讯财经', url: 'https://new.qq.com/rain/a/20260325A04KGJ00', icon: '🔵', cls: 'pt-default' },
-              { name: '小红书', url: '#', icon: '📕', cls: 'pt-xhs' }
-            ],
+            sources: [{ name: '腾讯财经', url: 'https://new.qq.com/rain/a/20260325A04KGJ00', icon: '🔵', cls: 'pt-default' }],
             level: 'high', levelLabel: '🔵 爆热',
             propagation: {
               emotion: '"数据赢了但消费者心气还没赢"是核心撕裂点——理性派和身份认同派的对立，在"买安踏是不是很掉价"这个问题上会大规模互怼。',
-              motivation: '证明自己不被品牌鄙视链绑架（理性消费人设）+ 质疑国货崛起叙事真实性（批评型参与）+ 炫耀独立判断（反共识型表达）。',
+              motivation: '证明自己不被品牌鄙视链绑架（理性消费人设）+ 质疑国货崛起叙事真实性 + 炫耀独立判断。',
               formats: ['🗳️ 投票帖（安踏赚钱了你会买吗）', '⚔️ 对比帖（安踏 vs 始祖鸟：钱去哪了）', '🔥 观点帖（国货崛起是数字游戏吗）']
             }
           },
           {
-            id: '20260325-03',
+            id: '20260325-s03',
             title: '阿迪EVO SL卖出1000万双，跑鞋爆款是真实力还是颜值消费？',
             summary: '阿迪达斯竞速跑鞋ADIZERO EVO SL销量破千万，刚好踩在上海半马节点——但这么多人买，到底有几个真的在跑？',
             tags: [
@@ -764,18 +802,16 @@ function radarApp() {
               { text: '虎扑', type: 'platform' }
             ],
             heatInfo: { type: 'start', label: '3月20日起热·上海半马备赛期' },
-            sources: [
-              { name: '虎扑跑步区', url: 'http://yuqing.hnr.cn/yxwjcsy/article/1/2034947217329954817', icon: '🐯', cls: 'pt-hupu' }
-            ],
+            sources: [{ name: '虎扑跑步区', url: 'http://yuqing.hnr.cn/yxwjcsy/article/1/2034947217329954817', icon: '🐯', cls: 'pt-hupu' }],
             level: 'high', levelLabel: '🔵 爆热',
             propagation: {
               emotion: '跑者社区长期存在"颜值党 vs 实力党"的鄙视链——"碳板鞋买来晒步数的"这类嘲讽高频出现，"1000万双"数字反而加剧了真跑者的身份焦虑。',
-              motivation: '展示专业人设（我买鞋看数据不看颜值）+ 参与圈内是非（跑步区常规节目）+ 真实种草/避坑需求（备马期高购买意愿）。',
+              motivation: '展示专业人设（我买鞋看数据不看颜值）+ 参与圈内是非 + 真实种草/避坑需求。',
               formats: ['📊 参数科普帖（碳板鞋真的需要吗）', '🗳️ 投票帖（你买跑鞋颜值 or 参数）', '⚔️ 横向对比帖（同价位竞速鞋PK）']
             }
           },
           {
-            id: '20260325-04',
+            id: '20260325-s04',
             title: '春季踏青搜索暴涨265%，始祖鸟北面门店周末排队进——买冲锋衣的人，真的去户外了吗？',
             summary: '同程数据显示踏青/露营搜索量环比+265%，三里屯始祖鸟、哥伦比亚门店顾客络绎不绝，热门配色断码——但进去的人里，有多少是去爬山的？',
             tags: [
@@ -785,89 +821,75 @@ function radarApp() {
               { text: '小红书', type: 'platform' }
             ],
             heatInfo: { type: 'resurge', label: '3月25日复涨·同程数据刷屏' },
-            sources: [
-              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860597173265213317', icon: '🅱', cls: 'pt-baidu' },
-              { name: '小红书', url: '#', icon: '📕', cls: 'pt-xhs' }
-            ],
-            level: 'mid', levelLabel: '🩵 中热',
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860597173265213317', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中热',
             propagation: {
-              emotion: '"穿着冲锋衣去星巴克"vs"真正去爬山的人"之间的长期鄙视链每次春季都会复发，265%这个数字重新激活了圈内对"户外消费是否真实"的讽刺情绪。',
-              motivation: '站队表达（我是真户外 or 我只是通勤好看）+ 分享装备晒路线（正向种草）+ 消费吐槽（排队断码经历）。',
+              emotion: '"穿着冲锋衣去星巴克"vs"真正去爬山的人"之间的长期鄙视链每次春季都会复发，265%这个数字重新激活了圈内讽刺情绪。',
+              motivation: '站队表达（我是真户外 or 我只是通勤好看）+ 分享装备晒路线 + 消费吐槽。',
               formats: ['📷 图文帖（冲锋衣穿去哪了实拍）', '💬 讨论帖（你买冲锋衣为了啥）', '🗳️ 投票帖（上次穿冲锋衣是去哪）']
             }
           },
           {
-            id: '20260325-05',
+            id: '20260325-s05',
             title: '备马季跑鞋轮番推新：HOKA MACH 7、NB SC Elite v5……普通跑者的钱包有几条命？',
             summary: '3月各大品牌竞速跑鞋集中发布，一双碳板竞速鞋动辄1500+，备赛的普通跑者人均钻研参数表——但配速5分的人，真的需要全掌碳板吗？',
             tags: [
               { text: 'HOKA', type: 'product' },
               { text: 'New Balance', type: 'product' },
               { text: '备马季', type: 'topic' },
-              { text: '跑步消费焦虑', type: 'emotion' },
-              { text: '虎扑', type: 'platform' }
+              { text: '跑步消费焦虑', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月20日起·备赛周期集中释放' },
-            sources: [
-              { name: '知乎', url: 'https://zhuanlan.zhihu.com/p/2018343949241201317', icon: '🟦', cls: 'pt-zhihu' },
-              { name: '虎扑', url: '#', icon: '🐯', cls: 'pt-hupu' }
-            ],
-            level: 'mid', levelLabel: '🩵 中热',
+            sources: [{ name: '知乎', url: 'https://zhuanlan.zhihu.com/p/2018343949241201317', icon: '🟦', cls: 'pt-zhihu' }],
+            level: 'mid', levelLabel: '🪵 中热',
             propagation: {
-              emotion: '"配速5分为什么要买1500块碳板"的理性质疑 vs "跑马就是要用最好的装备"的享乐主义，钱包焦虑和自我合理化同时存在，情绪高度矛盾。',
-              motivation: '寻求决策支持（到底买不买）+ 晒备赛清单（参与感仪式）+ 吐槽品牌推新节奏（共情消费疲倦）。',
+              emotion: '"配速5分为什么要买1500块碳板"的理性质疑 vs "跑马就是要用最好的装备"的享乐主义，钱包焦虑和自我合理化同时存在。',
+              motivation: '寻求决策支持（到底买不买）+ 晒备赛清单（参与感仪式）+ 吐槽品牌推新节奏。',
               formats: ['📋 清单帖（备马装备怎么选）', '💰 测评帖（xxx元以下最值得买的跑鞋）', '🗳️ 互动帖（你备马花了多少在装备上）']
             }
           }
         ],
         watchSection: [
           {
-            id: '20260325-06',
+            id: '20260325-s06',
             title: '99元跑鞋卖爆、同时推3000元冲锋衣——361度这门生意，你怎么看？',
             summary: '361度旗下，99元跑鞋销破10万双，同时旗下芬兰品牌ONEWAY轻量冲锋衣折后1500元起、硬壳款超3000元——同一家公司，这个价格跨度有点离谱。',
             tags: [
               { text: '361度', type: 'product' },
               { text: 'ONEWAY', type: 'product' },
               { text: '消费分级', type: 'topic' },
-              { text: '性价比焦虑', type: 'emotion' },
-              { text: '小红书', type: 'platform' }
+              { text: '性价比焦虑', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月25日新出现·数据刚曝光' },
-            sources: [
-              { name: '网易号', url: 'https://www.163.com/dy/article/KOSBRKUA0519QIKK.html', icon: '📰', cls: 'pt-default' }
-            ],
+            sources: [{ name: '网易号', url: 'https://www.163.com/dy/article/KOSBRKUA0519QIKK.html', icon: '📰', cls: 'pt-default' }],
             level: 'high', levelLabel: '🔵 高潜力',
             propagation: {
-              emotion: '"同一家公司99元和3000元"的反差本身就是信息炸弹——既有"国产终于走高端了"的骄傲，也有"你凭什么卖这么贵"的质疑，两种情绪的碰撞会持续出帖。',
-              motivation: '好奇心驱动（ONEWAY到底是啥来头）+ 性价比论战（361做高端靠不靠谱）+ 消费身份表达（买99的和买3000的是同一批人吗）。',
+              emotion: '"同一家公司99元和3000元"的反差本身就是信息炸弹——既有"国产终于走高端了"的骄傲，也有"你凭什么卖这么贵"的质疑。',
+              motivation: '好奇心驱动（ONEWAY到底是啥来头）+ 性价比论战 + 消费身份表达。',
               formats: ['🔍 科普帖（361度旗下ONEWAY品牌起底）', '🗳️ 投票帖（361的3000元冲锋衣你会买吗）', '⚔️ 对比帖（361 ONEWAY vs 同价位冲锋衣）']
             }
           },
           {
-            id: '20260325-07',
+            id: '20260325-s07',
             title: '专家说高帮徒步鞋"防崴脚"是心理安慰——你花大几千买的高帮靴，可能让脚踝变懒',
             summary: '越来越多研究和老驴们说：厚底高帮靴会迟钝你对地面的感知，Trail runners的薄底才能让踝关节主动发力——"高帮防崴"是装备营销神话？',
             tags: [
               { text: 'Salomon', type: 'product' },
               { text: '高帮徒步鞋', type: 'topic' },
               { text: '反常识', type: 'emotion' },
-              { text: '装备智商税', type: 'emotion' },
-              { text: '抖音', type: 'platform' }
+              { text: '装备智商税', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月24日出现·老驴社区扩散中' },
-            sources: [
-              { name: '网易号', url: 'https://m.163.com/dy/article/KOQ7I1F805561FZW.html', icon: '📰', cls: 'pt-default' },
-              { name: '抖音户外区', url: '#', icon: '🎵', cls: 'pt-douyin' }
-            ],
+            sources: [{ name: '网易号', url: 'https://m.163.com/dy/article/KOQ7I1F805561FZW.html', icon: '📰', cls: 'pt-default' }],
             level: 'high', levelLabel: '🔵 高潜力',
             propagation: {
-              emotion: '"买了高帮靴反而更容易崴脚"是高强度反常识钩子，触动了"我花了大钱买错了"的自我怀疑；老驴群体的权威背书 vs 品牌营销的长期洗脑形成强烈撕裂。',
-              motivation: '验证/否定自己的购买决策（我的高帮靴是不是白买了）+ 科普优越感（我早知道了）+ 寻求真相（到底应该穿什么）。',
+              emotion: '"买了高帮靴反而更容易崴脚"是高强度反常识钩子，触动了"我花了大钱买错了"的自我怀疑；老驴权威背书 vs 品牌营销长期洗脑形成撕裂。',
+              motivation: '验证/否定自己的购买决策 + 科普优越感（我早知道了）+ 寻求真相。',
               formats: ['🔥 反常识资讯帖（高帮靴防崴是谣言？）', '🗳️ 投票帖（你还信高帮靴能防崴吗）', '📹 测评视频（专业徒步者评测高帮 vs 低帮）']
             }
           },
           {
-            id: '20260325-08',
+            id: '20260325-s08',
             title: '抖音上国产军工品牌际华在卖冲锋衣，通勤人群在研究："这比始祖鸟便宜多少？"',
             summary: '际华冲锋衣在抖音批量投放，主打"打工人通勤伙伴"——国企军工出品的冲锋衣，能不能打进始祖鸟用户的心智？',
             tags: [
@@ -877,104 +899,224 @@ function radarApp() {
               { text: '抖音', type: 'platform' }
             ],
             heatInfo: { type: 'start', label: '3月22日起·抖音投流集中曝光' },
-            sources: [
-              { name: '抖音', url: 'https://www.douyin.com/user/MS4wLjABAAAAZae_XXSNLvU1brTBJcRDX22j-vs5xKpRQoIxaYnpGwjTgV4Sine-qlQsIr81vfb0', icon: '🎵', cls: 'pt-douyin' }
-            ],
-            level: 'mid', levelLabel: '🩵 中潜力',
+            sources: [{ name: '抖音', url: 'https://www.douyin.com/', icon: '🎵', cls: 'pt-douyin' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
             propagation: {
-              emotion: '"军工厂出冲锋衣"既猎奇又自带国货情怀滤镜；与此同时"抖音投流品牌"的可信度质疑也会同时出现——两股力量拉扯让讨论不会沉寂。',
-              motivation: '猎奇心（军工冲锋衣到底啥水平）+ 省钱寻找始祖鸟替代品（实用型参与）+ 质疑声（国企品牌做消费品靠谱吗）。',
+              emotion: '"军工厂出冲锋衣"既猎奇又自带国货情怀滤镜；"抖音投流品牌"的可信度质疑也会同时出现——两股力量拉扯让讨论不会沉寂。',
+              motivation: '猎奇心（军工冲锋衣到底啥水平）+ 省钱寻找始祖鸟替代品 + 质疑声（国企品牌做消费品靠谱吗）。',
               formats: ['🔍 测评帖（际华冲锋衣拆解实测）', '⚔️ 对比帖（际华 vs 始祖鸟 功能PK）', '💬 种草/避坑帖（买过的人来说说）']
             }
           },
           {
-            id: '20260325-09',
+            id: '20260325-s09',
             title: '春季露营热重启，但你2023年买的那顶帐篷现在在哪？',
             summary: '踏青/露营搜索量暴涨265%，露营装备专区再度爆满——但经历过2023年露营泡沫的人都记得，那些帐篷后来吃灰的速度有多快。',
             tags: [
               { text: '露营', type: 'topic' },
               { text: '春季消费', type: 'topic' },
               { text: '装备闲置', type: 'emotion' },
-              { text: '消费理性', type: 'emotion' },
-              { text: '微博', type: 'platform' }
+              { text: '消费理性', type: 'emotion' }
             ],
             heatInfo: { type: 'resurge', label: '3月24日复涨·23年泡沫周年记忆唤起' },
-            sources: [
-              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860506963778888310', icon: '🅱', cls: 'pt-baidu' },
-              { name: '小红书', url: '#', icon: '📕', cls: 'pt-xhs' }
-            ],
-            level: 'mid', levelLabel: '🩵 中潜力',
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860506963778888310', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
             propagation: {
               emotion: '2023年露营大热潮留下了大量"冲动消费后悔者"，这批人的记忆被265%数据一触即发——"冲动买了闲置"的自嘲情绪是极强的评论区引擎。',
-              motivation: '自嘲式共鸣（我的帐篷还在角落里）+ 再次被种草（今年应该重启了吧）+ 理性消费表态（这次不上当）。',
+              motivation: '自嘲式共鸣（我的帐篷还在角落里）+ 再次被种草（今年应该重启了吧）+ 理性消费表态。',
               formats: ['💬 互动帖（你的露营装备现在在哪）', '😂 自嘲梗图帖（2023帐篷闲置图鉴）', '📋 理性消费帖（哪些装备值得买哪些不值）']
             }
           },
           {
-            id: '20260325-10',
+            id: '20260325-s10',
             title: '耐克重启ACG、李宁开专属户外店……国际巨头失速之际，大家都在抢"专业户外"这块牌',
             summary: '耐克三里屯ACG大本营、李宁独立户外门店"COUNTERFLOW溯"接连落地——但凯乐石的用户会买耐克的户外账吗？',
             tags: [
               { text: '耐克ACG', type: 'product' },
               { text: '李宁户外', type: 'product' },
               { text: '户外市场争夺', type: 'topic' },
-              { text: '品牌质疑', type: 'emotion' },
-              { text: '虎扑', type: 'platform' }
+              { text: '品牌质疑', type: 'emotion' }
             ],
             heatInfo: { type: 'start', label: '3月25日起·两家门店同期落地' },
-            sources: [
-              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860597173265213317', icon: '🅱', cls: 'pt-baidu' },
-              { name: '虎扑户外区', url: '#', icon: '🐯', cls: 'pt-hupu' }
-            ],
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860597173265213317', icon: '🅱', cls: 'pt-baidu' }],
             level: 'low', levelLabel: '💚 观察中',
             propagation: {
               emotion: '户外圈有强烈的"圈内人 vs 蹭热度者"鄙视链，耐克李宁被视为蹭户外概念的局外人——真户外用户的不屑 vs 新入圈者的好奇之间的张力明显。',
-              motivation: '捍卫圈子门槛（耐克不配叫户外）+ 好奇心（李宁COUNTERFLOW是什么水平）+ 中立评估（巨头进入对户外市场是好是坏）。',
+              motivation: '捍卫圈子门槛（耐克不配叫户外）+ 好奇心（李宁COUNTERFLOW是什么水平）+ 中立评估。',
               formats: ['💬 观点帖（耐克做户外靠谱吗）', '🔍 深度帖（李宁COUNTERFLOW产品线起底）', '🗳️ 投票帖（你会买耐克/李宁的专业户外装备吗）']
             }
           }
         ]
       }
-
-      // ════════════════════════════════════════════════
-      // 📝 每日新增存档模板（往 archives 数组最前面插入）：
-      //
-      // ,{
-      //   date: '2026-03-27',
-      //   weekday: '周五',
-      //   updateTime: '09:00',
-      //   items: 8,
-      //   editorNote: '今日背景色：...',
-      //   keywords: ['关键词1', '关键词2'],
-      //   hotSection: [
-      //     {
-      //       id: '20260327-01',
-      //       title: '标题',
-      //       summary: '一句话导语',
-      //       tags: [
-      //         { text: '话题词', type: 'topic' },
-      //         { text: '平台', type: 'platform' },
-      //         { text: '情绪词', type: 'emotion' },
-      //         { text: '品牌', type: 'product' }
-      //       ],
-      //       heatInfo: { type: 'start', label: '3月27日起热·xxx' },
-      //       sources: [
-      //         { name: '微博', url: 'https://...', icon: '🔴', cls: 'pt-weibo' }
-      //       ],
-      //       level: 'high', levelLabel: '🔵 爆热',
-      //       propagation: {
-      //         emotion: '情绪/矛盾点描述',
-      //         motivation: '用户参与动机',
-      //         formats: ['📊 资讯帖', '🗳️ 投票帖']
-      //       }
-      //     }
-      //   ],
-      //   watchSection: [ /* 同上结构 */ ]
-      // }
-      // ════════════════════════════════════════════════
     ],
 
-    get current()    { return this.archives[this.currentIndex] || {}; },
+    // ══════════════════════════════════════════
+    // 数码科技数据
+    // ══════════════════════════════════════════
+    techArchives: [
+      {
+        date: '2026-03-26',
+        weekday: '周四',
+        updateTime: '09:00',
+        items: 7,
+        editorNote: '今日双线并行：①旧手机回收价暴涨5-8倍（AI芯片抢占存储产能引发供应链失衡）冲上各平台热搜，"3部旧手机换一台iPhone"的说法极具传播力，抽屉里的旧机突然变成"活钱"，全民翻箱倒柜——消费决策类内容今日窗口期极佳。②AI手机"真AI vs 假AI"争论持续发酵，澎湃深度报道引发4500人投票，超1/4认为AI是"掩盖硬件升级不足的遮羞布"，购机焦虑和消费信心叠加撕裂。同步关注：OPPO Find N6拉踩三星被段永平本人下场批评，品牌价值观裂缝已经公开化。',
+        keywords: ['旧手机回收暴涨', '存储芯片短缺', 'AI手机真假之争', 'OPPO段永平', '折叠屏营销战', '新机涨价', '换机焦虑'],
+        hotSection: [
+          {
+            id: '20260326-t01',
+            title: '旧手机回收价暴涨5-8倍！碎屏烂机都有人抢——你抽屉里的旧手机，现在值多少钱？',
+            summary: 'AI产业爆发抢占服务器存储产能，三星美光将七成先进产能转向AI内存，消费级芯片三个月涨超300%；OPPO R9从20元涨到180元，两台不开机的废机卖出308元——"3部旧手机换一台iPhone"已成现实。',
+            tags: [
+              { text: '旧手机回收', type: 'topic' },
+              { text: '存储芯片涨价', type: 'topic' },
+              { text: '消费焦虑', type: 'emotion' },
+              { text: '快科技', type: 'platform' }
+            ],
+            heatInfo: { type: 'resurge', label: '3月25日爆发·各平台持续扩散' },
+            sources: [
+              { name: '封面新闻', url: 'https://baijiahao.baidu.com/s?id=1860634805971200031', icon: '📰', cls: 'pt-default' },
+              { name: '快科技', url: 'https://baijiahao.baidu.com/s?id=1860615269028206878', icon: '📰', cls: 'pt-default' }
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"抽屉里的废铜烂铁突然变成活钱"的反转感极强——上周还准备扔掉的手机，今天可能值几百块；同时"为什么我的芯片要给AI服务器让路"的愤怒情绪也在悄悄积累。',
+              motivation: '立即行动（去查自己旧机值多少）+ 信息传播（告诉亲友快去卖）+ 愤怒表达（AI抢了我们的便宜手机）+ 决策焦虑（现在该买新机还是等等）。',
+              formats: ['💰 实用帖（如何查询你的旧机现在值多少钱）', '📊 科普帖（AI芯片抢占存储产能→消费电子涨价全链路）', '🗳️ 投票帖（你抽屉里有几台旧手机·准备卖吗）', '💬 讨论帖（旧手机卖还是不卖·你怎么选）']
+            }
+          },
+          {
+            id: '20260326-t02',
+            title: 'AI手机大会上4500人投票：超1/4认为AI是"掩盖硬件升级不足的遮羞布"',
+            summary: 'MWC2026展馆，荣耀展台有个会扭动脖子的Robot Phone，vivo带来400mm增距镜专业套件——但在Android Authority发起的调查中，"用来掩盖硬件升级不足的AI"以最高票被选为"最该消失的手机设计"。澎湃深度报道引发大量共鸣。',
+            tags: [
+              { text: 'AI手机', type: 'topic' },
+              { text: '真AI vs 假AI', type: 'emotion' },
+              { text: 'MWC2026', type: 'platform' },
+              { text: '消费信心', type: 'emotion' }
+            ],
+            heatInfo: { type: 'start', label: '3月20日起·MWC后持续发酵' },
+            sources: [
+              { name: '澎湃新闻', url: 'https://m.thepaper.cn/newsDetail_forward_32796285', icon: '📰', cls: 'pt-default' }
+            ],
+            level: 'high', levelLabel: '🔵 高热',
+            propagation: {
+              emotion: '"花6000买了个AI手机，真正用到AI功能的次数不超过5次"是大量用户的真实体感——这种"被忽悠了"的愤怒，在新机涨价200-500元的背景下更加强烈；支持AI派与反AI派的对立会在评论区充分爆发。',
+              motivation: '吐槽宣泄（终于有人说出我的感受）+ 求证需求（AI功能到底有没有用）+ 购机决策参考（要不要为AI多花钱）+ 科技话语权争夺（真懂技术的人来说说）。',
+              formats: ['🔥 观点帖（手机AI功能你真的用过吗·投票）', '📱 体验帖（盘点AI手机最鸡肋的5个功能）', '⚔️ 对比帖（真AI vs 假AI·如何识别）', '💬 讨论帖（你愿意为AI多花多少钱）']
+            }
+          },
+          {
+            id: '20260326-t03',
+            title: 'OPPO拉踩三星被段永平本人批"没必要"——创始人当众否定自家营销团队，这次算谁赢？',
+            summary: 'OPPO Find N6发布会上将折叠屏与三星Z Fold7同台对比展示折痕，有用户在雪球质问段永平；段永平回应"确实没必要比较，我反映一下"——一句话，既没表扬也没力挺，反把发布会营销团队架在火上烤。',
+            tags: [
+              { text: 'OPPO', type: 'product' },
+              { text: '段永平', type: 'product' },
+              { text: '折叠屏', type: 'topic' },
+              { text: '营销翻车', type: 'emotion' }
+            ],
+            heatInfo: { type: 'start', label: '3月20日起热·段永平下场引爆' },
+            sources: [
+              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860156135603174744', icon: '🅱', cls: 'pt-baidu' }
+            ],
+            level: 'high', levelLabel: '🔵 高热',
+            propagation: {
+              emotion: '"创始人公开质疑自家营销"的戏剧性冲突极具看点——站段永平的人说他维护了品牌格调，站营销团队的人说这是在公开打脸；消费者夹在中间反而开始同情OPPO了。',
+              motivation: '看热闹（创始人和营销团队谁赢了）+ 品牌忠诚表达（我支持OPPO/三星）+ 营销学讨论（拉踩策略到底有没有效）+ 购买决策（OPPO vs 三星 折叠屏怎么选）。',
+              formats: ['🎭 事件复盘帖（段永平"反映一下"背后的品牌困局）', '⚔️ 对比帖（OPPO Find N6 vs 三星Z Fold7·折叠屏终极对比）', '🗳️ 投票帖（你觉得OPPO这次拉踩策略对吗）']
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260326-t04',
+            title: '存储芯片三个月涨超300%，新手机即将涨价200-500元——现在买还是等等？',
+            summary: '供应链数据显示消费级内存涨价已传导至新机成本，手机厂商内部已启动调价预案；但部分厂商可能为稳市场短期承压——这个窗口到底还有多长？',
+            tags: [
+              { text: '手机涨价', type: 'topic' },
+              { text: '存储芯片', type: 'topic' },
+              { text: '购机时机', type: 'emotion' },
+              { text: '消费决策', type: 'emotion' }
+            ],
+            heatInfo: { type: 'resurge', label: '3月25日·芯片涨价延伸消费焦虑' },
+            sources: [{ name: 'PChome', url: 'https://baijiahao.baidu.com/s?id=1860613106169118172', icon: '📰', cls: 'pt-default' }],
+            level: 'high', levelLabel: '🔵 高潜力',
+            propagation: {
+              emotion: '"现在不买等涨价后悔，现在买万一还没涨"的两难焦虑让消费者陷入决策瘫痪；同时"AI产业间接让普通人多花钱"的情绪也在发酵。',
+              motivation: '寻求决策支持（现在到底要不要买手机）+ 信息核实（涨价预测靠不靠谱）+ 吐槽（AI凭什么让我的手机变贵）。',
+              formats: ['📊 分析帖（手机涨价节奏预测·现在买值不值）', '🗳️ 投票帖（芯片涨价消息出来后你打算怎么办）', '💬 讨论帖（你的换机计划有没有因为这个改变）']
+            }
+          },
+          {
+            id: '20260326-t05',
+            title: '荣耀发布会余承东演示"一键成片"，华为鸿蒙6.1 AI剪辑——专业剪辑师说：这个我不慌',
+            summary: '华为余承东展示鸿蒙6.1 AI"一键成片"：几段视频+截图自动生成电影感短片，配乐特效全包；微博上已有博主实测，争议两极——到底是替代剪辑师的杀手锏，还是只能骗骗小白？',
+            tags: [
+              { text: '华为鸿蒙', type: 'product' },
+              { text: 'AI剪辑', type: 'topic' },
+              { text: '创作者焦虑', type: 'emotion' },
+              { text: '微博', type: 'platform' }
+            ],
+            heatInfo: { type: 'start', label: '3月20日发布·创作者社区持续讨论' },
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860131650569194251', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
+            propagation: {
+              emotion: '"AI替代创作者"的存在性焦虑被这个功能具象化了——专业剪辑师说"不慌"，但入门级内容创作者开始真的慌了；"一键出片是帮助还是降维打击"在创作者圈子里会形成真实争论。',
+              motivation: '职业焦虑（我的技能还有价值吗）+ 好奇测试（亲自试试效果怎么样）+ 创作者身份维护（和AI划清界限）。',
+              formats: ['🎬 测评帖（实测华为AI一键成片·和手动剪辑差多少）', '💬 讨论帖（你觉得AI剪辑会取代人工吗）', '🗳️ 投票帖（你会用AI剪辑发内容吗）']
+            }
+          },
+          {
+            id: '20260326-t06',
+            title: 'iPhone 17e上线：4499元、单摄、60Hz刷新率——苹果这次是真的在摆烂？',
+            summary: '苹果iPhone 17e搭载A19芯片、8GB内存，存储256GB起，屏幕6.1英寸60Hz，后置单摄——2026年的高端手机，这个配置放在千元机都有点寒酸；但iOS生态和A19芯片还是让很多人心动。',
+            tags: [
+              { text: 'iPhone 17e', type: 'product' },
+              { text: '苹果', type: 'product' },
+              { text: '配置争议', type: 'emotion' },
+              { text: '性价比', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月初发布·持续性价比争议' },
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860286375531853182', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
+            propagation: {
+              emotion: '"苹果用A19芯片配60Hz屏幕"的降配组合天然制造愤怒——苹果粉认为"iOS体验值这个价"，安卓用户认为"同价位安卓甩它十条街"，双方的鄙视链永远吵不完。',
+              motivation: '购机决策（要不要买17e还是加钱上17标准版）+ 品牌吐槽（苹果越来越不行了）+ 生态辩护（iOS值得溢价）。',
+              formats: ['⚔️ 对比帖（iPhone 17e vs 同价位安卓旗舰·谁更值）', '🗳️ 投票帖（4499的17e你会买吗）', '📊 参数帖（A19+单摄+60Hz·这个配置怎么评价）']
+            }
+          },
+          {
+            id: '20260326-t07',
+            title: '三星S26 Ultra首款防窥屏：1万块买个"别人看不见你手机屏幕"，值吗？',
+            summary: '三星Galaxy S26 Ultra搭载首款可按需开启的防窥屏，可针对特定App/通知开启防窥——这个功能在地铁上刷微博的人心里值多少钱？',
+            tags: [
+              { text: '三星S26', type: 'product' },
+              { text: '防窥屏', type: 'topic' },
+              { text: '隐私焦虑', type: 'emotion' },
+              { text: '差异化卖点', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月11日发售·差异化卖点持续讨论' },
+            sources: [{ name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1860286375531853182', icon: '🅱', cls: 'pt-baidu' }],
+            level: 'mid', levelLabel: '🪵 中潜力',
+            propagation: {
+              emotion: '地铁偷看手机屏幕是城市人的真实隐私痛点，防窥屏把这个焦虑具象化成一个可购买的解决方案——但"1万块解决防窥问题"的性价比立刻成为讨论焦点。',
+              motivation: '隐私焦虑共鸣（地铁上我也怕被看）+ 消费合理化（值不值得为这个多花钱）+ 猎奇（这个防窥屏到底好不好用）。',
+              formats: ['📱 体验帖（实测三星防窥屏·真的防得住吗）', '🗳️ 投票帖（你会为防窥功能多花钱吗）', '💬 讨论帖（手机防窥你最需要在什么场景）']
+            }
+          }
+        ]
+      }
+    ],
+
+    // ══════════════════════════════════════════
+    // 计算属性 & 方法
+    // ══════════════════════════════════════════
+    get activeCat() {
+      return this.categories.find(c => c.id === this.currentCat) || this.categories[0];
+    },
+    get activeArchives() {
+      return this.currentCat === 'sports' ? this.sportsArchives : this.techArchives;
+    },
+    get current() { return this.activeArchives[this.currentIndex] || {}; },
     get hotItems()   { return this.current.hotSection   || []; },
     get watchItems() { return this.current.watchSection || []; },
 
@@ -983,10 +1125,34 @@ function radarApp() {
       return all.filter(i => i.level === lvl).length;
     },
 
+    switchCat(catId) {
+      this.currentCat = catId;
+      this.currentIndex = 0;
+      this.tocOpen = true;
+      window.location.hash = catId;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
     selectArchive(idx) {
       this.currentIndex = idx;
       this.tocOpen = true;
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    init() {
+      // 从 URL hash 恢复品类
+      const hash = window.location.hash.replace('#', '');
+      if (hash && this.categories.find(c => c.id === hash)) {
+        this.currentCat = hash;
+      }
+      // 监听 hash 变化
+      window.addEventListener('hashchange', () => {
+        const h = window.location.hash.replace('#', '');
+        if (h && this.categories.find(c => c.id === h)) {
+          this.currentCat = h;
+          this.currentIndex = 0;
+        }
+      });
     }
   };
 }
