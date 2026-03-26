@@ -1,7 +1,7 @@
 /**
  * 运动户外选题雷达 - 每日自动更新脚本
- * 数据来源: 微博热搜（免费）+ 百度热搜（免费）
- * AI 分析: DeepSeek API（deepseek-chat，极低成本）
+ * 数据来源: 微博热搜 + 百度热搜 + 百家号新闻（免费）
+ * AI 分析: DeepSeek API（deepseek-chat）
  * 运行方式: node update.mjs
  * 环境变量: DEEPSEEK_API_KEY
  */
@@ -18,7 +18,7 @@ if (!DEEPSEEK_API_KEY) {
   process.exit(1);
 }
 
-// ── 获取北京时间 ───────────────────────────────
+// ── 获取北京时间 ──────────────────────────────
 function getBeijingDate() {
   const now = new Date();
   const bjTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
@@ -30,28 +30,27 @@ function getBeijingDate() {
     date: `${y}-${m}-${d}`,
     dateCompact: `${y}${m}${d}`,
     weekday: weekdays[bjTime.getDay()],
-    month: m,
-    day: d,
+    month: parseInt(m),
+    day: parseInt(d),
   };
 }
 
-// ── 抓取微博热搜 ───────────────────────────────
+// ── 抓取微博热搜（含热度值）────────────────────
 async function fetchWeiboHot() {
   try {
     const res = await fetch('https://weibo.com/ajax/side/hotSearch', {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
         'Referer': 'https://weibo.com/',
         'Accept': 'application/json',
       },
       signal: AbortSignal.timeout(10000),
     });
     const data = await res.json();
-    const items = data?.data?.realtime || [];
-    return items.slice(0, 30).map(i => ({
+    return (data?.data?.realtime || []).slice(0, 35).map(i => ({
       word: i.word || '',
       num: i.num || 0,
-      url: i.word ? `https://s.weibo.com/weibo?q=%23${encodeURIComponent(i.word)}%23` : '',
+      url: `https://s.weibo.com/weibo?q=%23${encodeURIComponent(i.word)}%23`,
     }));
   } catch (e) {
     console.warn('⚠️ 微博热搜抓取失败:', e.message);
@@ -59,26 +58,17 @@ async function fetchWeiboHot() {
   }
 }
 
-// ── 抓取百度热搜 ───────────────────────────────
+// ── 抓取百度热搜 ──────────────────────────────
 async function fetchBaiduHot() {
   try {
     const res = await fetch('https://top.baidu.com/board?tab=realtime', {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'text/html',
-      },
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
       signal: AbortSignal.timeout(10000),
     });
     const html = await res.text();
-    const words = [];
-    const regex = /"word":"([^"]+)"/g;
-    let match;
-    while ((match = regex.exec(html)) !== null) {
-      words.push(match[1]);
-    }
+    const words = [...html.matchAll(/"word":"([^"]+)"/g)].map(m => m[1]);
     return words.slice(0, 20).map(w => ({
       word: w,
-      num: 0,
       url: `https://www.baidu.com/s?wd=${encodeURIComponent(w)}`,
     }));
   } catch (e) {
@@ -87,21 +77,38 @@ async function fetchBaiduHot() {
   }
 }
 
+// ── 抓取百家号运动户外新闻摘要 ────────────────
+async function fetchSportsNews() {
+  const queries = ['运动装备', '跑步马拉松', '户外冲锋衣'];
+  const results = [];
+  for (const q of queries) {
+    try {
+      const res = await fetch(
+        `https://www.baidu.com/s?wd=${encodeURIComponent(q + ' 最新')}&rn=5&tn=json`,
+        {
+          headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+          signal: AbortSignal.timeout(8000),
+        }
+      );
+      const text = await res.text();
+      // 提取标题
+      const titles = [...text.matchAll(/"title":"([^"]{10,60})"/g)].map(m => m[1]);
+      results.push(...titles.slice(0, 4).map(t => `[${q}] ${t}`));
+    } catch (e) { /* 忽略单个失败 */ }
+  }
+  return results;
+}
+
 // ── 抓取虎扑运动热帖 ──────────────────────────
 async function fetchHupuHot() {
   try {
     const res = await fetch('https://www.hupu.com/home/v1/news?pageNo=1&pageSize=20', {
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-        'Accept': 'application/json',
-      },
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
       signal: AbortSignal.timeout(8000),
     });
     const data = await res.json();
-    const list = data?.data?.list || [];
-    return list.slice(0, 10).map(i => ({
+    return (data?.data?.list || []).slice(0, 10).map(i => ({
       word: i.title || '',
-      num: i.recommendNum || 0,
       url: i.jumpUrl || '#',
     }));
   } catch (e) {
@@ -110,8 +117,8 @@ async function fetchHupuHot() {
   }
 }
 
-// ── 调用 DeepSeek API ─────────────────────────────
-async function callDeepSeek(prompt) {
+// ── 调用 DeepSeek API ─────────────────────────
+async function callDeepSeek(systemPrompt, userPrompt) {
   const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -121,23 +128,18 @@ async function callDeepSeek(prompt) {
     body: JSON.stringify({
       model: 'deepseek-chat',
       messages: [
-        {
-          role: 'system',
-          content: '你是一位专注运动户外行业的内容选题编辑，擅长从热搜数据中找到与跑步、装备、户外运动相关的有传播力的话题。请严格按照要求返回 JSON 格式，不要有任何额外说明文字。',
-        },
-        { role: 'user', content: prompt },
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
       ],
-      temperature: 0.4,
-      max_tokens: 3000,
+      temperature: 0.5,
+      max_tokens: 4000,
     }),
     signal: AbortSignal.timeout(120000),
   });
-
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`DeepSeek API 错误 ${res.status}: ${text.slice(0, 200)}`);
+    throw new Error(`DeepSeek API 错误 ${res.status}: ${text.slice(0, 300)}`);
   }
-
   const data = await res.json();
   return data.choices[0].message.content;
 }
@@ -147,103 +149,130 @@ async function main() {
   const { date, dateCompact, weekday, month, day } = getBeijingDate();
   console.log(`📅 开始生成 ${date}（${weekday}）的选题雷达...`);
 
-  // 并行抓取热搜数据
-  console.log('🔍 正在抓取热搜数据...');
-  const [weiboHot, baiduHot, hupuHot] = await Promise.all([
+  // 检查今日是否已生成（防止重复插入）
+  const indexPath = path.join(__dirname, 'index.html');
+  const existingHtml = fs.readFileSync(indexPath, 'utf-8');
+  if (existingHtml.includes(`"date": "${date}"`)) {
+    console.log(`✅ 今日（${date}）已存在，跳过生成`);
+    return;
+  }
+
+  // 并行抓取所有数据源
+  console.log('🔍 正在抓取热搜和新闻数据...');
+  const [weiboHot, baiduHot, hupuHot, sportsNews] = await Promise.all([
     fetchWeiboHot(),
     fetchBaiduHot(),
     fetchHupuHot(),
+    fetchSportsNews(),
   ]);
 
-  const weiboList = weiboHot.map(i => `  - ${i.word}（热度${i.num}）`).join('\n');
-  const baiduList = baiduHot.map(i => `  - ${i.word}`).join('\n');
-  const hupuList = hupuHot.map(i => `  - ${i.word}`).join('\n');
-
-  console.log(`  微博: ${weiboHot.length} 条 | 百度: ${baiduHot.length} 条 | 虎扑: ${hupuHot.length} 条`);
+  console.log(`  微博: ${weiboHot.length}条 | 百度: ${baiduHot.length}条 | 虎扑: ${hupuHot.length}条 | 新闻: ${sportsNews.length}条`);
 
   if (weiboHot.length === 0 && baiduHot.length === 0) {
     console.error('❌ 热搜数据全部获取失败，退出');
     process.exit(1);
   }
 
-  // 构建分析 prompt
-  const prompt = `
-今天是 ${date}（${weekday}），以下是从微博、百度、虎扑抓取的今日实时热搜数据：
+  const weiboStr = weiboHot.map(i => `  ${String(i.num).padStart(7)} | ${i.word}`).join('\n');
+  const baiduStr = baiduHot.map(i => `  ${i.word}`).join('\n');
+  const hupuStr = hupuHot.map(i => `  ${i.word}`).join('\n');
+  const newsStr = sportsNews.map(s => `  ${s}`).join('\n');
 
-【微博热搜（含热度值）】
-${weiboList || '（获取失败）'}
+  const systemPrompt = `你是一位深度运营的运动户外行业内容选题编辑，有10年行业经验。你能从热搜数据中挖掘出有真实传播力的选题，不只看表面词汇，而是分析背后的用户情绪、消费矛盾、品牌争议、社会现象。你的选题有独特的角度和钩子，能引发真实评论区互动。请严格按照要求返回 JSON 格式，不要有任何额外说明文字。`;
 
-【百度热搜】
-${baiduList || '（获取失败）'}
+  const userPrompt = `
+今天是 ${date}（${weekday}），以下是今日实时多平台数据：
 
-【虎扑热帖标题】
-${hupuList || '（获取失败）'}
+【微博热搜 Top35（格式：热度值 | 词条）】
+${weiboStr || '（获取失败）'}
 
-请从以上数据中，筛选出 6~8 条与【运动户外】行业相关的话题（跑步/马拉松/装备/冲锋衣/户外品牌/运动消费/健身/骑行/徒步），分析其传播价值，生成选题雷达简报。
+【百度热搜 Top20】
+${baiduStr || '（获取失败）'}
 
-如果热搜中运动户外相关话题不足，可以基于热搜中的社会情绪（如健康焦虑、消费焦虑、国货话题）结合运动户外角度进行延伸创作。
+【虎扑运动热帖】
+${hupuStr || '（无数据）'}
 
-严格返回以下 JSON 格式，不要有任何其他文字：
+【百度运动户外相关新闻标题】
+${newsStr || '（无数据）'}
+
+---
+
+请按以下思路生成今日运动户外选题：
+
+**第一步：识别运动户外相关信号**
+从上述数据找出所有与【跑步/马拉松/冲锋衣/户外装备/运动品牌/健身/骑行/徒步/运动消费/运动安全】直接或间接相关的词条。
+
+**第二步：扩展延伸**
+即使热搜词不直接写"运动"，也要联想：
+- 健康/医疗热点 → 运动安全/装备选题
+- 消费/品牌热点 → 运动消费焦虑选题
+- 社会情绪 → 运动生活方式选题
+- 季节/气候 → 户外装备需求选题
+
+**第三步：提炼传播钩子**
+每个选题必须有明确的"撕裂点"或"反常识"或"身份认同"，能让人在评论区站队。
+
+**第四步：输出标准格式**
+
+返回 JSON（只返回JSON，不要任何其他文字）：
 
 {
-  "editorNote": "今日整体背景概括，100字以内，突出最重要的运动户外相关热点",
+  "editorNote": "今日背景：[用100字描述今日最重要的运动户外舆情背景，点出1-2个核心热点和整体情绪基调]",
   "keywords": ["关键词1", "关键词2", "关键词3", "关键词4", "关键词5"],
   "hotSection": [
     {
       "id": "${dateCompact}-01",
-      "title": "选题标题，要有话题感和传播钩子，30字以内",
-      "summary": "一句话导语，说清楚事件背景和争议点，60字以内",
+      "title": "标题：必须有钩子，能一眼引发好奇或站队冲动，25字以内",
+      "summary": "导语：交代事件背景+核心争议点，语气犀利有态度，60字以内",
       "tags": [
-        { "text": "标签文字", "type": "topic" },
-        { "text": "情绪词", "type": "emotion" },
-        { "text": "品牌名", "type": "product" }
+        { "text": "具体话题词", "type": "topic" },
+        { "text": "情绪标签", "type": "emotion" },
+        { "text": "品牌名", "type": "product" },
+        { "text": "平台", "type": "platform" }
       ],
-      "heatInfo": { "type": "start", "label": "${month}月${day}日起热·简要说明" },
+      "heatInfo": { "type": "start", "label": "${month}月${day}日起热·[一句话说明热度来源]" },
       "sources": [
         { "name": "微博热搜", "url": "https://s.weibo.com/weibo?q=%23关键词%23", "icon": "🔴", "cls": "pt-weibo" }
       ],
       "level": "high",
       "levelLabel": "🔵 爆热",
       "propagation": {
-        "emotion": "核心情绪/矛盾点分析，50字以内",
-        "motivation": "用户参与动机，40字以内",
-        "formats": ["📊 资讯帖（简要说明）", "🗳️ 投票帖（简要说明）"]
+        "emotion": "[核心情绪/矛盾点：具体说明是什么样的对立或焦虑，60字以内]",
+        "motivation": "[用户为什么要参与：利益/认同/自我表达/猎奇，40字以内]",
+        "formats": ["📊 具体形式1（说明切入角度）", "🗳️ 具体形式2（说明互动设计）", "💬 具体形式3（说明内容方向）"]
       }
     }
   ],
   "watchSection": [
     {
       "id": "${dateCompact}-04",
-      "title": "选题标题，30字以内",
-      "summary": "一句话导语，60字以内",
+      "title": "标题，25字以内",
+      "summary": "导语，60字以内",
       "tags": [{ "text": "标签", "type": "topic" }],
-      "heatInfo": { "type": "start", "label": "${month}月${day}日·简要说明" },
-      "sources": [{ "name": "来源", "url": "#", "icon": "📰", "cls": "pt-default" }],
+      "heatInfo": { "type": "start", "label": "${month}月${day}日·[热度说明]" },
+      "sources": [{ "name": "来源平台", "url": "https://s.weibo.com/weibo?q=关键词", "icon": "🔴", "cls": "pt-weibo" }],
       "level": "mid",
       "levelLabel": "🩵 中潜力",
       "propagation": {
-        "emotion": "情绪分析，40字以内",
-        "motivation": "参与动机，30字以内",
-        "formats": ["💬 讨论帖（说明）"]
+        "emotion": "情绪分析，50字以内",
+        "motivation": "参与动机，35字以内",
+        "formats": ["💬 形式1", "🗳️ 形式2"]
       }
     }
   ]
 }
 
-规则：
-- hotSection 2~4条（已确认热起来的），watchSection 2~4条（潜力盯的）
-- level 只能是 high / mid / low
-- heatInfo.type 只能是 start 或 resurge（复涨）
-- cls 只能是：pt-weibo / pt-xhs / pt-douyin / pt-hupu / pt-zhihu / pt-weixin / pt-baidu / pt-default
-- hotSection levelLabel 用 🔵 爆热 或 🔵 高热
-- watchSection levelLabel 用 🩵 中潜力 或 🩵 中热 或 💚 观察中
-- 来源 url 尽量填真实的搜索链接，如 https://s.weibo.com/weibo?q=关键词
+数量要求：hotSection 3~4条，watchSection 3~4条。
+level 只能是 high/mid/low，heatInfo.type 只能是 start/resurge。
+cls 只能是：pt-weibo/pt-xhs/pt-douyin/pt-hupu/pt-zhihu/pt-weixin/pt-baidu/pt-default。
+hotSection levelLabel 用 🔵 爆热 或 🔵 高热。
+watchSection levelLabel 用 🩵 中潜力 或 🩵 中热 或 💚 观察中。
 `;
 
   let rawContent;
   try {
-    console.log('🤖 正在调用 DeepSeek AI 分析热点...');
-    rawContent = await callDeepSeek(prompt);
+    console.log('🤖 正在调用 DeepSeek 分析热点...');
+    rawContent = await callDeepSeek(systemPrompt, userPrompt);
     console.log('✅ DeepSeek 分析完成');
   } catch (err) {
     console.error('❌ DeepSeek API 调用失败:', err.message);
@@ -259,11 +288,11 @@ ${hupuList || '（获取失败）'}
     console.log(`📦 解析成功：热门 ${newData.hotSection?.length || 0} 条，观察 ${newData.watchSection?.length || 0} 条`);
   } catch (err) {
     console.error('❌ JSON 解析失败:', err.message);
-    console.error('原始返回前500字:', rawContent.slice(0, 500));
+    console.error('原始返回前800字:', rawContent.slice(0, 800));
     process.exit(1);
   }
 
-  // 构建新的存档对象
+  // 构建新存档对象
   const totalItems = (newData.hotSection?.length || 0) + (newData.watchSection?.length || 0);
   const newArchive = {
     date,
@@ -276,26 +305,35 @@ ${hupuList || '（获取失败）'}
     watchSection: newData.watchSection || [],
   };
 
-  // 读取并更新 index.html
-  const indexPath = path.join(__dirname, 'index.html');
-  let html = fs.readFileSync(indexPath, 'utf-8');
+  // ── 更新 index.html（安全插入，不破坏历史数据）──
+  let html = existingHtml;
 
-  // 更新 today 字段
+  // 1. 更新 today 字段
   html = html.replace(/today:\s*'[\d-]+'/, `today: '${date}'`);
 
-  // 在 archives 数组最前面插入新数据（缩进对齐）
-  const newArchiveStr = JSON.stringify(newArchive, null, 6)
+  // 2. 找到 archives: [ 的位置，在第一个 { 之前精确插入
+  //    用更稳健的方式：找到 "archives: [" 然后在其后插入，而不是替换
+  const newArchiveJson = JSON.stringify(newArchive, null, 6)
     .split('\n')
     .map((line, i) => i === 0 ? line : '      ' + line)
     .join('\n');
 
-  html = html.replace(
-    /archives:\s*\[(\s*)\{/,
-    `archives: [\n      ${newArchiveStr},\n      {`
-  );
+  // 匹配 archives: [ 后面紧跟的第一个 { （即第一期存档的开头）
+  // 在它之前插入新存档
+  const insertPattern = /(archives:\s*\[\s*\n\s*)\{/;
+  if (insertPattern.test(html)) {
+    html = html.replace(insertPattern, `$1${newArchiveJson},\n      {`);
+  } else {
+    console.error('❌ 未找到 archives 插入位置，HTML 结构可能已损坏');
+    process.exit(1);
+  }
 
   fs.writeFileSync(indexPath, html, 'utf-8');
-  console.log('✅ index.html 已更新');
+  console.log('✅ index.html 已更新（历史数据保留）');
+
+  // 验证插入后存档数量
+  const dateMatches = (html.match(/"date": "\d{4}-\d{2}-\d{2}"/g) || []);
+  console.log(`📚 当前存档期数: ${dateMatches.length} 期`);
 
   // 生成 MD 文件
   const mdPath = path.join(__dirname, `${date}.md`);
@@ -314,49 +352,33 @@ ${hupuList || '（获取失败）'}
     `## 🔥 已热起来（${newData.hotSection?.length || 0} 条）`,
     '',
   ];
-
   (newData.hotSection || []).forEach((item, i) => {
     mdLines.push(`### ${String(i + 1).padStart(2, '0')} | ${item.levelLabel} ${item.title}`);
-    mdLines.push('');
-    mdLines.push(`**导语：** ${item.summary}`);
-    mdLines.push('');
-    mdLines.push(`**热度时间：** ${item.heatInfo?.label || ''}`);
-    mdLines.push('');
+    mdLines.push('', `**导语：** ${item.summary}`, '');
+    mdLines.push(`**热度：** ${item.heatInfo?.label || ''}`);
     if (item.sources?.length) {
-      mdLines.push(`**来源：** ${item.sources.map(s => `[${s.name}](${s.url})`).join(' · ')}`);
-      mdLines.push('');
+      mdLines.push('', `**来源：** ${item.sources.map(s => `[${s.name}](${s.url})`).join(' · ')}`);
     }
     if (item.propagation) {
-      mdLines.push(`**情绪/矛盾点：** ${item.propagation.emotion || ''}`);
-      mdLines.push('');
-      mdLines.push(`**参与动机：** ${item.propagation.motivation || ''}`);
-      mdLines.push('');
+      mdLines.push('', `**情绪/矛盾点：** ${item.propagation.emotion || ''}`);
+      mdLines.push('', `**参与动机：** ${item.propagation.motivation || ''}`);
       if (item.propagation.formats?.length) {
-        mdLines.push(`**推荐形式：** ${item.propagation.formats.join(' | ')}`);
-        mdLines.push('');
+        mdLines.push('', `**推荐形式：** ${item.propagation.formats.join(' | ')}`);
       }
     }
-    mdLines.push('---');
-    mdLines.push('');
+    mdLines.push('', '---', '');
   });
-
   mdLines.push(`## 👀 值得盯（${newData.watchSection?.length || 0} 条）`, '');
   (newData.watchSection || []).forEach((item, i) => {
     const num = (newData.hotSection?.length || 0) + i + 1;
     mdLines.push(`### ${String(num).padStart(2, '0')} | ${item.levelLabel} ${item.title}`);
-    mdLines.push('');
-    mdLines.push(`**导语：** ${item.summary}`);
-    mdLines.push('');
-    mdLines.push(`**热度时间：** ${item.heatInfo?.label || ''}`);
-    mdLines.push('');
-    if (item.propagation) {
-      mdLines.push(`**推荐形式：** ${(item.propagation.formats || []).join(' | ')}`);
-      mdLines.push('');
+    mdLines.push('', `**导语：** ${item.summary}`, '');
+    mdLines.push(`**热度：** ${item.heatInfo?.label || ''}`);
+    if (item.propagation?.formats?.length) {
+      mdLines.push('', `**推荐形式：** ${item.propagation.formats.join(' | ')}`);
     }
-    mdLines.push('---');
-    mdLines.push('');
+    mdLines.push('', '---', '');
   });
-
   mdLines.push('*本简报由选题雷达系统每日自动生成 · 数据来源：微博/百度/虎扑热搜*');
 
   fs.writeFileSync(mdPath, mdLines.join('\n'), 'utf-8');
