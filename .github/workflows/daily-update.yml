@@ -1,0 +1,45 @@
+name: 每日选题雷达自动更新
+
+on:
+  schedule:
+    # 北京时间 09:00 = UTC 01:00
+    - cron: '0 1 * * *'
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 运行每日更新脚本
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: node update.mjs
+
+      - name: 提交更新后的文件
+        run: |
+          git config user.name "Sports Radar Bot"
+          git config user.email "bot@sports-radar.auto"
+          git add index.html *.md
+          git diff --cached --quiet || git commit -m "📡 自动更新：$(date '+%Y-%m-%d') 选题雷达"
+          git push
+
+      - name: 部署到 Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm install -g vercel@latest
+          vercel --prod --yes --token=$VERCEL_TOKEN

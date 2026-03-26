@@ -1,0 +1,9 @@
+{
+  "name": "sports-topic-radar",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "运动户外选题雷达 - 每日自动更新",
+  "scripts": {
+    "update": "node update.mjs"
+  }
+}
