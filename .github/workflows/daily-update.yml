@@ -24,7 +24,7 @@ jobs:
 
       - name: 运行每日更新脚本
         env:
-          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: node update.mjs
 
       - name: 提交并推送更新
