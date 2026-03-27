@@ -164,6 +164,22 @@
       text-align: center;
     }
 
+    /* ── 下午新增角标 ── */
+    .badge-new {
+      display: inline-flex; align-items: center; gap: 2px;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: #fff;
+      font-size: 0.6rem; font-weight: 800;
+      padding: 1px 6px; border-radius: 20px;
+      letter-spacing: .04em;
+      box-shadow: 0 1px 4px rgba(249,115,22,.35);
+      animation: pulse-new 2s ease-in-out infinite;
+    }
+    @keyframes pulse-new {
+      0%, 100% { box-shadow: 0 1px 4px rgba(249,115,22,.35); }
+      50%       { box-shadow: 0 1px 8px rgba(249,115,22,.6); }
+    }
+
     /* ── 品类 Tab ── */
     .cat-tab {
       display: inline-flex; align-items: center; gap: 6px;
@@ -358,6 +374,7 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums mt-0.5 shrink-0 w-5" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
                 <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5 badge-high" x-text="item.levelLabel"></span>
                 <span class="text-xs text-slate-600 leading-snug transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
+                <span x-show="item.isNew" class="badge-new shrink-0">下午新增</span>
               </a>
             </template>
           </div>
@@ -376,6 +393,7 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums mt-0.5 shrink-0 w-5" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
                 <span class="text-xs px-1.5 py-0.5 rounded shrink-0 mt-0.5 badge-mid" x-text="item.levelLabel"></span>
                 <span class="text-xs text-slate-600 leading-snug hover:text-sky-700 transition-colors line-clamp-1 flex-1" x-text="item.title"></span>
+                <span x-show="item.isNew" class="badge-new shrink-0">下午新增</span>
               </a>
             </template>
           </div>
@@ -402,6 +420,7 @@
               <div class="flex flex-wrap items-center gap-2 mb-2.5">
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-high" x-text="item.levelLabel"></span>
+                <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
                 <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
@@ -482,6 +501,7 @@
               <div class="flex flex-wrap items-center gap-2 mb-2.5">
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-mid" x-text="item.levelLabel"></span>
+                <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
                 <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
@@ -565,7 +585,7 @@ function radarApp() {
         name: '运动户外',
         icon: '🏃',
         desc: '装备 · 赛事 · 消费 · 户外 · 全网舆情扫描',
-        today: '2026-03-26',
+        today: '2026-03-27',
         color: '#2563eb',
         colorMuted: '#93a8d4',
         gradFrom: '#1e40af',
@@ -578,7 +598,7 @@ function radarApp() {
         name: '数码科技',
         icon: '💻',
         desc: '手机 · AI · 芯片 · 消费电子 · 全网舆情扫描',
-        today: '2026-03-26',
+        today: '2026-03-27',
         color: '#7c3aed',
         colorMuted: '#a78bca',
         gradFrom: '#5b21b6',
@@ -592,6 +612,151 @@ function radarApp() {
     // 运动户外数据
     // ══════════════════════════════════════════
     sportsArchives: [
+            {
+        date: '2026-03-27',
+        weekday: '周五',
+        updateTime: '09:00',
+        items: 7,
+        editorNote: '张雪峰事件进入第3天，全民护心情绪从高峰开始回落但仍维持高位，追悼会定于3月28日，舆论窗口期今日为最后一天。北面亚太首次负增长与始祖鸟+41.8%强烈对比持续发酵，冲锋衣"功能还是面子"叙事圈内共鸣强。手机集体涨价第2周，国补失补贴消费焦虑扩散，数码+户外两个圈都在讨论"花钱值不值"的消费决策焦虑。',
+        keywords: ['AED运动安全', '张雪峰追悼', '北面下滑始祖鸟飙升', '冲锋衣消费撕裂', 'Gore-Tex智商税', '国货反弹', '运动护心最后窗口'],
+        hotSection: [
+          {
+            id: '20260327-s01',
+            title: '跑步后猝死第3天：你的运动手表真的能救你吗？',
+            summary: '张雪峰事件进入追悼期，运动手表的心率/ECG检测能否识别危险信号成为跑者圈核心焦虑——但多数人其实不知道手表和医疗级设备的本质区别。',
+            tags: [
+              { text: '运动猝死', type: 'topic' },
+              { text: '心率表', type: 'product' },
+              { text: '张雪峰事件', type: 'topic' },
+              { text: 'AED', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月24日起·张雪峰事件引发全平台讨论，百家号多篇报道，速效救心丸搜索增30倍有数据实测' },
+            sources: [
+              { name: '百家号·极目新闻', url: 'https://baijiahao.baidu.com/s?id=1860595767336566295&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '百家号·光明网', url: 'https://baijiahao.baidu.com/s?id=1860631974637982996&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=运动手表+心率+猝死', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"花五千买佳明，结果没救到命"——这是跑者对自己装备投入的深层质疑，同时触发对品牌过度承诺的愤怒。',
+              motivation: '自我反思（我应该买更专业的设备吗）+ 知识获取（手表心率vs医疗ECG的真实区别）+ 情感共鸣（为张雪峰惋惜）',
+              formats: ['📖 深度帖（运动手表能预警猝死吗？专业医生测评）', '🗳️ 投票（你有没有因心率预警停下来过）', '💬 讨论帖（佳明/Apple Watch救过你一命吗）']
+            }
+          },
+          {
+            id: '20260327-s02',
+            title: '北面亚太首亏而始祖鸟暴涨42%：同是冲锋衣，为何两个世界？',
+            summary: '北面大中华区营收同比下滑6%首录负增长，始祖鸟同期飙涨41.8%——这组数据背后，是中国户外消费从"大众潮流"向"精英圈层"分化的真实切割。',
+            tags: [
+              { text: '北面', type: 'product' },
+              { text: '始祖鸟', type: 'product' },
+              { text: '圈层分化', type: 'topic' },
+              { text: '户外品牌', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月20日起·百家号财经媒体报道，圈内有讨论基础，社交平台热议程度未实测' },
+            sources: [
+              { name: '百家号·金角财经', url: 'https://baijiahao.baidu.com/s?id=1860166667182081226&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '网易·户外频道', url: 'https://www.163.com/dy/article/KOGC26BF055280CT.html', icon: '📰', cls: 'pt-default' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=北面+始祖鸟+亚太+下滑', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'mid', levelLabel: '🟡 上升',
+            propagation: {
+              emotion: '"以前穿北面是潮流，现在是土"——这句话击中了大量从众消费者的身份焦虑，同时触发新一波始祖鸟鄙视链讨论。',
+              motivation: '身份认同重构 + 消费决策焦虑（我该升级始祖鸟吗）+ 品牌站队（国货 vs 外资高端）',
+              formats: ['📊 对比帖（北面 vs 始祖鸟：同价格段谁更值）', '💬 讨论帖（你从北面换到始祖鸟了吗）', '📖 深度帖（中国户外圈层分化图鉴）']
+            }
+          },
+          {
+            id: '20260327-s03',
+            title: '四五千的冲锋衣你买的是功能还是面子？中产身份焦虑大曝光',
+            summary: '网易深度文章直击痛点：六成户外用户年消费超8000元，平均客单价1300元，装备从"工具"变"礼物"——品牌展台越来越像奢侈品店，消费者买的到底是啥？',
+            tags: [
+              { text: '冲锋衣', type: 'product' },
+              { text: '中产消费', type: 'topic' },
+              { text: '身份焦虑', type: 'emotion' },
+              { text: '户外装备', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月26日起·网易报道，有媒体讨论，圈内消费撕裂有历史争议基础，社交平台热议未实测' },
+            sources: [
+              { name: '网易·深度', url: 'https://www.163.com/dy/article/KOO6V4LO05564PRP.html', icon: '📰', cls: 'pt-default' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=冲锋衣+中产+身份+面子', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'mid', levelLabel: '🟡 上升',
+            propagation: {
+              emotion: '"花四千买了件冲锋衣，露营营地关门了——这钱花得究竟值不值"——消费后悔与身份认同双重撕裂。',
+              motivation: '消费决策反思 + 身份认同（我是真户外还是精神户外）+ 撕裂讨论（功能党 vs 颜值党）',
+              formats: ['🗳️ 投票（你买冲锋衣主要看功能还是品牌）', '💬 讨论帖（花4000的冲锋衣去哪了）', '📖 深度帖（中产户外装备消费图鉴）']
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260327-s04',
+            title: 'Gore-Tex防水膜2-3年后变"闷脚塑料袋"：你被骗了多少年？',
+            summary: '户外鞋评测揭示反常识：Gore-Tex防水膜寿命约2-3年后透气孔堵塞，非防水跑鞋+羊毛袜组合在干燥气候下反而更舒适、更健康。',
+            tags: [
+              { text: 'Gore-Tex', type: 'product' },
+              { text: '徒步鞋', type: 'product' },
+              { text: '反常识', type: 'topic' },
+              { text: '智商税', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月24日·网易户外测评文章，有反常识钩子，社交平台传播潜力待观察' },
+            sources: [
+              { name: '网易·户外测评', url: 'https://m.163.com/dy/article/KOQ7I1F805561FZW.html', icon: '📰', cls: 'pt-default' }
+            ],
+            level: 'low', levelLabel: '🌱 待观察',
+            propagation: {
+              emotion: '"花大价钱买Gore-Tex，三年后和普通鞋没区别"——这种被忽悠的愤怒极易引发传播。',
+              motivation: '知识获取 + 消费反思（我该怎么保养防水鞋）+ 反常识分享',
+              formats: ['📖 科普帖（Gore-Tex的真实寿命：官方不告诉你的事）', '🗳️ 投票（你的Gore-Tex鞋还防水吗）', '💬 讨论帖（徒步鞋非防水版真的够用吗）']
+            }
+          },
+          {
+            id: '20260327-s05',
+            title: '国货冲锋衣凯乐石、骆驼口碑逆袭：同等性能为什么还要花三倍？',
+            summary: '多项测评显示凯乐石自研防水透气面料性能不输国际品牌，骆驼基础防水做工扎实价格亲民，国货冲锋衣的口碑天花板在哪？',
+            tags: [
+              { text: '凯乐石', type: 'product' },
+              { text: '骆驼', type: 'product' },
+              { text: '国货', type: 'topic' },
+              { text: '性价比', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月23-25日·百家号多篇测评报道，国货户外话题持续，无单点爆发热议' },
+            sources: [
+              { name: '百家号·测评', url: 'https://baijiahao.baidu.com/s?id=1860616779124458506&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '知乎·户外', url: 'https://zhuanlan.zhihu.com/p/2018808864502493377', icon: '📰', cls: 'pt-zhihu' }
+            ],
+            level: 'low', levelLabel: '🌱 待观察',
+            propagation: {
+              emotion: '"国货冲锋衣真的够用了，你还在交智商税？"——外资vs国货撕裂点稳定存在。',
+              motivation: '消费决策（省钱 vs 品牌溢价）+ 国货身份认同 + 帮他人避坑',
+              formats: ['📊 对比帖（凯乐石 vs 始祖鸟同功能款：差价值几个 Gore-Tex）', '💬 推荐帖（500-1500元国货冲锋衣实用测评）', '🗳️ 投票（你愿意为品牌溢价多花多少钱）']
+            }
+          },
+          {
+            id: '20260327-s06',
+            title: '重庆女子半马3月29日开跑：张雪峰之后，赛事AED配置够不够？',
+            summary: '3月29日重庆女子半程马拉松临近，张雪峰事件仍在发酵，赛事现场AED覆盖率、急救响应能力成为跑者最关注的议题。',
+            tags: [
+              { text: '重庆女子半马', type: 'topic' },
+              { text: 'AED', type: 'topic' },
+              { text: '赛事安全', type: 'topic' },
+              { text: '跑步', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月27日·赛前窗口期，AED话题借张雪峰事件余热，实际热议程度未实测' },
+            sources: [
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=重庆女子半马+AED+安全', icon: '🔴', cls: 'pt-weibo' },
+              { name: '百度搜索', url: 'https://www.baidu.com/s?q=重庆女子半马2026+AED', icon: '🔵', cls: 'pt-baidu' }
+            ],
+            level: 'low', levelLabel: '🌱 待观察',
+            propagation: {
+              emotion: '"报名了重马，还敢不敢跑？"——跑者对自身安全的真实焦虑，借势窗口期强烈。',
+              motivation: '自我安全评估 + 圈子批评（赛事组委会有没有做好准备）+ 信息获取（查询AED位置）',
+              formats: ['📖 预报帖（重庆女子半马：今年AED配置几台·急救人员几名）', '💬 讨论帖（张雪峰之后你还会参加马拉松吗）', '🗳️ 投票（选赛事你会看AED配置吗）']
+            }
+          }
+        ]
+      },
       {
         date: '2026-03-26',
         weekday: '周四',
@@ -715,11 +880,11 @@ function radarApp() {
               { text: 'IWF健身展', type: 'platform' },
               { text: '极简跑法', type: 'topic' }
             ],
-            heatInfo: { type: 'start', label: '3月23日起·IWF展会期间' },
-            sources: [{ name: '微博', url: 'https://weibo.com/vibramchina', icon: '🔴', cls: 'pt-weibo' }],
-            level: 'mid', levelLabel: '🪵 中潜力',
+            heatInfo: { type: 'start', label: '3月26日·IWF展会出现，圈内有争议基础，当前无平台热议实测' },
+            sources: [{ name: '展会报道', url: 'https://www.baidu.com/s?q=Vibram五指鞋+IWF+2026', icon: '📰', cls: 'pt-default' }],
+            level: 'low', levelLabel: '🌱 待观察',
             propagation: {
-              emotion: '"五指鞋/赤足跑"是运动圈的长期争议话题，支持者说更自然、反对者说更容易受伤；在安全背景下格外敏感。',
+              emotion: '"五指鞋/赤足跑"在跑圈是长期争议，支持者说更自然护膝，反对者说初学者用反而更容易受伤；话题有历史积累，但当前无突发热度。',
               motivation: '好奇心（五指鞋到底是什么感受）+ 验证选择（我买的厚底鞋是不是对身体不好）+ 圈内争论参与欲。',
               formats: ['🔍 科普帖（赤足跑 vs 厚底跑：谁更科学）', '💬 讨论帖（你试过五指鞋吗）', '📹 体验视频（初跑者尝试Vibram五指鞋实录）']
             }
@@ -953,6 +1118,152 @@ function radarApp() {
     // 数码科技数据
     // ══════════════════════════════════════════
     techArchives: [
+            {
+        date: '2026-03-27',
+        weekday: '周五',
+        updateTime: '09:00',
+        items: 7,
+        editorNote: '今日T8追踪迎来新进展：旧手机回收今日仍有百家号最新报道（AI抢芯片→消费级短缺→废旧手机成金矿），故事链完整且今日有新文章，T8优先推送。手机集体涨价第2周情绪持续，国补失补贴消费焦虑是核心话题。OPPO拉踩三星段永平下场事件热度稳定。',
+        keywords: ['旧手机回收暴涨', '存储芯片短缺', '手机涨价失国补', 'OPPO拉踩三星', '段永平', '荣耀Magic V6', 'AI手机真假'],
+        hotSection: [
+          {
+            id: '20260327-t01',
+            title: '你家压箱底的旧手机，今天值三倍——AI把芯片都抢走了',
+            summary: '3月27日今日最新：旧手机回收价今年Q1整体涨3倍，AI产业把消费级存储芯片产能抢走70%以上，废旧机型连开不了机的都有人收，这是普通人能直接感受到的AI红利。',
+            tags: [
+              { text: '旧手机回收', type: 'topic' },
+              { text: 'AI芯片短缺', type: 'topic' },
+              { text: '废旧手机', type: 'topic' },
+              { text: '消费决策', type: 'emotion' }
+            ],
+            heatInfo: { type: 'start', label: '3月25-27日持续·百家号/封面新闻/中国青年报/红星新闻均有报道，今日仍有新文章发布，热度实测有媒体集体跟进' },
+            sources: [
+              { name: '百家号·今日新发', url: 'https://baijiahao.baidu.com/s?id=1860766214357114353&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '百家号·中国青年报', url: 'https://baijiahao.baidu.com/s?id=1860708383211912702&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=旧手机回收+暴涨+芯片', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"我有6台压箱底的旧手机，没想到今天变成了财富"——反转惊喜感极强，同时触发"AI发展让普通人受益了"的共鸣。',
+              motivation: '立即行动（赶快卖掉旧手机）+ 知识获取（哪些机型值钱）+ 意外感分享',
+              formats: ['📊 实用帖（2026旧手机回收价格表：哪款最值钱）', '💬 分享帖（我把压箱底旧机全卖了，赚了多少）', '📖 深度帖（AI时代：你的旧手机是AI的口粮）']
+            }
+          },
+          {
+            id: '20260327-t02',
+            title: '五年最大涨价潮：手机涨了还失国补，消费者里外里多掏近千元',
+            summary: 'OPPO、vivo、荣耀集体调价，部分机型从5999元涨到6399元，一跃过国补6000元红线，消费者不仅要多付涨价，还要失去最高500元国补——最坑的窗口期已经过了。',
+            tags: [
+              { text: '手机涨价', type: 'topic' },
+              { text: '国补红线', type: 'topic' },
+              { text: '消费决策', type: 'emotion' },
+              { text: 'OPPO vivo荣耀', type: 'product' }
+            ],
+            heatInfo: { type: 'start', label: '3月10-20日起·OPPO率先官宣，多家媒体实测报道，门店客流下降三成有实测数据，消费者讨论持续' },
+            sources: [
+              { name: '百家号·百家号', url: 'https://baijiahao.baidu.com/s?id=1860178507025279521&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '百家号·Tech星球', url: 'https://baijiahao.baidu.com/s?id=1860613312822893869&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=手机涨价+国补+失补贴', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"本来准备趁国补买手机，结果涨价后失去补贴资格，两头亏"——消费焦虑 + 被品牌算计的愤怒。',
+              motivation: '消费决策焦虑（现在到底买不买）+ 愤怒宣泄（厂商太坏了）+ 帮他人避坑',
+              formats: ['📊 决策帖（手机涨价后：还有哪些机型在国补红线以内）', '🗳️ 投票（你因为涨价推迟换机了吗）', '💬 讨论帖（存储芯片短缺预计多久，手机价格几时到顶）']
+            }
+          },
+          {
+            id: '20260327-t03',
+            title: 'OPPO拉踩三星段永平下场：本分的底线，被折叠屏卖场价格击穿了？',
+            summary: 'OPPO Find N6发布会当场将三星折叠屏掰弯60分钟比折痕，段永平罕见回应"确实没必要比较，我反映一下"——创始人级别的表态让这场品牌站队撕裂迅速扩散。',
+            tags: [
+              { text: 'OPPO Find N6', type: 'product' },
+              { text: '段永平', type: 'topic' },
+              { text: '折叠屏', type: 'product' },
+              { text: '品牌文化', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月17-20日起·百家号报道，段永平下场评论有雪球互动记录，折叠屏圈内有讨论基础' },
+            sources: [
+              { name: '百家号·分析', url: 'https://baijiahao.baidu.com/s?id=1860156135603174744&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=OPPO+段永平+拉踩三星+折叠屏', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'mid', levelLabel: '🟡 上升',
+            propagation: {
+              emotion: '"OPPO背刺自己的价值观——这比拉踩三星本身更让人失望"——品牌信任崩塌的情绪比纯技术争吵更持久。',
+              motivation: '品牌站队 + 价值观讨论（本分vs营销焦虑）+ 折叠屏购买决策',
+              formats: ['💬 讨论帖（你怎么看段永平这句"没必要比较"）', '📊 对比帖（折叠屏真正的差距在哪：OPPO vs 三星实测）', '📖 深度帖（OPPO 14年品牌观：从"本分"到拉踩的路有多远）']
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260327-t04',
+            title: '荣耀Magic V6"肉身测评"：7150mAh+接入iMessage，折叠屏新标杆还是信任危机？',
+            summary: '荣耀Magic V6搭载行业罕见7150mAh电池并号称兼容苹果iMessage，但生态护城河薄弱仍是核心质疑——用技术攻势能否赢回高端用户信任？',
+            tags: [
+              { text: '荣耀Magic V6', type: 'product' },
+              { text: '折叠屏', type: 'product' },
+              { text: '生态系统', type: 'topic' },
+              { text: 'iMessage互联', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月20-22日·百家号发布会报道，有媒体分析，发布会有网络传播，社交圈热议程度未实测' },
+            sources: [
+              { name: '百家号·蛇眼财经', url: 'https://baijiahao.baidu.com/s?id=1860358740041386982&wfr=spider&for=pc', icon: '🅱', cls: 'pt-baidu' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=荣耀Magic+V6+iMessage', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'mid', levelLabel: '🪵 中潜力',
+            propagation: {
+              emotion: '"折叠屏真的接入苹果生态了？太真了还是噱头？"——功能真假争议触发技术迷的深度讨论。',
+              motivation: '技术核验欲 + 品牌站队（荣耀能否超越华为鸿蒙）+ 购买决策辅助',
+              formats: ['📖 测评帖（荣耀Magic V6接入iMessage真实体验）', '🗳️ 投票（你换折叠屏最看重什么：续航/生态/价格）', '💬 讨论帖（荣耀生态真的能挑战苹果了吗）']
+            }
+          },
+          {
+            id: '20260327-t05',
+            title: 'AYANEO掌机因存储芯片暴涨被迫暂停预售：这波涨价还会波及哪些数码产品？',
+            summary: '游戏掌机AYANEO NEXT 2因存储器价格过高全面暂停预售，这是存储芯片短缺从手机圈蔓延到掌机/PC圈的第一个标志性案例。',
+            tags: [
+              { text: 'AYANEO掌机', type: 'product' },
+              { text: '存储芯片', type: 'topic' },
+              { text: '涨价传导', type: 'topic' },
+              { text: '消费电子', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月24日·IT之家报道，掌机圈有实际讨论，存储芯片话题在此背景下有延伸价值' },
+            sources: [
+              { name: '新浪数码', url: 'https://k.sina.cn/article_7857201856_1d45362c001903k2i2.html', icon: '📰', cls: 'pt-default' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=AYANEO+掌机+存储芯片+涨价', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'low', levelLabel: '🌱 待观察',
+            propagation: {
+              emotion: '"想买掌机却直接被迫取消预售"——消费者的无力感 + 对AI烧光芯片的愤怒。',
+              motivation: '消费决策（我的预购会不会也被取消）+ 知识获取（存储芯片短缺影响哪些设备）+ 情绪宣泄',
+              formats: ['📖 扫雷帖（存储芯片短缺：接下来哪些数码产品会涨价或断货）', '💬 讨论帖（为了AI大模型，我们连掌机都买不到了）', '🗳️ 投票（你现在是立即入手还是等芯片价格回落）']
+            }
+          },
+          {
+            id: '20260327-t06',
+            title: 'iPhone Fold折叠屏曝光CoE技术：更薄了但户外可读性成短板',
+            summary: '苹果iPhone Fold引入CoE彩色滤光片封装技术，省去偏光片可实现更薄屏幕、更省电，但随之而来的户外强光可读性下降问题让外界争议不断。',
+            tags: [
+              { text: 'iPhone Fold', type: 'product' },
+              { text: '苹果折叠屏', type: 'product' },
+              { text: 'CoE技术', type: 'topic' },
+              { text: '折叠屏争议', type: 'topic' }
+            ],
+            heatInfo: { type: 'start', label: '3月24日·新浪数码报道，属于爆料信息，苹果圈长期关注，无当前热议实测' },
+            sources: [
+              { name: '新浪数码', url: 'https://k.sina.cn/article_7857201856_1d45362c001903k2i2.html', icon: '📰', cls: 'pt-default' },
+              { name: '微博搜索', url: 'https://s.weibo.com/weibo?q=iPhone+Fold+CoE+户外可读性', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'low', levelLabel: '🌱 待观察',
+            propagation: {
+              emotion: '"苹果折叠屏还没发布，短板就暴露了"——苹果铁粉和折叠屏期待者双重情绪碰撞。',
+              motivation: '知识获取（CoE技术到底好不好）+ 品牌站队（苹果的选择对不对）+ 消费决策（要不要等iPhone Fold）',
+              formats: ['📖 技术帖（CoE屏幕技术：苹果的取舍是进步还是倒退）', '🗳️ 投票（iPhone Fold发布后你会买吗）', '💬 讨论帖（户外可读性下降是可以接受的折叠屏缺陷吗）']
+            }
+          }
+        ]
+      },
       {
         date: '2026-03-26',
         weekday: '周四',
