@@ -2303,8 +2303,8 @@ function radarApp() {
       summary: '折叠屏手机耐用性虽有提升，但屏幕折痕仍是痛点，用户对高昂售价与耐用性之间的平衡表示质疑。',
       tags: [{ text: '折叠屏', type: 'topic' }, { text: '耐用性测试', type: 'topic' }],
       heatInfo: { type: 'watch', label: '耐用性技术讨论' },
-      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=相机+手机+拍照+2026', icon: '🔴', cls: 'pt-weibo' },
-              {name:'少数派', url:'https://sspai.com/search/post?q=相机+手机+拍照', icon:'📰', cls:'pt-baidu'}
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=折叠屏+铰链+耐用性+2026', icon: '🔴', cls: 'pt-weibo' },
+              {name:'少数派', url:'https://sspai.com/search/post?q=折叠屏+耐用性+铰链', icon:'📰', cls:'pt-baidu'}
             ],
       level: 'medium',
       levelLabel: '🟡 值得关注',
@@ -3996,113 +3996,98 @@ function radarApp() {
   editorNote: '今日最强数据：同程旅行实测——清明6天假亲子人群订单同比暴涨200%，春假城市亲子产品销量更突破300%。4月5日燃油附加费Q档大涨6倍（中短途从10元跳至60元），携程/飞猪昨晚紧急预警，用户"提前购vs观望捡漏"决策撕裂今日达峰。最热目的地：洛阳增长超5倍，西安超4倍，"有历史的城市才能研学"话题已在小红书爆量。⚠️ 假期第一天热度最高，出行焦虑类内容今日比明日传播力强2-3倍，不要等到假期中段发。',
   keywords: ['清明出行', '燃油附加费', '抢票潮', '含娃量', '春假'],
   hotSection: [
-    {
-      id: '20260403-v01',
-      title: '清明前夜“抢票战”：燃油费明起暴涨6倍，最后窗口期锁定',
-      summary: '清明假期临近，燃油附加费即将暴涨，消费者陷入抢票焦虑，纷纷赶在涨价前锁定机票。',
-      tags: [{ text: '清明出行', type: 'topic' }, { text: '燃油附加费', type: 'topic' }],
-      heatInfo: { type: 'start', label: '出行决策焦虑达峰值' },
-      sources: [{ name: '新浪财经', url: 'http://k.sina.com.cn/article_7857201856_1d45362c001903vm9m.html', icon: '📰', cls: 'pt-baidu' },
-              {name:'马蜂窝', url:'https://www.mafengwo.cn/search/q.php?q=清明机票+燃油', icon:'🐝', cls:'pt-default'}
+          {
+            id: '20260403-v01',
+            title: '燃油附加费清明档暴涨6倍：最后窗口期紧急锁票',
+            summary: '4月5日起国内航线燃油附加费Q档从10元跳至60元（短途）、20元→120元（长途），涨幅5倍，携程/飞猪紧急预警，今日消费者"抢票vs放弃"决策撕裂达峰。',
+            tags: [{text:'燃油附加费',type:'topic'},{text:'清明出行',type:'action'},{text:'航司定价',type:'topic'}],
+            heatInfo: {type: 'start', label: '4月3日·燃油附加费5倍涨幅预警，消费者抢票潮爆发'},
+            sources: [
+              {name:'同花顺财经', url:'http://field.10jqka.com.cn/20260402/c675717066.shtml', icon:'📰', cls:'pt-baidu'},
+              {name:'百家号', url:'https://baijiahao.baidu.com/s?id=1861362399910527282&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·燃油费话题', url:'https://s.weibo.com/weibo?q=燃油附加费+清明+2026', icon:'🔴', cls:'pt-weibo'}
             ],
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      propagation: {
-        emotion: '“这哪是清明出游，简直是给航司送钱！明明是明天才涨价，今天机票价格就跟着水涨船高，平台显示余票全是高价位，这波操作真是把消费者的钱包拿捏得死死的，早知道上周就该把票出了，现在买就是纯纯的大冤种。”——用户对航司涨价操作感到愤怒，认为被“收割”，对高昂票价产生强烈抵触与无奈情绪。',
-        motivation: '（在携程/飞猪刷新机票价格）+（对比4日与5日的燃油费差额）+（立刻下单锁定4日晚间出票）',
-        formats: ['✈️ 抢票攻略（避坑指南）', '💰 成本分析（涨价预警）', '📱 小红书/微博·热度窗口[今日14:00-20:00]']
-      }
-    },
-    {
-      id: '20260403-v02',
-      title: '清明6天假“含娃量”爆表，亲子游订单暴涨200%',
-      summary: '清明亲子游需求激增，热门航线被家庭客群占据，家长在心疼钱包与陪伴孩子间寻求平衡。',
-      tags: [{ text: '亲子游', type: 'topic' }, { text: '含娃量', type: 'topic' }],
-      heatInfo: { type: 'start', label: '亲子游订单暴涨200%' },
-      sources: [{ name: '网易新闻', url: 'https://www.163.com/dy/article/KPC313170550B6IS.html', icon: '📰', cls: 'pt-baidu' },
-              {name:'携程', url:'https://www.ctrip.com/search/o.htm?q=民宿+踩雷+退款', icon:'📰', cls:'pt-baidu'}
-            ,
-              { name: '小红书', url: 'https://www.xiaohongshu.com/search_result?keyword=民宿+踩雷+退款', icon: '📕', cls: 'pt-default' }],
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      propagation: {
-        emotion: '“带娃出行就是一场修行，现在连机票都得抢，看到热门航线全是带小孩的家庭，感觉整个机场都要被奶粉味和哭闹声淹没了。虽然心疼钱包，但看着孩子满心期待的样子，只能安慰自己：贵就贵点吧，只要能出去玩，一切都值得。”——家长群体对高昂出行成本感到压力，但出于对亲子陪伴的重视，表现出“痛并快乐着”的复杂心态。',
-        motivation: '（在亲子社群询问目的地攻略）+（搜索广州/三亚亲子酒店房型）+（转发带娃出行注意事项给配偶）',
-        formats: ['👨‍👩‍👧 亲子出行（避坑经验）', '🎒 装备清单（带娃指南）', '📱 微信朋友圈/抖音·热度窗口[今日18:00-22:00]']
-      }
-    },
-    {
-      id: '20260403-v03',
-      title: '清明出行避坑指南：4日24点前出票，省下往返200元',
-      summary: '面对燃油费上涨，网友通过熬夜抢票、实时比价等方式试图降低出行成本，焦虑感蔓延。',
-      tags: [{ text: '省钱攻略', type: 'topic' }, { text: '清明出行', type: 'topic' }],
-      heatInfo: { type: 'watch', label: '省钱焦虑引发关注' },
-      sources: [{ name: '百度百家号', url: 'https://baijiahao.baidu.com/s?id=1861362399910527282', icon: '📰', cls: 'pt-baidu' },
-              {name:'航旅纵横', url:'https://www.umetrip.com/', icon:'📰', cls:'pt-baidu'}
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"这哪是清明出游，简直是给航司送钱！明明明天才涨价，今天机票价格就跟着水涨船高，这波操作真是把消费者的钱包拿捏得死死的，早知道上周就该把票出了，现在买就是纯纯的大冤种。"——政策缺乏缓冲期引发的愤怒，是最容易传播的消费撕裂情绪。',
+              motivation: '在携程/飞猪刷新机票价格（核实涨幅）+ 对比4日与5日的燃油费差额（计算损失）+ 在社交媒体吐槽航司定价（情绪宣泄）',
+              formats: [
+                '⚠️ 紧急提醒（燃油费明起涨6倍，今天买还能省多少？附计算公式）',
+                '📊 对比贴（4日vs5日出发总价差异，真实截图对比）',
+                '💬 观点贴（航司定价机制合理吗？旅游业复苏靠收割消费者？）',
+                '📱 微博/小红书·热度窗口[17:00-23:00]'
+              ]
+            }
+          },
+          {
+            id: '20260403-v02',
+            title: '清明6天假"含娃量"爆表：亲子游订单同比涨200%',
+            summary: '同程旅行数据：清明亲子人群订单同比涨200%，景区青少年人数增3倍，洛阳增长超5倍、西安超4倍，"有历史才能研学"成家长出游首选逻辑，但亲子游价格同步创新高。',
+            tags: [{text:'亲子游',type:'topic'},{text:'含娃量',type:'topic'},{text:'研学旅游',type:'category'}],
+            heatInfo: {type: 'start', label: '4月3日·同程旅行发布清明亲子出行数据'},
+            sources: [
+              {name:'百家号-财联社', url:'https://baijiahao.baidu.com/s?id=1861255394937202646&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'百家号-北京商报', url:'https://baijiahao.baidu.com/s?id=1861266847311132963&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·清明亲子游', url:'https://s.weibo.com/weibo?q=清明+亲子游+2026', icon:'🔴', cls:'pt-weibo'}
             ],
-      level: 'medium',
-      levelLabel: '🟡 值得关注',
-      propagation: {
-        emotion: '“这种政策调整简直是逼着人熬夜！为了省下那几百块钱燃油费，今晚注定是个不眠夜。看着后台不断跳动的价格，真的怀疑自己是在度假还是在炒股，这种为了省钱而产生的焦虑感，真的让整个假期的心情都打了折扣。”——用户对政策调整带来的额外经济负担感到不满，将抢票过程比作“炒股”，反映出对出行成本的极度敏感。',
-        motivation: '（设置闹钟提醒4日24点前出票）+（查看航司官网实时余票）+（在购票群分享省钱技巧）',
-        formats: ['📉 价格监测（省钱技巧）', '⏰ 抢票提醒（时间节点）', '📱 今日头条/知乎·热度窗口[今日20:00-24:00]']
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260403-v04',
-      title: '清明长假酒店预订激增，广州与三亚成“顶流”',
-      summary: '清明酒店价格翻倍，热门城市房源紧缺，消费者对报复性消费带来的高物价感到无奈。',
-      tags: [{ text: '酒店预订', type: 'topic' }, { text: '旅游消费', type: 'topic' }],
-      heatInfo: { type: 'watch', label: '热门城市房源紧缺' },
-      sources: [{ name: '百度百家号', url: 'https://baijiahao.baidu.com/s?id=1861255394937202646', icon: '📰', cls: 'pt-baidu' },
-              {name:'马蜂窝', url:'https://www.mafengwo.cn/search/q.php?q=特种兵旅游+清明', icon:'🐝', cls:'pt-default'}
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"清明亲子游价格贵得离谱，酒店一晚直接翻倍，还一房难求。带孩子出去玩是好事，但被景区和平台这么收割，下次真的考虑不出门了。"——亲子消费意愿强但价格敏感度高，性价比撕裂是今日最强钩子。',
+              motivation: '在携程对比亲子房价格（核实涨幅）+ 在小红书搜索"清明亲子游平替"（找省钱方案）+ 在家长群分享目的地避坑经验（社交裂变）',
+              formats: [
+                '📊 数据贴（清明亲子游十大热门目的地+价格涨幅对比）',
+                '💰 省钱攻略（含娃出游如何避开价格刺客，附真实预算清单）',
+                '💬 观点征集（清明带娃出游还是宅家陪伴？你怎么选）',
+                '📱 小红书·热度窗口今日全天，亲子内容清明假期流量翻倍'
+              ]
+            }
+          },
+          {
+            id: '20260403-v03',
+            title: '清明票务省钱实战：4日24点前出票，可省往返200元',
+            summary: '短途燃油附加费从10元涨至60元，长途从20元涨至120元，4月4日24点前出票是最后低价窗口。网友整理了携程/去哪儿的差价截图，"省200元攻略"在各旅行群裂变。',
+            tags: [{text:'燃油附加费省钱',type:'topic'},{text:'清明出行',type:'action'},{text:'抢票攻略',type:'category'}],
+            heatInfo: {type: 'resurge', label: '4月3日·燃油附加费涨幅公告，省钱攻略裂变传播'},
+            sources: [
+              {name:'百家号', url:'https://baijiahao.baidu.com/s?id=1861362399910527282&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·省票攻略', url:'https://s.weibo.com/weibo?q=燃油附加费+省钱+清明+2026', icon:'🔴', cls:'pt-weibo'}
             ],
-      level: 'medium',
-      levelLabel: '🟡 值得关注',
-      propagation: {
-        emotion: '“现在的酒店价格简直离谱，平时几百块的房现在翻了三倍不止，而且稍微好点的亲子房早就被订空了。感觉大家都在报复性消费，清明这几天出门，除了看人头就是看价格，真的是花钱买罪受。”——用户对假期酒店溢价表示强烈不满，认为旅游体验因高昂成本而大打折扣，产生“花钱买罪受”的负面评价。',
-        motivation: '（在美团/大众点评查看酒店剩余房源）+（对比不同平台的酒店价格）+（预订周边非热门城市的替代住宿）',
-        formats: ['🏨 酒店避坑（预订建议）', '🗺️ 替代方案（小众目的地）', '📱 小红书/抖音·热度窗口[今日10:00-16:00]']
-      }
-    },
-    {
-      id: '20260403-v05',
-      title: '春日黄金周航线热度监测：13-18岁青少年出行需求激增',
-      summary: '青少年出行需求增长，家长在支持孩子出游与高昂机票成本之间权衡，呼吁航司优惠。',
-      tags: [{ text: '青少年出行', type: 'topic' }, { text: '春假', type: 'topic' }],
-      heatInfo: { type: 'watch', label: '青少年出行需求增长' },
-      sources: [{ name: '网易新闻', url: 'https://www.163.com/search/index.html?keyword=清明+青少年+出行+订单', icon: '📰', cls: 'pt-baidu' },
-              {name:'小红书', url:'https://www.xiaohongshu.com/search_result?keyword=清明+青少年+出行+研学', icon:'📕', cls:'pt-default'}
+            level: 'mid', levelLabel: '🟡 热议',
+            propagation: {
+              emotion: '"没想到清明出行买张机票要多花这么多钱，这波政策调整真的让人措手不及。好在有人整理了抢票攻略，赶紧转发给群友，今晚熬夜出票不亏。"——成本压力下用户主动传播省钱内容，实用攻略裂变动力强。',
+              motivation: '设置闹钟提醒4日24点前出票（立即行动）+ 查看携程实时余票（比价决策）+ 在购票群分享省钱技巧（社交裂变）',
+              formats: [
+                '📊 省钱帖（燃油附加费4月5日前vs后：真实差价计算，附购票时间表）',
+                '⏰ 提醒帖（还有X小时！4日24点前出票指南）',
+                '💬 讨论帖（今年清明出行最贵的成本是什么）',
+                '📱 微信群/微博·热度窗口[20:00-24:00]'
+              ]
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260403-v04',
+            title: '洛阳增长超5倍、西安超4倍：清明"历史研学"成家庭首选',
+            summary: '去哪儿发布数据：清明热门城市入住量中，洛阳增超5倍、西安增超4倍，"有历史的城市才能研学"话题在小红书爆量，国风历史目的地彻底跑赢海滨/山地传统热门。',
+            tags: [{text:'研学旅游',type:'topic'},{text:'洛阳西安',type:'category'},{text:'历史目的地',type:'action'}],
+            heatInfo: {type: 'start', label: '4月3日·去哪儿发布清明最热目的地数据'},
+            sources: [
+              {name:'百家号-北京商报', url:'https://baijiahao.baidu.com/s?id=1861266847311132963&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'小红书·研学旅游', url:'https://www.xiaohongshu.com/search_result?keyword=清明研学目的地2026', icon:'📕', cls:'pt-default'}
             ],
-      level: 'low',
-      levelLabel: '🌱 潜力股',
-      propagation: {
-        emotion: '“现在的孩子真是幸福，清明假都能安排得这么满。不过作为家长，看到机票价格涨幅这么大，真的有点吃不消。希望航司能多放点票，别让这种刚需出行变成纯粹的奢侈消费。”——家长对青少年出行需求表示理解，但对高昂的机票价格感到吃力，呼吁航司提供更多惠民政策。',
-        motivation: '（查询热门航线余票情况）+（对比不同航空公司的会员折扣）+（与家人商量调整出行日期）',
-        formats: ['✈️ 航线监测（价格走势）', '💡 消费建议（家长视角）', '📱 微博/今日头条·热度窗口[今日15:00-19:00]']
-      }
-    },
-    {
-      id: '20260403-v06',
-      title: '燃油费上调倒计时：长途出行成本增加，旅游业复苏还是收割？',
-      summary: '燃油费上调引发对旅游业复苏模式的质疑，消费者对缺乏缓冲期的政策调整感到不满。',
-      tags: [{ text: '燃油附加费', type: 'topic' }, { text: '旅游业', type: 'topic' }],
-      heatInfo: { type: 'watch', label: '政策调整引发质疑' },
-      sources: [{ name: '新浪财经', url: 'http://k.sina.com.cn/article_7857201856_1d45362c001903vm9m.html', icon: '📰', cls: 'pt-baidu' },
-              {name:'携程', url:'https://www.ctrip.com/search/o.htm?q=清明+早鸟+囤酒店', icon:'📰', cls:'pt-baidu'}
-            ],
-      level: 'medium',
-      levelLabel: '🟡 值得关注',
-      propagation: {
-        emotion: '“每次假期前夕都要来这么一出，燃油费说涨就涨，完全不给消费者缓冲期。这种政策调整真的太不人性化了，感觉旅游业的复苏完全是建立在对游客的反复收割上，以后假期出行真的得三思了。”——用户对政策缺乏缓冲期感到愤怒，质疑旅游业的复苏逻辑，认为消费者成为了被收割的对象。',
-        motivation: '（搜索燃油费调整政策全文）+（计算往返总成本）+（在社交媒体吐槽航司定价）',
-        formats: ['⚖️ 政策解读（行业观察）', '💬 舆论吐槽（消费者心声）', '📱 知乎/微信朋友圈·热度窗口[今日17:00-23:00]']
-      }
-    }
-  ],
-  watchSection: [
+            level: 'mid', levelLabel: '🟡 热议',
+            propagation: {
+              emotion: '"以前带孩子就是去海边/游乐场，今年突然觉得带去洛阳看牡丹、去西安看兵马俑更有意义。研学这个词被说烂了，但当孩子真的在龙门石窟问\'爸爸这是什么朝代的\'，才觉得值了。"——历史文化目的地打通亲子游与教育焦虑两个需求，情感动力强。',
+              motivation: '在小红书搜索"洛阳清明研学攻略"（获取信息）+ 对比环球/迪士尼vs洛阳西安的教育价值（选择决策）+ 晒娃在历史景区的照片（内容生产）',
+              formats: [
+                '📊 攻略帖（清明历史文化游TOP5城市：洛阳/西安/北京/南京/成都行程对比）',
+                '💬 讨论帖（你会带孩子去"有历史"的城市还是"有趣"的城市）',
+                '🗳️ 投票贴（清明家庭亲子游：研学优先还是放松优先）',
+                '📱 小红书/抖音·热度窗口[19:00-21:00]'
+              ]
+            }
+          },
           {
             id: '20260403-v05',
             title: '亲子游大爆发：清明含娃出行订单同比涨200%',
@@ -4800,7 +4785,7 @@ function radarApp() {
             heatInfo: { type: 'resurge', label: '4月3日·音著协发声介入' },
             sources: [
               { name: '微博·李荣浩版权话题', url: 'https://s.weibo.com/weibo?q=李荣浩+版权+翻唱', icon: '🔴', cls: 'pt-weibo' },
-              { name: '1905电影网娱乐新闻', url: 'https://www.1905.com/news/', icon: '🎬', cls: 'pt-default' }
+              { name: '新浪娱乐·李荣浩', url: 'https://s.weibo.com/weibo?q=李荣浩+单依纯+李白+版权', icon: '🔴', cls: 'pt-weibo' }
             ],
             level: 'medium',
             levelLabel: '🟡 热议',
