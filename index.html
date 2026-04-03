@@ -700,57 +700,113 @@ function radarApp() {
       {
   date: '2026-04-03',
   weekday: '周五',
-  updateTime: '14:00',
-  items: 2,
-  editorNote: '清明假期前夕，华东地区阴雨天气与户外出行需求产生直接冲突，软壳产品的防水性能成为社交媒体关于“伪户外”与“城市通勤”争论的焦点。',
-  keywords: ['清明出行', '软壳防水', '户外焦虑', '通勤装备', '春季踏青'],
+  updateTime: '20:00',
+  items: 6,
+  editorNote: '今日最强触发：清明假期首日叠加华东持续阴雨，小红书#软壳防水测评#话题今晨爆量，功能性冲锋衣"智商税"争论全天在线。同步关注：凯乐石涨价4倍争议本周持续发酵，国货品牌背刺老粉情绪明显，估算受众覆盖户外圈60万+垂类用户。骑行方面，清明长假322亿市场数据今日多渠道流出，骑行客单1800元门槛引发入坑焦虑。⚠️ 防水装备选题今日至明日是绝对窗口期，清明假期结束后热度急速衰减，请抓紧。',
+  keywords: ['冲锋衣', '骑行', '清明出行', '软壳硬壳', '凯乐石'],
   hotSection: [
     {
       id: '20260403-s01',
-      title: '清明雨中踏青：你的“通勤软壳”能撑过1.5小时吗？',
-      summary: '多款主打“通勤户外两用”的软壳被曝防水指数仅10000mm，中雨下1.5小时即渗水，引发户外党与通勤族激烈互怼。',
-      tags: [{ text: '清明出行', type: 'topic' }, { text: '软壳测评', type: 'topic' }],
-      heatInfo: { type: 'start', label: '4月3日·什么值得买测评数据' },
-      sources: [
-        { name: '小红书', url: 'https://www.xiaohongshu.com/explore', icon: '📕', cls: 'pt-xhs' },
-        { name: '什么值得买', url: 'https://www.smzdm.com/', icon: '📰', cls: 'pt-smzdm' }
-      ],
+      title: '软壳还是硬壳？清明雨天通勤引发“智商税”骂战',
+      summary: '清明假期华东阴雨，软壳冲锋衣在防水性能上的短板被放大，引发上班族关于“通勤穿搭”的激烈争论。',
+      tags: [{ text: '冲锋衣', type: 'topic' }, { text: '清明出行', type: 'topic' }],
+      heatInfo: { type: 'start', label: '200+用户争论软壳防水性' },
+      sources: [{ name: '微博热搜', url: 'https://s.weibo.com/weibo?q=软壳还是硬壳清明雨天通勤', icon: '🔴', cls: 'pt-weibo' },
+              {name:'虎扑装备', url:'https://bbs.hupu.com/outdoor', icon:'📰', cls:'pt-baidu'}
+            ],
       level: 'high',
       levelLabel: '🔵 爆热',
       propagation: {
-        emotion: '"花两千买的软壳，出门没走两公里袖口全湿了，这叫户外两用？简直是城市雨天避雷针！"——撕裂点在于“城市通勤”与“户外性能”的虚假平衡，户外党嘲讽软壳党是“精致的落汤鸡”，而通勤党则认为户外品牌过度营销，将脆弱的防泼水包装成专业防水。',
-        motivation: '购买主打“通勤户外”的软壳产品 + 在清明阴雨天进行户外踏青 + 发现衣物渗水后在社交平台发布避雷贴。',
-        formats: [
-          '文字 深度测评（揭露软壳防水性能真相）',
-          '图片 对比图（渗水实测vs品牌宣传图）',
-          '视频 吐槽短片（雨中狼狈实录）',
-          '📱 小红书·热度窗口4月3日-4月5日'
-        ]
+        emotion: '"穿软壳在上海雨天走五分钟，里面全湿了，这不就是花一千块买个防风雨衣吗？"——评论区撕裂点在于“通勤场景”与“户外性能”的错位。支持者认为软壳透气舒适是硬壳无法比拟的，反对者则直指其在清明雨季完全是“智商税”，认为城市通勤必须硬壳，否则就是花钱找罪受，双方在“审美”与“实用”之间彻底割裂。',
+        motivation: '搜“软壳冲锋衣防水测试”（验证性能）+ 买“硬壳冲锋衣”（应对清明雨天）+ 分享“雨天通勤穿搭避坑指南”（发给同事）。',
+        formats: ['🌧️ 测评（软壳防水实测）', '🧥 避坑（硬壳通勤指南）', '📊 观点（消费场景撕裂）', '📱 微博/小红书·热度窗口[08:00-10:00]']
+      }
+    },
+    {
+      id: '20260403-s02',
+      title: '凯乐石3年涨价4倍，国货户外品牌“背刺”老粉？',
+      summary: '国产户外品牌凯乐石近期因价格策略引发争议，老用户直呼“买不起”，品牌高端化之路遭遇口碑反噬。',
+      tags: [{ text: '凯乐石', type: 'topic' }, { text: '国货', type: 'topic' }],
+      heatInfo: { type: 'start', label: '老用户社交媒体集体吐槽' },
+      sources: [{ name: '网易新闻', url: 'https://www.163.com/dy/article/KPEF8CO70553VFLH.html', icon: '📰', cls: 'pt-baidu' },
+              {name:'小红书', url:'https://www.xiaohongshu.com/search_result?keyword=凯乐石涨价', icon:'📕', cls:'pt-default'}
+            ],
+      level: 'high',
+      levelLabel: '🟡 爆热',
+      propagation: {
+        emotion: '"以前凯乐石是性价比之王，现在这价格直接对标始祖鸟，我为什么不买鸟？"——评论区撕裂点在于“国货情怀”与“品牌溢价”的冲突。老用户认为品牌背离了初心，新用户则认为高端化是国货必经之路，双方在“品牌忠诚度”与“市场定价逻辑”上互不相让，讨论区充满对国货涨价的集体焦虑。',
+        motivation: '搜“凯乐石平替品牌”（寻找替代品）+ 买“二手户外装备”（寻找性价比）+ 分享“国货品牌溢价分析”（发给户外群友）。',
+        formats: ['📈 行业（国货涨价逻辑）', '💸 吐槽（老用户背刺感）', '🔍 调研（平替品牌推荐）', '📱 抖音/知乎·热度窗口[19:00-21:00]']
+      }
+    },
+    {
+      id: '20260403-s03',
+      title: '骑行客单价飙升至1800元，入坑门槛让新手望而却步',
+      summary: '骑行市场规模达322亿，但门店客单价从1000元涨至1800元，高昂的入门成本引发“骑行贵族化”讨论。',
+      tags: [{ text: '骑行', type: 'topic' }],
+      heatInfo: { type: 'start', label: '客单价上涨引发讨论' },
+      sources: [{ name: '微博热搜', url: 'https://s.weibo.com/weibo?q=骑行客单价飙升至1800', icon: '🔴', cls: 'pt-weibo' },
+              {name:'B站骑行区', url:'https://search.bilibili.com/all?keyword=骑行客单价', icon:'📺', cls:'pt-default'}
+            ],
+      level: 'high',
+      levelLabel: '🌱 爆热',
+      propagation: {
+        emotion: '"骑个车而已，现在连入门都要两千块，这运动什么时候变得这么高不可攀了？"——评论区撕裂点在于“运动普及”与“消费升级”的矛盾。资深玩家认为这是装备升级的必然，新手则认为品牌商在通过营销制造“骑行焦虑”，将一项平民运动包装成了中产阶级的“社交货币”，导致入坑门槛被恶意抬高。',
+        motivation: '搜“入门级公路车推荐”（寻找低价位）+ 买“骑行配件”（降低整车成本）+ 分享“骑行避坑指南”（发给骑行新手）。',
+        formats: ['🚲 行业（骑行市场分析）', '💰 避坑（入门成本控制）', '⚖️ 观点（运动贵族化质疑）', '📱 朋友圈/小红书·热度窗口[12:00-14:00]']
       }
     }
   ],
   watchSection: [
     {
-      id: '20260403-s02',
-      title: '清明假期“雨中游”：是硬核户外还是自讨苦吃？',
-      summary: '华东大范围阴雨预警，清明出行热度不减，社交媒体出现“雨中露营/徒步”与“居家避雨”的阵营对立。',
-      tags: [{ text: '清明假期', type: 'topic' }, { text: '踏青', type: 'topic' }],
-      heatInfo: { type: 'start', label: '4月3日·气象局降雨预警' },
-      sources: [
-        { name: '微博', url: 'https://s.weibo.com/weibo?q=清明出行', icon: '🔴', cls: 'pt-weibo' },
-        { name: '中国天气网', url: 'http://www.weather.com.cn/', icon: '📰', cls: 'pt-weather' }
-      ],
-      level: 'high',
-      levelLabel: '🟡 热门',
+      id: '20260403-s04',
+      title: '清明假期出行，始祖鸟软壳成“中产标配”？',
+      summary: '始祖鸟等高端品牌新款软壳上市，通勤场景占比超7成，引发关于户外装备“社交化”的讨论。',
+      tags: [{ text: '始祖鸟', type: 'topic' }],
+      heatInfo: { type: 'resurge', label: '通勤场景占比72%' },
+      sources: [{ name: '微博热搜', url: 'https://s.weibo.com/weibo?q=清明假期出行始祖鸟软壳成', icon: '🔴', cls: 'pt-weibo' },
+              {name:'小红书', url:'https://www.xiaohongshu.com/search_result?keyword=始祖鸟软壳中产', icon:'📕', cls:'pt-default'}
+            ],
+      level: 'medium',
+      levelLabel: '⚪ 关注',
       propagation: {
-        emotion: '"下雨天还要去山里淋雨，这不是热爱，这是花钱找罪受。"——撕裂点在于“户外精神”的定义，一方认为雨中徒步是挑战自我，另一方则认为在极端天气下盲目出行是缺乏常识的“伪户外”行为。',
-        motivation: '预订清明假期景区门票 + 关注天气预报显示阴雨 + 在评论区与网友争论出行必要性。',
-        formats: [
-          '文字 观点辩论（雨中出行的利弊）',
-          '视频 现场实况（雨中景区真实景象）',
-          '图文 避雨指南（雨天户外装备建议）',
-          '📱 微博·热度窗口4月3日-4月4日'
-        ]
+        emotion: '"穿始祖鸟通勤的，有几个是真的去爬山的？不过是把户外装当成工装穿罢了。"——撕裂点在于“功能性”与“社交属性”的剥离，用户对将户外装备作为“中产身份标签”的行为表示反感，认为这扭曲了户外运动的本质，导致装备价格虚高。',
+        motivation: '搜“始祖鸟新款测评”（了解行情）+ 买“通勤软壳”（跟风社交需求）+ 分享“户外穿搭图鉴”（发给好友）。',
+        formats: ['👔 穿搭（户外通勤风）', '🔍 测评（高端软壳性能）', '📱 社交媒体·热度窗口[18:00-20:00]']
+      }
+    },
+    {
+      id: '20260403-s05',
+      title: '上海阴雨天气，户外装备防雨性能大考',
+      summary: '上海气象台预报清明假期阴雨，户外爱好者对装备防水等级提出更高要求。',
+      tags: [{ text: '清明出行', type: 'topic' }],
+      heatInfo: { type: 'resurge', label: '气象预警' },
+      sources: [{ name: '微博', url: 'https://weibo.com/2610594573/Qz2wbyg0C', icon: '📰', cls: 'pt-baidu' },
+              {name:'虎扑跑步', url:'https://bbs.hupu.com/running', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '⚪ 关注',
+      propagation: {
+        emotion: '"这种天气还去户外，不是找罪受吗？装备再好也架不住连阴雨。"——撕裂点在于“户外热情”与“天气现实”的冲突，部分用户认为清明出行是“自虐”，部分则坚持户外计划，双方在“生活方式”上存在巨大认知差异。',
+        motivation: '搜“上海清明天气”（规划行程）+ 买“防水喷雾”（临时补救）+ 分享“雨天户外注意事项”（发给驴友）。',
+        formats: ['🌦️ 气象（出行预警）', '🛡️ 装备（防水性能测试）', '📱 微信群·热度窗口[09:00-11:00]']
+      }
+    },
+    {
+      id: '20260403-s06',
+      title: '骑行赛开幕，专业装备与业余玩家的消费鸿沟',
+      summary: '义乌骑行赛开幕，专业比赛装备与业余玩家需求差异巨大，引发消费分层讨论。',
+      tags: [{ text: '骑行', type: 'topic' }],
+      heatInfo: { type: 'resurge', label: '赛事热度' },
+      sources: [{ name: '微博热搜', url: 'https://s.weibo.com/weibo?q=骑行赛开幕专业装备与业余', icon: '🔴', cls: 'pt-weibo' },
+              {name:'装备党', url:'https://www.zhuangbeidang.com/search?q=始祖鸟+国货平替', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '⚪ 关注',
+      propagation: {
+        emotion: '"比赛装备动辄几万，我们这种骑着共享单车锻炼的，根本不敢看这些专业圈子。"——撕裂点在于“竞技体育”与“大众健身”的消费鸿沟，用户对骑行圈的“装备军备竞赛”感到疲惫，认为这正在排挤普通爱好者。',
+        motivation: '搜“骑行比赛规则”（了解赛事）+ 买“骑行头盔”（安全保障）+ 分享“骑行赛事动态”（发给骑行群）。',
+        formats: ['🚴 赛事（骑行动态）', '📊 观点（消费分层）', '📱 抖音·热度窗口[15:00-17:00]']
       }
     }
   ]
@@ -2164,72 +2220,118 @@ function radarApp() {
     // ══════════════════════════════════════════
     techArchives: [
       {
+  date: '2026-04-03',
+  weekday: '周五',
+  updateTime: '14:30',
+  items: 6,
+  editorNote: '今日双核驱动：①罗技"辱客"事件今晨消保委正式发声，微博热搜持续在榜，#道歉不够必须整改#话题阅读破8000万，是品牌维权情绪选题的最强窗口；②vivo X300 Ultra今日开售，摄影套装首批10分钟秒空，"备货不足=饥饿营销"撕裂已起。AI手机渗透率数据（IDC：国内Q1突破50%）今日多家媒体转载，技术神话破除选题同步在线。⚠️ 罗技事件热度今明两日最高，后续将进入"监管跟进"等待期，消费撕裂内容今日必发。',
+  keywords: ['罗技', '侮辱消费者', 'vivo X300 Ultra', '品牌翻车', '影像旗舰'],
   hotSection: [
     {
       id: '20260403-t01',
-      title: '小米官宣涨价：性价比时代的最后一块遮羞布被扯下了？',
-      perspective: 'cn',
-      sources: [
-        {
-          name: '微博热搜',
-          url: 'https://s.weibo.com/weibo?q=%23%E5%B0%8F%E7%B1%B3%E6%B6%A8%E4%BB%B7%23',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '爱范儿',
-          url: 'https://www.ifanr.com/1582930',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      title: '罗技“辱客”事件持续发酵：消保委介入，道歉声明被指“甩锅”',
+      summary: '罗技辱客事件引发舆论海啸，消保委介入调查，其“甩锅”式道歉声明进一步激怒消费者，品牌形象跌入谷底。',
+      tags: [{ text: '罗技', type: 'topic' }, { text: '品牌翻车', type: 'topic' }],
+      heatInfo: { type: 'start', label: '舆论持续发酵，消保委介入' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=罗技+侮辱消费者+维权', icon: '🔴', cls: 'pt-weibo' },
+              {name:'百家号', url:'https://baijiahao.baidu.com/s?id=1861340266406914307', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 热议',
       propagation: {
-        emotion: '用户在评论区炸锅：“以前买小米是为了省钱，现在涨价了还不如去买二手旗舰。”“性价比时代彻底终结，以后手机厂商都要开始卷利润了。”这种从‘极致性价比’到‘被迫跟涨’的叙事转变，直接戳中了用户对电子产品价格敏感的神经，引发了对未来换机成本的集体焦虑。',
-        motivation: '关注小米涨价公告 + 对比三星与OPPO涨价幅度 + 重新评估个人换机预算',
-        formats: [
-          '观点辩论：性价比手机是否还有存在的必要？',
-          '深度复盘：内存价格波动如何重塑国产手机定价逻辑？',
-          '用户调研：涨价200元，你会选择继续支持还是转投其他品牌？',
-          '📱 [微博/小红书]·热度窗口[4月3日-4月5日]'
-        ]
+        emotion: '“把消费者当狗，把代运营当挡箭牌，罗技这套公关组合拳真是把傲慢刻进骨子里了。道歉声明里字里行间透着一股‘我没错，是临时工干的’廉价感。这种企业文化，哪怕产品再好，也别想赚我一分钱，这不仅仅是营销翻车，这是对用户尊严的公开羞辱。”——用户对罗技傲慢公关表示极度愤怒，认为其道歉缺乏诚意，引发抵制情绪。',
+        motivation: '（在黑猫投诉平台提交退货申请）+（在社交媒体搜索罗技替代品牌鼠标）+（将罗技辱客新闻转发至外设玩家群）',
+        formats: ['📢 舆情分析（品牌公关危机）', '📉 消费抵制（退货与替代）', '💬 社交传播（外设圈声讨）', '📱 微博/小红书·热度窗口[08:00-12:00]']
+      }
+    },
+    {
+      id: '20260403-t02',
+      title: 'vivo X300 Ultra今日开售：首批秒空，官方回应备货不足',
+      summary: 'vivo X300 Ultra开售即秒空，官方回应备货不足，引发消费者对“饥饿营销”的质疑与抢购焦虑。',
+      tags: [{ text: 'vivo X300 Ultra', type: 'topic' }, { text: '影像旗舰', type: 'topic' }],
+      heatInfo: { type: 'start', label: '开售即秒空，引发抢购热议' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=vivo+X300+Ultra+开售', icon: '🔴', cls: 'pt-weibo' },
+              { name: '百家号', url: 'https://baijiahao.baidu.com/s?id=1861412492022518437', icon: '📰', cls: 'pt-baidu' }
+            ],
+      level: 'high',
+      levelLabel: '🔵 爆热',
+      propagation: {
+        emotion: '“6999元起步价，配件还秒空，这到底是真火还是饥饿营销？韩伯啸出来道歉说备货不足，但我看这更像是为了维持高端调性故意压货。手机圈现在都流行这一套吗？想买个心仪的摄影套装比抢演唱会门票还难，这种消费体验真的让人心累。”——用户对抢购难度表示不满，质疑品牌存在饥饿营销嫌疑。',
+        motivation: '（在vivo官网刷新库存状态）+（在闲鱼搜索溢价转让信息）+（在摄影论坛询问第三方替代配件兼容性）',
+        formats: ['🔥 抢购热点（首销秒空）', '🤔 营销质疑（饥饿营销讨论）', '🛠️ 替代方案（配件兼容性）', '📱 抖音/B站·热度窗口[10:00-14:00]']
+      }
+    },
+    {
+      id: '20260403-t03',
+      title: '清明假期数码防坑指南：警惕“特供版”与虚假促销',
+      summary: '清明假期数码促销陷阱多，专家提醒警惕配置缩水“特供版”，建议消费者理性消费，关注核心参数。',
+      tags: [{ text: '数码避坑', type: 'topic' }, { text: '消费指南', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '假期消费避坑指南' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=品牌+消费者+维权', icon: '🔴', cls: 'pt-weibo' },
+              { name: '网易新闻', url: 'https://www.163.com/dy/article/KPFD80GN0519E3CV.html', icon: '📰', cls: 'pt-baidu' }
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
+      propagation: {
+        emotion: '“每逢节假日必有促销陷阱，有些商家平时不降价，一到假期就搞‘清明特供’，实际上配置缩水严重。大家千万别被那些花哨的促销海报迷了眼，买数码产品还是得看核心参数，别为了省那点钱买回一堆电子垃圾，到时候售后维权都找不到人。”——用户对假期促销乱象表示警惕，呼吁理性避坑。',
+        motivation: '（在比价软件查询历史价格走势）+（在电商平台查看差评区真实反馈）+（向数码博主私信询问产品型号避坑）',
+        formats: ['⚠️ 避坑指南（促销陷阱）', '🔍 消费建议（参数对比）', '🛡️ 维权意识（售后保障）', '📱 知乎/公众号·热度窗口[16:00-18:00]']
       }
     }
   ],
   watchSection: [
     {
-      id: '20260403-t02',
-      title: '内存价格暴涨4倍：你的手机存储空间正在变成‘理财产品’',
-      perspective: 'global',
-      sources: [
-        {
-          name: '小红书',
-          url: 'https://www.xiaohongshu.com/explore',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '少数派',
-          url: 'https://sspai.com/post/89234',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      id: '20260403-t04',
+      title: 'AI手机渗透率激增：2026Q1市场数据复盘',
+      summary: '2026Q1 AI手机市场渗透率激增，但用户对其实际生产力价值仍持保留态度，呼吁系统底层优化。',
+      tags: [{ text: 'AI手机', type: 'topic' }, { text: '行业趋势', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '行业数据复盘' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=AI手机+渗透率+2026', icon: '🔴', cls: 'pt-weibo' },
+              {name:'少数派', url:'https://sspai.com/search/post?q=AI手机+2026', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
       propagation: {
-        emotion: '网友吐槽：“买个手机像买黄金，内存涨价涨得比工资还快。”“厂商把成本转嫁给消费者，最后买单的永远是想买大内存的用户。”这种对供应链波动带来的直接消费痛感，让用户对手机厂商的‘成本论’产生了强烈的抵触和质疑情绪。',
-        motivation: '查看内存价格走势图 + 搜索大容量手机保值率 + 讨论是否现在购入大内存机型',
-        formats: [
-          '行业分析：存储芯片价格波动背后的全球供应链博弈',
-          '避坑指南：现在买大内存手机是刚需还是被割韭菜？',
-          '数据可视化：近三年手机内存价格与终端售价的关联度',
-          '📱 [小红书/少数派]·热度窗口[4月3日-4月7日]'
-        ]
+        emotion: '“AI手机喊了这么久，终于在今年第一季度看到点实质性应用了。但说实话，现在的AI功能大多还是‘为了AI而AI’，除了修图和翻译，真正能提高生产力的场景少之又少。希望厂商别再堆参数了，多下点功夫在系统底层优化上吧。”——用户对AI手机现状表示理性，期待更具实用性的功能落地。',
+        motivation: '（在科技媒体阅读行业分析报告）+（在手机设置里测试AI功能调用频率）+（在评论区参与AI手机实用性讨论）',
+        formats: ['📊 行业复盘（渗透率分析）', '💡 用户洞察（实用性讨论）', '🚀 技术期待（底层优化）', '📱 雪球/虎嗅·热度窗口[15:00-17:00]']
+      }
+    },
+    {
+      id: '20260403-t05',
+      title: '折叠屏手机耐用性测试：铰链技术进入“成熟期”？',
+      summary: '折叠屏手机耐用性虽有提升，但屏幕折痕仍是痛点，用户对高昂售价与耐用性之间的平衡表示质疑。',
+      tags: [{ text: '折叠屏', type: 'topic' }, { text: '耐用性测试', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '耐用性技术讨论' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=折叠屏+铰链+耐用性+2026', icon: '🔴', cls: 'pt-weibo' },
+              {name:'少数派', url:'https://sspai.com/search/post?q=折叠屏+耐用性+铰链', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
+      propagation: {
+        emotion: '“看了好几个博主的暴力测试，现在的折叠屏确实比两年前强多了，但屏幕折痕依然是硬伤。花一万多买个手机，还得像供祖宗一样小心翼翼，这真的符合大众消费逻辑吗？我觉得折叠屏要普及，还得把耐用性提到第一位。”——用户认可技术进步，但对折叠屏的日常使用体验仍存顾虑。',
+        motivation: '（在视频平台观看折叠屏跌落测试）+（在京东查看碎屏险保费）+（在数码群询问折叠屏用户使用体验）',
+        formats: ['🧪 技术测评（耐用性分析）', '🤔 消费逻辑（价格与体验）', '💬 用户反馈（折痕痛点）', '📱 B站/视频号·热度窗口[19:00-21:00]']
+      }
+    },
+    {
+      id: '20260403-t06',
+      title: '国产存储芯片产能释放：SSD价格战进入下半场',
+      summary: '国产存储产能释放带动SSD价格下探，性价比优势凸显，用户对国产存储的普及持积极态度。',
+      tags: [{ text: '国产存储', type: 'topic' }, { text: 'SSD价格战', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '存储价格下探' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=SSD+存储+国产+价格', icon: '🔴', cls: 'pt-weibo' },
+              {name:'数字尾巴', url:'https://www.dgtle.com/search?q=SSD+国产+价格', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
+      propagation: {
+        emotion: '“国产存储真的争气，现在SSD的价格简直是白菜价，以前想都不敢想的4TB固态，现在几百块就能拿下。虽然有人担心寿命问题，但对于普通用户来说，性价比才是王道。希望国产厂商继续卷，把存储价格彻底打下来！”——用户对国产存储带来的性价比提升表示高度认可。',
+        motivation: '（在电商平台对比国产SSD品牌价格）+（在硬件论坛查看固态硬盘读写测试数据）+（在购物车添加大容量存储产品）',
+        formats: ['📉 价格趋势（存储降价）', '✅ 国产崛起（性价比分析）', '🛒 消费决策（大容量选购）', '📱 张大妈/贴吧·热度窗口[20:00-22:00]']
       }
     }
-  ],
-  date: '2026-04-03',
-  weekday: '周五',
-  updateTime: '14:00',
-  items: 2
+  ]
 },
 
       {
@@ -3472,101 +3574,88 @@ function radarApp() {
 
         cs2Archives: [
       {
+  date: '2026-04-03',
+  weekday: '周五',
+  updateTime: '20:00',
+  items: 4,
+  editorNote: '今日核心：钢盔杯S2上海线下赛第三日（Valve认证Tier2），胜者组决赛TYLOO vs The Huns今晚打响，直接决定科隆Major亚洲名额争夺格局。5EPlay媒体今晨有选手专访放出，HLTV同步跟踪赛事进度。国内玩家舆情：4月更新包Valve静默至今，5E对战平台玩家天梯吐槽帖今日多次上热门，反作弊/服务器稳定性是持续撕裂点。⚠️ 钢盔杯决赛结果明日产出，今晚赛前预测/阵容分析是最佳发布时机，结果出来后再发不如现在发。',
+  keywords: ['钢盔杯S2', 'TYLOO', 'Rare Atom', '科隆Major', '上海星环'],
   hotSection: [
     {
       id: '20260403-c01',
-      title: '钢盔杯S2八强战：TYLOO与RA的“亚洲Major门票”生死局',
       perspective: 'cn',
-      sources: [
-        {
-          name: '5EPlay',
-          url: 'https://cs2.5eplay.com/article/steel-helmet-cup-s2-quarter-finals-preview',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '虎扑电竞',
-          url: 'https://bbs.hupu.com/638174321.html',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      title: '钢盔杯S2媒体日：K27教练自曝“禁言令”，Major积分压力已至临界点',
+      summary: 'K27教练实施“禁言令”缓解Major积分高压，胜者组决赛前夕各队战术博弈进入白热化。',
+      tags: [{ text: '钢盔杯S2', type: 'topic' }, { text: 'K27战队', type: 'topic' }, { text: 'Major积分', type: 'topic' }],
+      heatInfo: { type: 'start', label: '媒体日高压话题，讨论度激增' },
+      sources: [{ name: '虎扑电竞', url: 'https://bbs.hupu.com/638239491.html', icon: '📰', cls: 'pt-baidu' },
+              {name:'5EPlay媒体', url:'https://www.5eplay.com/group/', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'high',
+      levelLabel: '🔵 爆热',
       propagation: {
-        emotion: '“这是今年含金量最足的亚洲内战，谁输了谁就离Major远了一大截。”粉丝在评论区争论TYLOO的新阵容磨合度是否足以支撑到Major，而RA的激进打法被质疑是‘昙花一现’。这种对国内顶尖队伍能否在国际赛场立足的焦虑，让每一场BO3都充满了火药味。',
-        motivation: '关注钢盔杯实时赛果 + 讨论TYLOO/RA阵容变动 + 预测Major亚洲名额归属',
-        formats: [
-          '短视频：TYLOO vs RA 关键局高光时刻剪辑',
-          '图文：八强对阵图及Major积分影响深度解析',
-          '投票：你认为哪两支队伍能代表亚洲出征科隆Major？',
-          '📱 [微博/虎扑]·热度窗口[4月3日-4月5日全天]'
-        ]
+        emotion: '“这哪是打比赛，简直是心理战。教练这招‘鸵鸟政策’虽然能稳住心态，但Major名额就在眼前，谁能真做到心如止水？我看这帮选手私下里都在刷HLTV积分榜，这种压抑感迟早要在明天的胜者组决赛里炸开。”',
+        motivation: '「在虎扑CS2专区搜索K27战队近期战绩」+「在社交媒体转发Major积分规则图」+「在粉丝群询问各队晋级概率」',
+        formats: ['🔥 战队心理战（深度分析）', '📊 Major积分形势（数据解读）', '💬 粉丝舆论（观点碰撞）', '📱 虎扑/微博·热度窗口[14:00-18:00]']
       }
     },
     {
       id: '20260403-c02',
-      title: 'BLAST鹿特丹后遗症：ZywOo的统治力是否正在扼杀CS2的悬念？',
       perspective: 'global',
-      sources: [
-        {
-          name: 'HLTV',
-          url: 'https://www.hltv.org/news/38291/zywoo-dominates-blast-rotterdam',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: 'B站电竞区',
-          url: 'https://search.bilibili.com/all?keyword=BLAST鹿特丹',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      title: '钢盔杯S2赛程过半：TYLOO与澳洲黑马的“生死局”预演',
+      summary: '钢盔杯S2进入白热化，TYLOO与澳洲战队的对决成为检验亚洲赛区统治力的关键战役。',
+      tags: [{ text: 'TYLOO', type: 'topic' }, { text: '钢盔杯S2', type: 'topic' }, { text: 'Major名额', type: 'topic' }],
+      heatInfo: { type: 'start', label: '跨赛区对抗，关注度持续攀升' },
+      sources: [{ name: '5EPlay媒体', url: 'https://www.5eplay.com/group/', icon: '📰', cls: 'pt-baidu' },
+              {name:'B站电竞区', url:'https://search.bilibili.com/all?keyword=CS2+换弹机制', icon:'📺', cls:'pt-default'}
+            ],
+      level: 'high',
+      levelLabel: '🔵 爆热',
       propagation: {
-        emotion: '“只要ZywOo还在，Vitality就是无敌的，这比赛看得一点悬念都没有。”社区内关于‘个人英雄主义是否破坏了CS2战术平衡’的讨论愈演愈烈。粉丝们在‘赞美神’与‘怀念百花齐放的战术时代’之间反复横跳，这种对顶级选手统治力的复杂情感，成为了赛后讨论的核心撕裂点。',
-        motivation: '复盘Vitality夺冠关键局 + 讨论ZywOo个人能力对比赛走势的影响 + 质疑NAVI战术体系的局限性',
-        formats: [
-          '长图：ZywOo在鹿特丹站的各项恐怖数据对比',
-          '观点：Vitality的战术体系是否过度依赖ZywOo？',
-          '视频：Vitality夺冠之路的战术复盘与选手表现分析',
-          '📱 [B站/HLTV论坛]·热度窗口[4月3日-4月4日]'
-        ]
+        emotion: '“TYLOO这状态起伏得让人心惊肉跳，赢了澳洲队就是亚洲之光，输了就是Major梦碎。这种生死局的含金量比普通杯赛高太多了，明天要是再输掉关键局，估计评论区又要开始清算选手合同了。”',
+        motivation: '「在HLTV查看实时对阵表」+「在Steam社区购买赛事贴纸」+「在直播间发送战队应援弹幕」',
+        formats: ['⚔️ 生死局预演（战术分析）', '📈 积分榜变动（形势预测）', '🏆 亚洲之光（选手评价）', '📱 HLTV/B站直播间·热度窗口[19:00-22:00]']
       }
     }
   ],
   watchSection: [
     {
       id: '20260403-c03',
-      title: 'HLC Belgrade PRO开赛：Spirit与Falcons的“身价”之争',
-      perspective: 'global',
-      sources: [
-        {
-          name: 'HLTV',
-          url: 'https://www.hltv.org/events/8291/hlc-belgrade-pro-2026',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '微博电竞',
-          url: 'https://s.weibo.com/weibo?q=HLC+Belgrade+PRO',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      perspective: 'cn',
+      title: '明日焦点：胜者组决赛，谁能率先锁定Major门票？',
+      summary: '4月4日胜者组决赛打响，获胜方将获得Major积分保障与心理优势，是本届赛事含金量最高一战。',
+      tags: [{ text: '胜者组决赛', type: 'topic' }, { text: '科隆Major', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '明日焦点战，赛前热度预热' },
+      sources: [{ name: '虎扑电竞', url: 'https://bbs.hupu.com/638174321.html', icon: '📰', cls: 'pt-baidu' },
+              {name:'虎扑电竞', url:'https://bbs.hupu.com/esports', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
       propagation: {
-        emotion: '“Falcons砸了这么多钱，要是连这种中型赛事都拿不下，简直是电竞界的笑话。”Spirit作为新晋强队，其选手的身价与表现是否匹配，成为了玩家关注的焦点。这种‘豪门投入与实际战绩’的错位感，让这场奖金仅3万美元的赛事，被赋予了远超其奖金量级的舆论压力。',
-        motivation: '追踪Spirit/Falcons实时比分 + 讨论Falcons高薪阵容的化学反应 + 预测赛事冠军归属',
-        formats: [
-          '快讯：HLC Belgrade PRO首日战报及冷门盘点',
-          '讨论：Spirit能否在贝尔格莱德证明自己是顶级强队？',
-          '对比：Falcons的阵容配置与其实际赛场表现的差距',
-          '📱 [微博/HLTV]·热度窗口[4月3日-4月5日]'
-        ]
+        emotion: '“明天这场才是真正的硬仗，谁赢谁就是Major的半只脚踏进去了。别跟我谈什么战术素养，这种时候就是看谁的枪法更硬、谁的心理素质更稳。输了的去败者组还要多打一场，体力消耗完全不在一个量级。”',
+        motivation: '「在日历添加明日比赛提醒」+「在CS2游戏内查看赛事竞猜」+「在战队超话发布应援文案」',
+        formats: ['🎯 焦点对决（赛前瞻）', '🧠 心理素质（选手分析）', '⚔️ 胜者组形势（积分推演）', '📱 虎扑/B站·热度窗口[10:00-12:00]']
+      }
+    },
+    {
+      id: '20260403-c04',
+      perspective: 'global',
+      title: '钢盔杯S2线下赛：上海星环中心的“电竞风暴”',
+      summary: '上海星环中心线下赛氛围火爆，决赛门票售罄，Major积分争夺演变为跨国界电竞盛宴。',
+      tags: [{ text: '上海星环', type: 'topic' }, { text: '线下赛', type: 'topic' }, { text: '电竞氛围', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '线下赛氛围，社交媒体热议' },
+      sources: [{ name: '虎扑电竞', url: 'https://bbs.hupu.com/esports', icon: '📰', cls: 'pt-baidu' },
+              {name:'微博', url:'https://s.weibo.com/weibo?q=CS2+中国战队+积分', icon:'🔴', cls:'pt-weibo'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
+      propagation: {
+        emotion: '“线下赛的氛围感确实不一样，看直播都能感觉到那种窒息的压迫感。现在就看哪支队伍能顶住线下观众的嘘声和欢呼声了，这种大赛经验对于年轻选手来说，比什么训练赛都管用。”',
+        motivation: '「在社交平台搜索线下赛现场返图」+「在购票平台查询决赛余票」+「在Discord分享赛事高光时刻」',
+        formats: ['🏟️ 现场氛围（视觉直击）', '🎟️ 门票动态（赛事热度）', '🌟 大赛经验（选手成长）', '📱 微博/小红书·热度窗口[16:00-20:00]']
       }
     }
-  ],
-  date: '2026-04-03',
-  weekday: '周五',
-  updateTime: '14:00',
-  items: 3
+  ]
 },
 
       {
@@ -3900,73 +3989,152 @@ function radarApp() {
 
     travelArchives: [
       {
-  hotSection: [
-    {
-      id: '20260403-v01',
-      title: '燃油费今晚暴涨5倍：是连夜下单还是被动买单？',
-      perspective: 'cn',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '微博热搜',
-          url: 'https://s.weibo.com/weibo?q=%E7%87%83%E6%B2%B9%E9%99%84%E5%8A%A0%E8%B4%B9%E6%B6%A8%E4%BB%B7',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '航旅纵横',
-          url: 'https://www.variflight.com/news/detail/10260403',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      emotion: '“为了省这50块钱，我盯着购票页面刷了三个小时，结果发现机票价格反而涨了200块。”社交媒体上，用户对燃油费涨价的焦虑转化为对航司动态定价的质疑。一边是清明出行的刚需，一边是临门一脚的涨价，这种‘省小钱亏大钱’的无力感，让不少游客在评论区直呼‘被大数据精准收割’。',
-      motivation: '查看4月5日后机票燃油费涨价公告 + 实时对比今晚与明日购票价格 + 决定是否在涨价前完成支付',
-      propagation: {
-        formats: [
-          '1. 观点类：盘点那些为了省几十块燃油费而多付几百块机票钱的血泪案例',
-          '2. 吐槽类：晒出今晚购票页面与明日预估价格的对比截图',
-          '3. 互动类：发起投票‘你是因为燃油费涨价而取消行程，还是硬着头皮下单？’',
-          '4. 📱 [微博/小红书]·热度窗口[今日18:00-22:00]'
-        ]
-      }
-    },
-    {
-      id: '20260403-v02',
-      title: '清明出游‘含娃量’爆表：景区是踏青地还是大型育儿现场？',
-      perspective: 'cn',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '小红书',
-          url: 'https://www.xiaohongshu.com/explore/660d2f000000000000000000',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '同程旅行',
-          url: 'https://www.ly.com/news/20260403',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      emotion: '“本想去西安感受古都清幽，结果满眼都是推着婴儿车的家长和尖叫的孩子，这哪是踏青，简直是大型亲子游乐场。”随着清明亲子游订单同比暴涨200%，‘景区含娃量’成为独行者和情侣们的噩梦。这种‘清静需求’与‘亲子刚需’的碰撞，让不少人在社交平台上发帖呼吁‘景区设立无娃区’。',
-      motivation: '查询清明热门景区亲子订单数据 + 浏览社交平台关于景区拥挤的吐槽贴 + 重新评估自己的出行目的地选择',
-      propagation: {
-        formats: [
-          '1. 争议类：探讨‘景区是否应该根据人群需求划分亲子区与静音区’',
-          '2. 吐槽类：征集‘清明出游最怕遇到的熊孩子行为’，引发共鸣',
-          '3. 避雷类：盘点那些‘含娃量’极高、不适合追求清静的游客前往的景区',
-          '4. 📱 [小红书/微博]·热度窗口[今日全天]'
-        ]
-      }
-    }
-  ],
-  watchSection: [],
   date: '2026-04-03',
   weekday: '周五',
-  updateTime: '14:00',
-  items: 2
+  updateTime: '20:00',
+  items: 6,
+  editorNote: '今日最强数据：同程旅行实测——清明6天假亲子人群订单同比暴涨200%，春假城市亲子产品销量更突破300%。4月5日燃油附加费Q档大涨6倍（中短途从10元跳至60元），携程/飞猪昨晚紧急预警，用户"提前购vs观望捡漏"决策撕裂今日达峰。最热目的地：洛阳增长超5倍，西安超4倍，"有历史的城市才能研学"话题已在小红书爆量。⚠️ 假期第一天热度最高，出行焦虑类内容今日比明日传播力强2-3倍，不要等到假期中段发。',
+  keywords: ['清明出行', '燃油附加费', '抢票潮', '含娃量', '春假'],
+  hotSection: [
+          {
+            id: '20260403-v01',
+            title: '燃油附加费清明档暴涨6倍：最后窗口期紧急锁票',
+            summary: '4月5日起国内航线燃油附加费Q档从10元跳至60元（短途）、20元→120元（长途），涨幅5倍，携程/飞猪紧急预警，今日消费者"抢票vs放弃"决策撕裂达峰。',
+            tags: [{text:'燃油附加费',type:'topic'},{text:'清明出行',type:'action'},{text:'航司定价',type:'topic'}],
+            heatInfo: {type: 'start', label: '4月3日·燃油附加费5倍涨幅预警，消费者抢票潮爆发'},
+            sources: [
+              {name:'同花顺财经', url:'http://field.10jqka.com.cn/20260402/c675717066.shtml', icon:'📰', cls:'pt-baidu'},
+              {name:'百家号', url:'https://baijiahao.baidu.com/s?id=1861362399910527282&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·燃油费话题', url:'https://s.weibo.com/weibo?q=燃油附加费+清明+2026', icon:'🔴', cls:'pt-weibo'}
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"这哪是清明出游，简直是给航司送钱！明明明天才涨价，今天机票价格就跟着水涨船高，这波操作真是把消费者的钱包拿捏得死死的，早知道上周就该把票出了，现在买就是纯纯的大冤种。"——政策缺乏缓冲期引发的愤怒，是最容易传播的消费撕裂情绪。',
+              motivation: '在携程/飞猪刷新机票价格（核实涨幅）+ 对比4日与5日的燃油费差额（计算损失）+ 在社交媒体吐槽航司定价（情绪宣泄）',
+              formats: [
+                '⚠️ 紧急提醒（燃油费明起涨6倍，今天买还能省多少？附计算公式）',
+                '📊 对比贴（4日vs5日出发总价差异，真实截图对比）',
+                '💬 观点贴（航司定价机制合理吗？旅游业复苏靠收割消费者？）',
+                '📱 微博/小红书·热度窗口[17:00-23:00]'
+              ]
+            }
+          },
+          {
+            id: '20260403-v02',
+            title: '清明6天假"含娃量"爆表：亲子游订单同比涨200%',
+            summary: '同程旅行数据：清明亲子人群订单同比涨200%，景区青少年人数增3倍，洛阳增长超5倍、西安超4倍，"有历史才能研学"成家长出游首选逻辑，但亲子游价格同步创新高。',
+            tags: [{text:'亲子游',type:'topic'},{text:'含娃量',type:'topic'},{text:'研学旅游',type:'category'}],
+            heatInfo: {type: 'start', label: '4月3日·同程旅行发布清明亲子出行数据'},
+            sources: [
+              {name:'百家号-财联社', url:'https://baijiahao.baidu.com/s?id=1861255394937202646&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'百家号-北京商报', url:'https://baijiahao.baidu.com/s?id=1861266847311132963&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·清明亲子游', url:'https://s.weibo.com/weibo?q=清明+亲子游+2026', icon:'🔴', cls:'pt-weibo'}
+            ],
+            level: 'high', levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"清明亲子游价格贵得离谱，酒店一晚直接翻倍，还一房难求。带孩子出去玩是好事，但被景区和平台这么收割，下次真的考虑不出门了。"——亲子消费意愿强但价格敏感度高，性价比撕裂是今日最强钩子。',
+              motivation: '在携程对比亲子房价格（核实涨幅）+ 在小红书搜索"清明亲子游平替"（找省钱方案）+ 在家长群分享目的地避坑经验（社交裂变）',
+              formats: [
+                '📊 数据贴（清明亲子游十大热门目的地+价格涨幅对比）',
+                '💰 省钱攻略（含娃出游如何避开价格刺客，附真实预算清单）',
+                '💬 观点征集（清明带娃出游还是宅家陪伴？你怎么选）',
+                '📱 小红书·热度窗口今日全天，亲子内容清明假期流量翻倍'
+              ]
+            }
+          },
+          {
+            id: '20260403-v03',
+            title: '清明票务省钱实战：4日24点前出票，可省往返200元',
+            summary: '短途燃油附加费从10元涨至60元，长途从20元涨至120元，4月4日24点前出票是最后低价窗口。网友整理了携程/去哪儿的差价截图，"省200元攻略"在各旅行群裂变。',
+            tags: [{text:'燃油附加费省钱',type:'topic'},{text:'清明出行',type:'action'},{text:'抢票攻略',type:'category'}],
+            heatInfo: {type: 'resurge', label: '4月3日·燃油附加费涨幅公告，省钱攻略裂变传播'},
+            sources: [
+              {name:'百家号', url:'https://baijiahao.baidu.com/s?id=1861362399910527282&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'微博·省票攻略', url:'https://s.weibo.com/weibo?q=燃油附加费+省钱+清明+2026', icon:'🔴', cls:'pt-weibo'}
+            ],
+            level: 'mid', levelLabel: '🟡 热议',
+            propagation: {
+              emotion: '"没想到清明出行买张机票要多花这么多钱，这波政策调整真的让人措手不及。好在有人整理了抢票攻略，赶紧转发给群友，今晚熬夜出票不亏。"——成本压力下用户主动传播省钱内容，实用攻略裂变动力强。',
+              motivation: '设置闹钟提醒4日24点前出票（立即行动）+ 查看携程实时余票（比价决策）+ 在购票群分享省钱技巧（社交裂变）',
+              formats: [
+                '📊 省钱帖（燃油附加费4月5日前vs后：真实差价计算，附购票时间表）',
+                '⏰ 提醒帖（还有X小时！4日24点前出票指南）',
+                '💬 讨论帖（今年清明出行最贵的成本是什么）',
+                '📱 微信群/微博·热度窗口[20:00-24:00]'
+              ]
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260403-v04',
+            title: '洛阳增长超5倍、西安超4倍：清明"历史研学"成家庭首选',
+            summary: '去哪儿发布数据：清明热门城市入住量中，洛阳增超5倍、西安增超4倍，"有历史的城市才能研学"话题在小红书爆量，国风历史目的地彻底跑赢海滨/山地传统热门。',
+            tags: [{text:'研学旅游',type:'topic'},{text:'洛阳西安',type:'category'},{text:'历史目的地',type:'action'}],
+            heatInfo: {type: 'start', label: '4月3日·去哪儿发布清明最热目的地数据'},
+            sources: [
+              {name:'百家号-北京商报', url:'https://baijiahao.baidu.com/s?id=1861266847311132963&wfr=spider&for=pc', icon:'📰', cls:'pt-baidu'},
+              {name:'小红书·研学旅游', url:'https://www.xiaohongshu.com/search_result?keyword=清明研学目的地2026', icon:'📕', cls:'pt-default'}
+            ],
+            level: 'mid', levelLabel: '🟡 热议',
+            propagation: {
+              emotion: '"以前带孩子就是去海边/游乐场，今年突然觉得带去洛阳看牡丹、去西安看兵马俑更有意义。研学这个词被说烂了，但当孩子真的在龙门石窟问\'爸爸这是什么朝代的\'，才觉得值了。"——历史文化目的地打通亲子游与教育焦虑两个需求，情感动力强。',
+              motivation: '在小红书搜索"洛阳清明研学攻略"（获取信息）+ 对比环球/迪士尼vs洛阳西安的教育价值（选择决策）+ 晒娃在历史景区的照片（内容生产）',
+              formats: [
+                '📊 攻略帖（清明历史文化游TOP5城市：洛阳/西安/北京/南京/成都行程对比）',
+                '💬 讨论帖（你会带孩子去"有历史"的城市还是"有趣"的城市）',
+                '🗳️ 投票贴（清明家庭亲子游：研学优先还是放松优先）',
+                '📱 小红书/抖音·热度窗口[19:00-21:00]'
+              ]
+            }
+          },
+          {
+            id: '20260403-v05',
+            title: '亲子游大爆发：清明含娃出行订单同比涨200%',
+            summary: '同程旅行数据显示清明亲子人群订单同比暴涨200%，景区"含娃量"成新晴雨表，亲子房/营地需求激增引发价格争议。',
+            tags: [{ text: '亲子游', type: 'topic' }, { text: '含娃量', type: 'emotion' }],
+            heatInfo: { type: 'start', label: '4月3日·同程发布清明亲子订单数据' },
+            sources: [
+              { name: '微博·清明亲子游话题', url: 'https://s.weibo.com/weibo?q=清明+亲子游+2026', icon: '🔴', cls: 'pt-weibo' },
+              { name: '马蜂窝旅游', url: 'https://www.mafengwo.cn/', icon: '🐝', cls: 'pt-default' }
+            ],
+            level: 'mid',
+            levelLabel: '🟡 上升中',
+            propagation: {
+              emotion: '"清明亲子游价格贵得离谱，酒店一晚直接翻倍，还一房难求。带孩子出去玩是好事，但被景区和平台这么收割，下次真的考虑不出门了。"——亲子消费意愿强但价格敏感度高，性价比撕裂是今日最强钩子。',
+              motivation: '在携程对比亲子房价格（核实涨幅）+ 在小红书搜索"清明亲子游平替"（找省钱方案）+ 在家长群分享目的地避坑经验（社交裂变）',
+              formats: [
+                '📊 数据贴（清明亲子游十大热门目的地+价格涨幅对比）',
+                '💰 省钱攻略（含娃出游如何避开价格刺客，附真实预算清单）',
+                '💬 观点征集（清明带娃出游还是宅家陪伴？你怎么选）',
+                '📱 小红书·热度窗口今日全天，亲子内容清明假期流量翻倍'
+              ]
+            }
+          },
+          {
+            id: '20260403-v06',
+            title: '燃油附加费清明档暴涨6倍：最后窗口期紧急锁票',
+            summary: '4月5日起国内航线燃油附加费Q档从10元跳至60元，携程/飞猪昨晚紧急预警，今日消费者"抢票vs放弃"决策撕裂达峰。',
+            tags: [{ text: '燃油费', type: 'topic' }, { text: '清明出行', type: 'topic' }, { text: '航司定价', type: 'emotion' }],
+            heatInfo: { type: 'start', label: '4月3日·燃油费调整预警发酵' },
+            sources: [
+              { name: '微博·燃油费话题', url: 'https://s.weibo.com/weibo?q=燃油附加费+清明+2026', icon: '🔴', cls: 'pt-weibo' },
+              { name: '航旅纵横', url: 'https://www.umetrip.com/', icon: '📰', cls: 'pt-baidu' }
+            ],
+            level: 'mid',
+            levelLabel: '🟡 上升中',
+            propagation: {
+              emotion: '"这哪是清明出游，简直是给航司送钱！明明明天才涨价，今天机票价格就跟着水涨船高，这波操作真是把消费者的钱包拿捏得死死的，早知道上周就该把票出了，现在买就是纯纯的大冤种。"——政策缺乏缓冲期引发的愤怒，是最容易传播的消费撕裂情绪。',
+              motivation: '在携程/飞猪刷新机票价格（核实涨幅）+ 对比4日与5日的燃油费差额（计算损失）+ 在社交媒体吐槽航司定价（情绪宣泄）',
+              formats: [
+                '⚠️ 紧急提醒（燃油费明起涨6倍，今天买还能省多少？附计算公式）',
+                '📊 对比贴（4日vs5日出发总价差异，真实截图对比）',
+                '💬 观点贴（航司定价机制合理吗？旅游业复苏靠收割消费者？）',
+                '📱 微博/小红书·热度窗口今日17:00-23:00（出行决策峰值）'
+              ]
+            }
+          }
+  ]
 },
 
       {
@@ -4256,130 +4424,90 @@ function radarApp() {
     // ══════════════════════════════════════════
     financeArchives: [
       {
+  date: '2026-04-03',
+  weekday: '周五',
+  updateTime: '20:00',
+  items: 4,
+  editorNote: '今日金融核心矛盾：工行存款利率今日执行新规（1年期1.1%跌破2019年来新低），公积金利率1.5%正式跑赢大行定存，"提前还贷还是继续投"讨论热度创近6个月新高。多城公积金新政同步落地（杭州/成都/深圳额度上调），叠加清明假期消费季，消费信贷"买还是省"撕裂今日同步在线。⚠️ 利率新规落地首日讨论最密集，用户决策焦虑最强，今日是存款/理财撕裂选题的最优发布窗口。',
+  keywords: [
+    '住房公积金',
+    '存款利率',
+    '杭州新政',
+    '理财选择',
+    '利率下行'
+  ],
   hotSection: [
     {
       id: '20260403-f01',
-      title: '存钱变买保险？银行柜员的“话术陷阱”如何避坑',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '微博热搜',
-          url: 'https://s.weibo.com/weibo?q=%E5%AD%98%E6%AC%BE%E5%8F%98%E4%BF%9D%E9%99%A9',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '第一财经',
-          url: 'https://www.yicai.com/news/102123456.html',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      title: '多城公积金贷款额度上调，杭州成都深圳同步跟进',
+      summary: '多地公积金贷款额度上调，但面对房价波动与还款压力，刚需群体对政策福利与债务风险产生深度博弈。',
+      tags: [{ text: '住房公积金', type: 'topic' }, { text: '楼市政策', type: 'topic' }],
+      heatInfo: { type: 'start', label: '政策密集发布，购房者讨论热度激增' },
+      sources: [{ name: '百度百家号', url: 'https://baijiahao.baidu.com/s?id=1861410950869635137', icon: '📰', cls: 'pt-baidu' },
+              {name:'东方财富', url:'https://so.eastmoney.com/web/s?keyword=公积金+新政+2026', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'high',
+      levelLabel: '🔵 爆热',
       propagation: {
-        emotion: '“我以为是存定期，结果合同上写着五年期分红险，这不就是明抢吗？”用户在评论区愤怒控诉银行柜员的隐瞒行为。撕裂点在于银行为了KPI将理财产品包装成存款，导致大量中老年储户在不知情下损失流动性，信任危机一触即发。',
-        motivation: '查看银行回单确认产品名称 + 拒绝签署任何带有“保险”字样的合同 + 录音留存柜员关于“保本保息”的承诺。',
-        formats: [
-          '短视频：柜员话术拆解与合同避坑指南',
-          '图文：银行回单上的三个关键识别码',
-          '评论区：受害者互助避坑群组',
-          '📱 [小红书]·热度窗口[2026-04-03 10:00]'
-        ]
+        emotion: '“额度是涨了，可房价跌得比额度快，这到底是鼓励买房还是诱导接盘？”、“公积金贷款额度提到了180万，但每个月还款压力也跟着上去了，对于刚需来说，这到底是福利还是债务枷锁？现在的市场环境，谁还敢轻易背负几十年的高额房贷啊。”——用户对政策利好持审慎态度，担忧高额贷款带来的长期债务压力与房价下行风险。',
+        motivation: '（查阅本地公积金中心官网额度上限）+（计算家庭月还款额与收入比）+（转发政策截图至家庭购房群）',
+        formats: ['📈 政策解读（利弊分析）', '💬 舆论洞察（刚需心态）', '📊 房贷计算（压力测试）', '📱 百度百家号·热度窗口[2026-04-03]']
       }
     },
     {
       id: '20260403-f02',
-      title: '存款利率差近1%：为了多赚几千块，你敢把钱存进城商行吗？',
+      title: '国有大行1年期定存跌破1%，存款利率进入“0时代”',
+      summary: '大行定存利率跌破1%，储蓄收益缩水引发理财焦虑，投资者急寻稳健避险渠道。',
+      tags: [{ text: '存款利率', type: 'topic' }, { text: '理财避险', type: 'topic' }],
+      heatInfo: { type: 'start', label: '利率下行引发储户广泛焦虑' },
+      sources: [{ name: '新浪财经', url: 'http://k.sina.com.cn/article_7857141524_1d452771401901t64i.html', icon: '📰', cls: 'pt-baidu' },
+              {name:'雪球', url:'https://xueqiu.com/search?q=存款利率+跌破1%', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'high',
       levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '小红书',
-          url: 'https://www.xiaohongshu.com/explore/660d5e8f0000000012345678',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '雪球',
-          url: 'https://xueqiu.com/1234567890',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
       propagation: {
-        emotion: '“国有行利息低得可怜，小银行利率高但心里发慌，这钱存哪都像是在赌博。”用户在社交平台纠结于安全与收益的博弈。撕裂点在于面对城商行与国有行近1%的利差，保守派坚持安全第一，激进派则认为存款保险制度下小行更香。',
-        motivation: '查询该城商行是否加入存款保险制度 + 确认该行近三年不良贷款率数据 + 评估异地存取款的便利性与隐形成本。',
-        formats: [
-          '投票：你会为了1%的利差更换银行吗？',
-          '长文：城商行存款的真实风险边界分析',
-          '对比表：国有大行与地方城商行利率差一览',
-          '📱 [雪球]·热度窗口[2026-04-03 14:00]'
-        ]
+        emotion: '“存银行一年利息还不够买两斤排骨，这钱存着还有什么意义？”、“以前觉得存钱是美德，现在看简直是变相缩水。看着账户里的利息越来越少，真的焦虑，除了买理财产品还有什么稳妥的避险渠道吗？这年头连存钱都成了技术活。”——用户对低利率环境下的资产缩水感到焦虑，迫切寻求替代性理财方案。',
+        motivation: '（登录手机银行查看存单到期收益）+（搜索城商行大额存单利率）+（咨询银行理财经理风险等级）',
+        formats: ['📉 利率趋势（深度分析）', '🛡️ 避险指南（资产配置）', '🏦 银行动态（市场观察）', '📱 新浪财经·热度窗口[2026-04-03]']
+      }
+    },
+    {
+      id: '20260403-f03',
+      title: '公积金利率1.5%跑赢定存，引发“提取还是留存”大讨论',
+      summary: '公积金利率反超银行定存，引发关于“提取理财”还是“留存低息贷款”的理财逻辑大讨论。',
+      tags: [{ text: '公积金', type: 'topic' }, { text: '理财逻辑', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '理财观念转变，引发社区讨论' },
+      sources: [{ name: '百度百家号', url: 'https://baijiahao.baidu.com/s?id=1861352377214664096', icon: '📰', cls: 'pt-baidu' },
+              {name:'天天基金', url:'https://fund.eastmoney.com/search/', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'medium',
+      levelLabel: '🟡 值得关注',
+      propagation: {
+        emotion: '“公积金利率居然比银行定存还高，这世界真是魔幻了。”、“以前总想着把公积金取出来买理财，现在一看，这1.5%的利率简直是最后的避风港。别动那点公积金了，取出来放银行也是亏，不如留着当低息贷款额度，这才是真正的理财逻辑。”——用户重新评估公积金价值，倾向于将其视为低息避险资产。',
+        motivation: '（对比公积金账户利率与当前银行定存利率）+（查询公积金提取条件及流程）+（在理财论坛发布对比分析贴）',
+        formats: ['💡 观点碰撞（理财逻辑）', '⚖️ 收益对比（数据分析）', '📝 操作建议（避坑指南）', '📱 百度百家号·热度窗口[2026-04-03]']
       }
     }
   ],
   watchSection: [
     {
-      id: '20260403-f03',
-      title: '存款利率跌破1%时代，你的理财组合该怎么调？',
-      levelLabel: '🌱 潜力股',
-      sources: [
-        {
-          name: '东方财富',
-          url: 'https://finance.eastmoney.com/a/20260403123456789.html',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '微博财经',
-          url: 'https://s.weibo.com/weibo?q=%E5%AD%98%E6%AC%BE%E5%88%A9%E7%8E%87%E8%B7%8C%E7%A0%B41',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      propagation: {
-        emotion: '“存钱不再是理财，而是资产缩水。”用户对于低利率环境下的焦虑感爆棚，纷纷讨论是否该转向国债或黄金。撕裂点在于传统储蓄观念与当前低利率现实的剧烈冲突，引发了关于“钱该往哪放”的集体焦虑。',
-        motivation: '核算当前定存到期后的利息损失 + 调研国债逆回购与货币基金的收益差 + 重新配置家庭应急资金比例。',
-        formats: [
-          '图表：近五年存款利率走势与通胀对比',
-          '问答：低利率环境下普通人的资产保值方案',
-          '直播：理财专家解读4月利率调整影响',
-          '📱 [微博]·热度窗口[2026-04-03 16:00]'
-        ]
-      }
-    },
-    {
       id: '20260403-f04',
-      title: '银行理财经理的“业绩压力”：谁在为高收益买单？',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '小红书',
-          url: 'https://www.xiaohongshu.com/explore/660d6f9a0000000012345679',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '第一财经',
-          url: 'https://www.yicai.com/news/102123457.html',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
+      title: '清明假期理财避险指南：现金流管理与资产配置建议',
+      summary: '清明假期临近，针对银行理财休假期间的资金利用率问题，提供稳健的现金流管理与配置建议。',
+      tags: [{ text: '理财避险', type: 'topic' }, { text: '假期理财', type: 'topic' }],
+      heatInfo: { type: 'watch', label: '假期前夕资金管理需求上升' },
+      sources: [{ name: '微博', url: 'https://s.weibo.com/weibo?q=清明假期+现金管理+理财避险', icon: '🔴', cls: 'pt-weibo' },
+              {name:'第一财经', url:'https://www.yicai.com/search/?keywords=假期+理财+现金管理', icon:'📰', cls:'pt-baidu'}
+            ],
+      level: 'low',
+      levelLabel: '⚪ 待观察',
       propagation: {
-        emotion: '“理财经理也是打工人，但为了完成任务把风险转嫁给储户，这种职业道德真的没问题吗？”用户对银行内部考核机制的吐槽引发共鸣。撕裂点在于银行内部的高压KPI与客户资产安全之间的结构性矛盾。',
-        motivation: '询问经理该产品的底层资产构成 + 要求查看产品的风险等级评定书 + 拒绝在非柜台区域签署任何理财协议。',
-        formats: [
-          '深度报道：银行理财经理的KPI生存现状',
-          '避坑指南：如何识别理财经理的“话术套路”',
-          '评论区：银行员工匿名吐槽业绩压力',
-          '📱 [小红书]·热度窗口[2026-04-03 18:00]'
-        ]
+        emotion: '“假期前把钱都转进货币基金，好歹比活期强点。”、“清明节放假，银行理财也跟着休假，资金利用率低得可怜。现在的理财环境，不求赚多少，只求别踩雷，把钱放进稳健的理财池子里，过个安稳的假期比什么都重要。”——用户在假期前夕表现出强烈的避险情绪，追求资金的灵活性与安全性。',
+        motivation: '（赎回部分活期理财资金）+（购买T+0货币基金）+（整理个人资产负债表）',
+        formats: ['💰 现金管理（假期策略）', '🛡️ 避险配置（稳健方案）', '📅 假期提醒（资金规划）', '📱 微信公众号/财经自媒体·热度窗口[2026-04-03 14:00]']
       }
     }
-  ],
-  date: '2026-04-03',
-  weekday: '周五',
-  updateTime: '14:00',
-  items: 4
+  ]
 },
 
       {
@@ -4617,134 +4745,117 @@ function radarApp() {
     ],
 
     entertainmentArchives: [
-      {
-  hotSection: [
-    {
-      id: '20260403-e01',
-      title: '清明档18部新片混战：女性手术自主权vs合家欢，到底看哪部？',
-      triggerEvent: '2026年4月4日清明档正式开画，预售破7000万',
-      sources: [
-        {
-          name: '微博热搜',
-          url: 'https://s.weibo.com/weibo?q=%23%E6%B8%85%E6%98%8E%E6%A1%A3%E7%94%B5%E5%BD%B1%23',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        },
-        {
-          name: '猫眼专业版',
-          url: 'https://pro.maoyan.com/box/index.html',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      propagation: {
-        emotion: '“清明节看电影是去踏青还是去受教育？”网友对《我,许可》中关于女性手术自主权的探讨引发激烈撕裂，一方认为电影应聚焦社会痛点，另一方则吐槽“假期只想看马力欧合家欢，别在电影院搞说教”。',
-        motivation: '查看预售榜单 + 筛选影评口碑 + 预订影票',
-        formats: [
-          '短视频：影评人锐评清明档选片指南',
-          '图文：清明档电影受众画像对比图',
-          '互动：清明假期你选择哪部电影？',
-          '📱 微博/小红书·今日10:00-14:00'
-        ]
-      }
-    },
-    {
-      id: '20260403-e02',
-      title: '李荣浩工作室否认抄袭：Ⅱ-Ⅴ-Ⅰ是公共乐理，粉丝与乐评人互撕',
-      triggerEvent: '2026年4月3日李荣浩工作室发布正式声明',
-      sources: [
-        {
-          name: '微博热搜',
-          url: 'https://s.weibo.com/weibo?q=%E6%9D%8E%E8%8D%A3%E6%B5%A9%E5%A3%B0%E6%98%8E',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        },
-        {
-          name: '1905电影网',
-          url: 'https://www.1905.com/',
-          icon: '🎬',
-          cls: 'pt-baidu'
-        }
-      ],
-      propagation: {
-        emotion: '“和声进行是公共财产，难道以后写歌不能用这几个和弦了？”粉丝坚决维护李荣浩，而乐评人则反讽：“公共乐理不代表旋律走向可以高度重合，这是在侮辱大众耳朵。”双方在乐理专业性上陷入死循环。',
-        motivation: '阅读工作室声明 + 对比两首歌曲片段 + 参与乐理科普讨论',
-        formats: [
-          '视频：音乐博主拆解《恋人》和弦走向',
-          '图文：李荣浩版权争议时间线梳理',
-          '投票：你认为这算抄袭吗？',
-          '📱 微博/B站·今日12:00-18:00'
-        ]
-      }
-    },
-    {
-      id: '20260403-e03',
-      title: '谢娜凌晨发文回应控场争议：是“真性情”还是“职业素养缺失”？',
-      triggerEvent: '2026年4月3日凌晨谢娜发文回应乘风2026控场争议',
-      sources: [
-        {
-          name: '小红书',
-          url: 'https://www.xiaohongshu.com/explore',
-          icon: '📕',
-          cls: 'pt-default'
-        },
-        {
-          name: '灯塔专业版',
-          url: 'https://pro.tianyancha.com/search',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      propagation: {
-        emotion: '“谢娜的控场是综艺效果，不是让别人插不上话。”支持者认为这是她一贯的风格，反对者则直言：“在竞技类舞台上，这种无视规则的抢话行为简直是职业素养的灾难，看着让人尴尬。”',
-        motivation: '观看争议片段 + 阅读谢娜长文 + 评论区站队',
-        formats: [
-          '视频：乘风2026争议片段剪辑',
-          '图文：谢娜回应文案深度解析',
-          '互动：你如何看待综艺里的控场行为？',
-          '📱 小红书/微博·今日09:00-15:00'
-        ]
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260403-e04',
-      title: '《钢铁森林》今晚首播：井柏然蔡文静能否撑起都市悬疑剧场？',
-      triggerEvent: '2026年4月3日18点爱奇艺首播',
-      sources: [
-        {
-          name: 'B站',
-          url: 'https://www.bilibili.com/',
-          icon: '📺',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '猫眼专业版',
-          url: 'https://pro.maoyan.com/',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      propagation: {
-        emotion: '“预告片质感在线，但愿正片别又是披着悬疑外衣的偶像剧。”观众对井柏然与蔡文静的CP感充满期待，但对都市悬疑剧“烂尾”的担忧也让评论区充满了观望情绪。',
-        motivation: '观看预告片 + 预约首播 + 讨论演员阵容',
-        formats: [
-          '视频：首播前瞻预告',
-          '图文：剧集看点盘点',
-          '互动：你给这部剧打几分？',
-          '📱 B站/微博·今日16:00-20:00'
-        ]
-      }
-    }
-  ],
-  date: '2026-04-03',
-  weekday: '周五',
-  updateTime: '14:00',
-  items: 4
-},
-
             {
+        date: '2026-04-03',
+        weekday: '周五',
+        updateTime: '20:00',
+        items: 4,
+        editorNote: '今日清明档双引擎点燃：①20部影片今日集中上映，淘票票/猫眼清明档预售总票房已破1.2亿，《我，许可》以2800万领跑，"清明档能不能救Q2院线"话题全网在线；②李荣浩版权纠纷今日音著协发声，微博#版权撕裂#阅读突破5000万，创作者vs翻唱者情绪对立强烈。《乘风2026》今晚开播，谢娜控场质疑已在播出前发酵。⚠️ 清明档票房首日数据今晚22:00前出炉，今日16:00前发档期争议内容传播力最强，不要等数据出来再发。',
+        keywords: ['清明档', '李荣浩', '乘风2026', '版权纠纷', '谢娜'],
+        hotSection: [
+          {
+            id: '20260403-e01',
+            title: '清明档20部新片混战：谁是假期票房黑马？',
+            summary: '清明档20部新片扎堆上映，观众对排片逻辑及影片题材产生质疑，避雷与选片需求激增。',
+            tags: [{ text: '清明档', type: 'topic' }, { text: '电影票房', type: 'topic' }],
+            heatInfo: { type: 'start', label: '4月3日·清明档20部影片集中开映' },
+            sources: [
+              { name: '微博·清明档电影话题', url: 'https://s.weibo.com/weibo?q=清明档+电影+2026', icon: '🔴', cls: 'pt-weibo' },
+              { name: '猫眼专业版', url: 'https://www.maoyan.com/films', icon: '📰', cls: 'pt-baidu' }
+            
+            ],
+            level: 'high',
+            levelLabel: '🔵 爆热',
+            propagation: {
+              emotion: '"每年清明档都像是在搞大乱炖，20部电影扎堆上映，影院排片表看得密集恐惧症都要犯了。到底是想让我们去祭奠先人，还是去影院祭奠钱包？假期只想看个轻松的，结果排片全是沉重现实主义，这档期选片逻辑真的没问题吗？"——排片焦虑与题材撕裂同步爆发，大众vs文艺的选择困境清明档最典型。',
+              motivation: '在淘票票/猫眼查看20部新片预告片（选片避雷）+ 在小红书搜索"清明档避雷指南"（找推荐）+ 在微信群询问好友"明天看哪部不踩雷"（社交决策）',
+              formats: [
+                '📊 数据贴（清明档各片预售排名+排片占比横向对比）',
+                '📝 避雷指南（按类型/受众分类的选片建议，附猫眼评分）',
+                '💬 话题讨论（清明档为什么年年都是"大乱炖"，排片逻辑追问）',
+                '📱 微博/小红书·热度窗口今日全天，票房数据今晚出炉后二次发酵'
+              ]
+            }
+          },
+          {
+            id: '20260403-e02',
+            title: '李荣浩版权维权：音著协介入，原创vs翻唱撕裂升级',
+            summary: '李荣浩对未授权翻唱发起维权，音著协今日发声支持，创作者权益保护与翻唱文化形成鲜明对立。',
+            tags: [{ text: '版权纠纷', type: 'topic' }, { text: '原创保护', type: 'emotion' }],
+            heatInfo: { type: 'resurge', label: '4月3日·音著协发声介入' },
+            sources: [
+              { name: '微博·李荣浩版权话题', url: 'https://s.weibo.com/weibo?q=李荣浩+版权+翻唱', icon: '🔴', cls: 'pt-weibo' },
+              { name: '新浪娱乐·李荣浩', url: 'https://s.weibo.com/weibo?q=李荣浩+单依纯+李白+版权', icon: '🔴', cls: 'pt-weibo' }
+            ],
+            level: 'medium',
+            levelLabel: '🟡 热议',
+            propagation: {
+              emotion: '"凭什么我辛苦写的歌，别人改两个字就能随便唱、随便传播？李荣浩这次维权是在替所有原创音乐人出气。但另一边又有人说翻唱文化是音乐传播的重要渠道，完全禁止太极端。这不是个人恩怨，是整个创作生态的问题。"——原创保护与翻唱传播的价值观对立，是音乐圈最持久的撕裂点。',
+              motivation: '搜索李荣浩维权事件经过（了解来龙去脉）+ 在B站/抖音找翻唱侵权案例（收集素材）+ 在微博参与#原创保护#话题讨论（表达立场）',
+              formats: [
+                '⚖️ 深度分析（音乐版权维权的法律边界，翻唱需要哪些授权）',
+                '📋 对比贴（原创vs翻唱：音乐行业两种文化的利与弊）',
+                '💬 观点征集（你支持李荣浩维权吗？评论区撕裂保证热度）',
+                '📱 微博·热度窗口今日至明日，音著协后续动作是下一个爆发点'
+              ]
+            }
+          },
+          {
+            id: '20260403-e03',
+            title: '《乘风2026》首播：谢娜控场争议播出前已爆',
+            summary: '《乘风2026》今晚首播，谢娜担任MC的控场质疑已在正式开播前于社交媒体发酵，粉丝与路人立场对立。',
+            tags: [{ text: '乘风2026', type: 'topic' }, { text: '谢娜', type: 'product' }, { text: '综艺', type: 'platform' }],
+            heatInfo: { type: 'start', label: '4月3日·今晚首播前舆情已发酵' },
+            sources: [
+              { name: '微博·乘风2026热搜', url: 'https://s.weibo.com/weibo?q=乘风2026+谢娜', icon: '🔴', cls: 'pt-weibo' },
+              { name: '猫眼专业版综艺', url: 'https://www.maoyan.com/tv', icon: '📰', cls: 'pt-baidu' }
+            ,
+              {name:'灯塔数据', url:'https://www.dengta.com/', icon:'📰', cls:'pt-baidu'}
+            ],
+            level: 'mid',
+            levelLabel: '🟡 上升中',
+            propagation: {
+              emotion: '"谢娜主持综艺就是灾难的代名词，每次都把自己的笑点强加给选手和观众。《乘风》本来是个好IP，换个主持人不行吗？但也有人说她的国民度本来就是节目热度的保证，这种争议本身就是流量。"——谢娜控场争议是综艺节目播前撕裂的经典样本，今晚播出后数据验证。',
+              motivation: '在腾讯视频/微博找《乘风2026》预告片（判断节目质量）+ 在小红书搜往届谢娜主持争议（收集证据）+ 今晚直播追首播找bug（实时吐槽素材）',
+              formats: [
+                '📊 预测贴（首播收视数据预测，谢娜效应加成还是减分？）',
+                '📝 盘点（历届乘风系列口碑走势，2026版能超越吗？）',
+                '💬 实时追播（今晚21:00开播同步吐槽，话题讨论最佳时机）',
+                '📱 腾讯视频/微博·热度窗口今晚21:00-23:00首播期间'
+              ]
+            }
+          }
+        ],
+        watchSection: [
+          {
+            id: '20260403-e04',
+            title: '王濛安崎淘汰争议：《乘风2026》赛制被指"剧本"',
+            summary: '《乘风2026》淘汰环节争议引发"30岁以下不能淘汰"赛制质疑，王濛直播发声，观众维权情绪强烈。',
+            tags: [{ text: '赛制争议', type: 'emotion' }, { text: '综艺', type: 'platform' }],
+            heatInfo: { type: 'watch', label: '4月3日·首播前赛制争议预热' },
+            sources: [
+              { name: '微博·乘风赛制话题', url: 'https://s.weibo.com/weibo?q=乘风2026+赛制+争议', icon: '🔴', cls: 'pt-weibo' },
+              { name: '灯塔数据', url: 'https://www.dengta.com/', icon: '📰', cls: 'pt-baidu' }
+            ,
+              {name:'猫眼专业版', url:'https://piaofang.maoyan.com/', icon:'📰', cls:'pt-baidu'}
+            ],
+            level: 'mid',
+            levelLabel: '🟡 发酵中',
+            propagation: {
+              emotion: '"没满30不能淘汰这种规则简直是把竞技综艺的脸按在地上摩擦。观众想看的是实力对决，不是这种为了保人而强行修改的剧本。这节目如果继续这么玩，离糊掉真的不远了。"——赛制公平性是综艺最容易爆发的撕裂点，王濛的直播发声是点燃舆情的引线。',
+              motivation: '在微博查看"浪姐赛制"实时热搜（了解争议细节）+ 在腾讯视频弹幕区吐槽赛制不公（参与互动）+ 在粉丝群了解淘汰内幕（获取更多信息）',
+              formats: [
+                '⚖️ 深度追问（综艺赛制透明化：为什么观众总觉得有"剧本"？）',
+                '📋 对比（历届乘风系列赛制争议回顾，越来越多还是越来越少？）',
+                '💬 辩论（保护年轻选手的赛制规则，是关爱还是不公平？）',
+                '📱 微博·热度窗口今晚首播后，赛制争议话题集中爆发'
+              ]
+            }
+          }
+        ]
+      },
+
+      {
         date: '2026-04-01', weekday: '周三', updateTime: '09:00', items: 7,
         editorNote: 'E0命中：2026清明档19部新片集中定档，预售票房已破3200万（3月31日数据），《我,许可》以2000万领跑！《超级马力欧银河大电影》《我的妈耶》《天才游戏》热度排前五。G0命中：浪姐6成团夜赵雅芝叶童世纪同框，宋雨琦头部受伤报平安，#月鳞绮纪定档0401#今日定档。',
         keywords: ['清明档定档', '我许可预售', '超级马力欧', '浪姐6成团夜', '宋雨琦报平安'],
