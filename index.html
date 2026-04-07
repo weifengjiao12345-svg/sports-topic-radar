@@ -679,6 +679,19 @@ function radarApp() {
         borderLight: '#a5f3fc',
       },
       {
+        id: 'food',
+        name: '美食',
+        icon: '🍜',
+        desc: '外卖 · 餐饮 · 生鲜 · 食品安全 · 全网舆情扫描',
+        today: '',
+        color: '#ea580c',
+        colorMuted: '#d49070',
+        gradFrom: '#c2410c',
+        gradTo: '#f97316',
+        bgLight: 'rgba(234,88,12,0.06)',
+        borderLight: '#fed7aa',
+      },
+            {
         id: 'entertainment',
         name: '文娱',
         icon: '🎬',
@@ -700,7 +713,7 @@ function radarApp() {
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 5,
   editorNote: '今日清明返程，用户刚经历雨天实测，关于软壳防水虚标的愤怒值达到峰值，是拆解测评类内容的黄金窗口。同时，五一假期长达11天的预期激活了长线装备置换需求。今日必须集中火力输出‘避坑指南’，通过对比实测数据转化流量。后续需在4月15日跟进五一长线户外装备的深度测评，利用返程后的冷静期，引导用户从‘跟风买’转向‘理性选’，为五一销售转化铺路。',
   keywords: [
@@ -883,7 +896,49 @@ function radarApp() {
         emotion: '',
         motivation: ''
       }
+    },
+      {
+  id: '20260407-s01',
+  title: '370%销量激增后的落汤鸡：软壳防水虚标毁掉清明，五一你还敢信它吗？',
+  summary: '清明速干毛巾销量暴涨370%侧面证实户外淋雨惨状，软壳冲锋衣因防泼水与全防水概念混淆引发大规模退货，五一长线出行前夕，装备避雷进入关键窗口。',
+  tags: [
+    {
+      text: '软壳冲锋衣',
+      type: 'topic'
+    },
+    {
+      text: '防水虚标',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '微博话题',
+      url: 'https://s.weibo.com/weibo?q=软壳防水虚标',
+      icon: '🔴',
+      cls: 'pt-weibo'
+    }
+  ],
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  heatInfo: {
+    type: 'peak',
+    label: '4月7日·清明后复盘·五一出行前窗口期'
+  },
+  isNew: true,
+  propagation: {
+    emotion: '买软壳之前商家说防水，穿上爬山两小时就湿透了——这种对冲锋衣市场营销失真的愤怒，分化成了两类人：一类是踩坑后发帖求退货的普通驴友，一类是坚持认为软壳够用、抗议过度营销的经验户外人。二者的核心分歧在于：普通消费者对技术参数毫无概念，而品牌在利用这一信息差做营销。',
+    motivation: 'A型：翻出自己买软壳被坑的经历发帖控诉虚标品牌；B型：制作对比测评视频，在实际淋雨场景中演示软壳vs硬壳真实防水差异；C型：根据评论区需求，整理五一出行前必看的冲锋衣防水参数科普。',
+    formats: [
+      '📊 软壳vs硬壳防水等级实测横评',
+      '💬 软壳防水宣传是否涉嫌误导消费',
+      '🗳️ 投票：软壳够用vs必须买硬壳',
+      '📱 小红书·19:00-21:00'
+    ]
+  },
+  levelLabel: '🔵 爆热'
+}
   ]
 },
 
@@ -3199,7 +3254,7 @@ function radarApp() {
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 4,
   editorNote: '今日是小米涨价前最后4天窗口期，全网关于“等等党”的讨论已进入白热化。内存涨价4倍已成定局，手机行业毛利率跌至10.9%，涨价潮将持续至2027年底。今日选题核心在于打破用户对“降价促销”的幻想，引导其在涨价前完成刚需置换。同时，五一假期临近，数码消费电子热度回升，建议将“涨价焦虑”与“假期换机”结合，重点跟进苹果是否跟进涨价的传闻，这将是5月前后的最大舆论爆点。',
   keywords: [
@@ -3357,7 +3412,53 @@ function radarApp() {
       },
       level: 'low',
       levelLabel: '🌱 潜力股'
+    },
+      {
+  id: '20260407-t01',
+  title: '内存成本飙4倍！小米K90 Pro Max将涨200元，4月11日前你买不买？',
+  isNew: true,
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  summary: '小米4月11日起K90 Pro Max全系+200元，卢伟冰确认内存价格较去年Q1飙升近4倍，苹果被曝将采用奇招应对。OPPO/vivo已涨300-500元，等等党还要等到何时？',
+  tags: [
+    {
+      text: '手机涨价',
+      type: 'topic'
+    },
+    {
+      text: '等等党',
+      type: 'topic'
+    },
+    {
+      text: '内存芯片',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '百家号·科技转转',
+      url: 'https://baijiahao.baidu.com/s?id=1861632689797526595',
+      icon: '📰',
+      cls: 'pt-baidu'
+    }
+  ],
+  heatInfo: {
+    type: 'upcoming',
+    label: '4月11日·小米涨价执行日·后续：苹果应对方案'
+  },
+  propagation: {
+    emotion: '以前是买内存送手机，现在是买手机供内存，感觉是被时代选中受苦的那一批。——这句话精准切中了等等党与现在买派的核心矛盾：等等党认为芯片周期总会平衡，再等半年能省千元；而现在买派则认为涨价会传导至所有新品，越等越贵。本质上是对科技行业周期判断的分歧。',
+    motivation: 'A型：制作各品牌手机4月前后价格变化对比图，帮粉丝判断是否入手时机；B型：深度剖析AI算力如何虹吸全球内存产能，从产业链视角解释这轮涨价不可逆；C型：整理网友讨论中的经典等等党悲剧案例，引发同感。',
+    formats: [
+      '📊 主流旗舰内存涨价幅度横评',
+      '💬 AI手机时代内存是否为伪命题',
+      '🗳️ 现在买vs等到双11再看',
+      '📱 微博·14:00-16:00'
+    ]
+  },
+  levelLabel: '🔵 爆热'
+}
   ]
 },
 
@@ -5517,7 +5618,7 @@ function radarApp() {
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 4,
   editorNote: '今日CS2圈内迎来“冰火两重天”：国内TYLOO与LVG携手晋级科隆Major，重燃CNCS希望；而国际赛场FaZe十年不败神话终结，无缘Major引发全球震动。今日选题重点在于分析CNCS双雄的晋级含金量，以及FaZe王朝崩塌后的连锁反应。清明假期结束，玩家讨论热度正从“观赛”转向“复盘”，建议深入挖掘TYLOO小将Zero的成长轨迹，并跟进FaZe选手的未来动向。后续需重点关注科隆Major Stage1的具体抽签分组及赛程节点。',
   keywords: [
@@ -5673,7 +5774,64 @@ function radarApp() {
         emotion: '',
         motivation: ''
       }
+    },
+      {
+  id: '20260407-c01',
+  perspective: 'both',
+  isNew: true,
+  title: 'FaZe十年首次无缘Major，TYLOO排34位进科隆，中国CS2真的站起来了吗？',
+  summary: 'TYLOO以2-1击败FlyQuest夺钢盔杯S2冠军，与LVG携手锁定科隆Major名额；老牌豪门FaZe十年来首次无缘Major，欧洲区版图剧变引发全球CS社区震动。国内玩家热议TYLOO能否在科隆冲击八强。',
+  tags: [
+    {
+      text: '钢盔杯S2',
+      type: 'topic'
+    },
+    {
+      text: 'TYLOO',
+      type: 'topic'
+    },
+    {
+      text: '科隆Major',
+      type: 'topic'
+    },
+    {
+      text: 'FaZe',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '虎牙直播微博',
+      url: 'https://weibo.com/2698412232/QzpHR0EtG',
+      icon: '🔴',
+      cls: 'pt-weibo'
+    },
+    {
+      name: '17173电竞',
+      url: 'https://news.17173.com/content/04062026/171709440.shtml',
+      icon: '📰',
+      cls: 'pt-baidu'
+    }
+  ],
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  heatInfo: {
+    type: 'peak',
+    label: '4月5日·钢盔杯S2收官·科隆Major赛前热议'
+  },
+  propagation: {
+    emotion: 'FaZe进不去，天禄进去了，这世界线乱了——这种撕裂感源于老牌豪门粉丝的幻灭与CNCS老兵对新希望的极度渴望。一方面是FaZe十年功勋毁于一旦的唏嘘，另一方面是TYLOO排名暴涨后的捧杀风险，评论区正处于CNCS站起来了与只是欧洲队拉了的激烈交锋中。',
+    motivation: 'A型：拆解TYLOO夺冠关键局战术，制作战术分析视频；B型：连线资深解说分析FaZe出局深层原因；C型：发起科隆Major中国战队能进八强吗的社区投票活动。',
+    formats: [
+      '📊 TYLOO与FaZe近半年关键数据对比',
+      '💬 豪门陨落与CNCS复兴的必然联系',
+      '🗳️ TYLOO科隆能进八强吗？能 vs 不能',
+      '📱 抖音·16:00-18:00'
+    ]
+  },
+  levelLabel: '🔵 爆热'
+}
   ]
 },
 
@@ -6991,7 +7149,7 @@ function radarApp() {
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 5,
   editorNote: '今日正值清明返程高峰，高速免费政策于昨日结束，叠加4月5日起燃油附加费上调至60/120元新标准，用户出行成本与拥堵焦虑双重叠加。五一假期搜索热度已暴涨320%，拼假攻略成为流量新高地。今日必发内容需聚焦：一是下午14-18时返程避堵实操；二是解读燃油费新标对五一订票的影响。后续节点需持续跟进五一长线游规划，本周内完成从清明复盘到五一预热的选题切换。',
   keywords: [
@@ -7162,7 +7320,59 @@ function radarApp() {
         emotion: '',
         motivation: ''
       }
+    },
+      {
+  id: '20260407-v1',
+  isNew: true,
+  title: '民宿涨价90%！五一反向旅游是省钱还是踩坑？这几座小城还没涨价。',
+  summary: '清明假期结束，五一规划潮开启。同程数据：民宿预订量+90%，县城如家八百元/晚，小城反向出游宜宾兴文已涨400%。避开热门城市人潮的人们正在发现，冷门小城的性价比红利正被迅速收割。',
+  tags: [
+    {
+      text: '五一出行',
+      type: 'topic'
+    },
+    {
+      text: '反向旅游',
+      type: 'topic'
+    },
+    {
+      text: '民宿涨价',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '百家号·极目新闻',
+      url: 'https://baijiahao.baidu.com/s?id=1861692495049959564',
+      icon: '📰',
+      cls: 'pt-baidu'
+    },
+    {
+      name: '微博',
+      url: 'https://s.weibo.com/weibo?q=五一反向旅游',
+      icon: '🔴',
+      cls: 'pt-weibo'
+    }
+  ],
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  heatInfo: {
+    type: 'upcoming',
+    label: '4月7日·清明后规划期·五一出行窗口开启'
+  },
+  propagation: {
+    emotion: '清明在景区看人头，五一想去县城躲清静，结果发现县城如家也敢卖八百。——撕裂分析：用户在逃离人潮与基建落后间反复横跳。渴望低价高质的差异化体验，却无法忍受小城暴涨的物价，这种反向旅游的红利正被资本迅速收割，引发强烈的被背刺感。',
+    motivation: 'A型：整理10个五一冷门城市性价比对比，附真实住宿价格和避坑攻略；B型：分析民宿涨价背后的平台定价机制，讨论是否该征收旅游调节税；C型：发起五一热门城市还是冷门小城的选择投票，引导讨论。',
+    formats: [
+      '📊 10个五一冷门城市性价比测评',
+      '💬 县城酒店卖八百是消费刺客吗',
+      '🗳️ 热门城市排队 vs 冷门县城开荒',
+      '📱 小红书·14:30-16:30'
+    ]
+  },
+  levelLabel: '🔵 爆热'
+}
   ]
 },
 
@@ -8316,7 +8526,7 @@ function radarApp() {
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 5,
   editorNote: '今日清明假期后首个工作日，储户返程后大量涌入银行网点及手机App查询利率，存款利率倒挂与收益腰斩话题迎来流量峰值。六大行利率全线下调至‘0.95%-1.25%’区间，导致存钱不如理财的焦虑感蔓延。今日必发‘你的存款还值得存吗’深度解析，帮助用户在利率下行期重新配置资产。五一假期（24天后）前，居民资产搬家潮将加剧，本周需重点跟进高股息蓝筹与保险类产品的替代效应，引导用户从‘死存钱’转向‘活配置’。',
   keywords: [
@@ -8487,7 +8697,59 @@ function radarApp() {
         emotion: '',
         motivation: ''
       }
+    },
+      {
+  id: '20260407-f01',
+  isNew: true,
+  levelLabel: '🔵 爆热',
+  title: '13类豁免与T+0博弈终结：短线新规今日落地，散户炒妖股的时代真的结束了。',
+  summary: '4月7日短线交易监管新规正式落地，可转债纳入监管范围，新增13种豁免情形为社保/养老金进场扫清障碍。同期六大行存款利率进入1字头，普通人的钱面临史上最难配置决策。',
+  tags: [
+    {
+      text: '短线交易新规',
+      type: 'topic'
+    },
+    {
+      text: '存款利率',
+      type: 'topic'
+    },
+    {
+      text: '资产配置',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '网易财经',
+      url: 'https://m.163.com/dy/article/KPKNLD1005566SDU.html',
+      icon: '📰',
+      cls: 'pt-baidu'
+    },
+    {
+      name: '雪球',
+      url: 'https://xueqiu.com/k?q=短线交易新规',
+      icon: '📰',
+      cls: 'pt-baidu'
+    }
+  ],
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  heatInfo: {
+    type: 'start',
+    label: '4月7日·短线新规落地·后续：一季报窗口期4月30日'
+  },
+  propagation: {
+    emotion: '以前靠手速和信息差还能在妖股里分杯羹，现在新规一出，还没封板我就得先算违规风险。——这是对A股投机逻辑的彻底重构。新规堵死了可转债等品种的投机漏洞，让习惯了快进快出的散户陷入了守旧策略失效与新规适应期的剧烈阵痛中，而长线资金则在为价值投资春天鼓掌。',
+    motivation: 'A型：整理新规前后短线交易成本变化对比，帮粉丝判断自己的操作是否违规；B型：分析新规推出对游资生态的冲击，探讨妖股消失后A股格局如何重塑；C型：发起坚持短线博弈vs转向长线价值的投票，收集粉丝策略变化。',
+    formats: [
+      '📊 新规前后短线交易成本对比',
+      '💬 监管收紧对游资生态的影响',
+      '🗳️ 坚持短线博弈VS转向长线价值',
+      '📱 雪球·14:00-16:00'
+    ]
+  }
+}
   ]
 },
 
@@ -9591,11 +9853,13 @@ function radarApp() {
       }
     ],
 
-    entertainmentArchives: [
+    foodArchives: [
+    ],
+        entertainmentArchives: [
       {
   date: '2026-04-07',
   weekday: '周二',
-  updateTime: '09:00',
+  updateTime: '14:00',
   items: 5,
   editorNote: '清明档以3亿票房收官，同比微增，市场进入“五一档”前的冷静期。今日核心任务是完成档期复盘：重点拆解《我,许可》引发的母女关系争议，这是目前社交媒体讨论度最高的长尾话题，建议持续发酵；同时，需对五一档定档影片进行首轮卡司监测。当前市场情绪从怀旧转向期待，影综类内容需快速调整节奏，从“清明档总结”平滑过渡到“五一档预热”，重点关注主旋律与商业片在不同档期的受众迁移差异。',
   keywords: [
@@ -9758,7 +10022,59 @@ function radarApp() {
         emotion: '',
         motivation: ''
       }
+    },
+      {
+  id: '20260407-e01',
+  isNew: true,
+  title: '3.04亿清明档收官，8部新片挤爆五一，水饺皇后能打赢马力欧吗？',
+  summary: '清明档3.04亿票房，场次145.4万刷新影史纪录，马力欧银河领跑；五一档8部新片定档，水饺皇后为淘票票热度第一；周杰伦杭州站15万人场内+超20万场外，演唱会经济再创纪录。',
+  tags: [
+    {
+      text: '清明档票房',
+      type: 'topic'
+    },
+    {
+      text: '五一档',
+      type: 'topic'
+    },
+    {
+      text: '水饺皇后',
+      type: 'topic'
     }
+  ],
+  sources: [
+    {
+      name: '微博·吉林发布',
+      url: 'https://weibo.com/3275115274/QzFrPzw2n',
+      icon: '🔴',
+      cls: 'pt-weibo'
+    },
+    {
+      name: '猫眼电影',
+      url: 'https://www.maoyan.com/search?query=五一档',
+      icon: '📰',
+      cls: 'pt-baidu'
+    }
+  ],
+  heat: 'high',
+  level: 'high',
+  section: 'hot',
+  heatInfo: {
+    type: 'resurge',
+    label: '4月7日·清明档收官·五一档预热开启'
+  },
+  propagation: {
+    emotion: '清明档场次刷了新高，但真正能看的片子一只手都数得过来。——影院经理在为破纪录的场次欢呼，而核心影迷却在为片荒焦虑。这种数据繁荣与内容贫瘠的撕裂，让五一档的8部新片成了救命稻草，尤其是水饺皇后这种现实题材能否承接住报复性观影潮，决定了上半年影市的成色。',
+    motivation: 'A型：对比五一档8部新片的题材、排片预测和目标受众，制作选片攻略；B型：分析清明档场次纪录背后的排片策略，探讨量增质不增的困境；C型：发起选合家欢马力欧还是励志水饺皇后的选片投票。',
+    formats: [
+      '📊 五一档8部新片想看热度排行榜',
+      '💬 体育传记片为何总在五一档扎堆',
+      '🗳️ 选合家欢马力欧还是励志水饺皇后',
+      '📱 抖音·15:00-17:00'
+    ]
+  },
+  levelLabel: '🔵 爆热'
+}
   ]
 },
 
@@ -10997,6 +11313,7 @@ function radarApp() {
       if (this.currentCat === 'cs2') return this.cs2Archives;
       if (this.currentCat === 'travel') return this.travelArchives;
       if (this.currentCat === 'finance') return this.financeArchives;
+      if (this.currentCat === 'food') return this.foodArchives;
       return this.entertainmentArchives;
     },
     get current() { return this.activeArchives[this.currentIndex] || {}; },
