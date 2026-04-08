@@ -39,8 +39,8 @@ TMP_DIR = f'{WORKSPACE}/运动户外选题雷达/tmp'
 
 GEMINI_API_KEY = '1sGK0Ye0792JMtNQD4D59770-0859-4958-bBdA-F451De4d'
 GEMINI_ENDPOINT = 'https://api.modelverse.cn/v1/chat/completions'
-GEMINI_MODEL_SEARCH = 'gemini-3.1-flash-lite-preview'  # 搜索用最便宜的模型
-GEMINI_MODEL_PROCESS = 'gemini-3-flash-preview'       # 提炼用标准模型
+GEMINI_MODEL_SEARCH = 'gemini-3-flash-preview'  # 搜索模型（统一用标准模型）
+GEMINI_MODEL_PROCESS = 'gemini-3-flash-preview'  # 提炼模型（与搜索相同）
 
 # 兜底模板（降本优化）
 FALLBACK_FORMATS = [
