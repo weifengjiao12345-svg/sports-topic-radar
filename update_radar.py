@@ -142,29 +142,56 @@ def gemini_search(query, max_results=3):
 
 
 def validate_and_fix_urls(results, query):
-    """验证 URL 可访问性，无效时用微博热搜替代"""
+    """验证 URL 可访问性，保留原始URL，仅在完全无效时用微博热搜替代"""
+    
+    # 平台识别：根据URL判断来源平台
+    def get_platform_icon(url):
+        if 'weibo.com' in url or 's.weibo.com' in url:
+            return 'red', 'pt-weibo'
+        elif 'zhihu.com' in url:
+            return 'blue', 'pt-zhihu'
+        elif 'bilibili.com' in url or 'b23.tv' in url:
+            return 'tv', 'pt-bilibili'
+        elif 'xiaohongshu.com' in url or 'xhslink.com' in url:
+            return 'book', 'pt-xhs'
+        elif 'douyin.com' in url or 'iesdouyin.com' in url:
+            return 'music', 'pt-douyin'
+        elif 'toutiao.com' in url:
+            return 'news', 'pt-toutiao'
+        elif 'thepaper.cn' in url:
+            return 'news', 'pt-baidu'
+        elif 'hltv.org' in url:
+            return 'globe', 'pt-baidu'
+        elif 'counter-strike.net' in url or 'blog.counter-strike.net' in url:
+            return 'game', 'pt-baidu'
+        elif 'reddit.com' in url:
+            return 'chat', 'pt-baidu'
+        elif '5eplay.com' in url:
+            return 'news', 'pt-baidu'
+        elif '163.com' in url or 'sina.com.cn' in url or 'qq.com' in url or 'sohu.com' in url:
+            return 'news', 'pt-baidu'
+        else:
+            return 'news', 'pt-default'
     
     validated = []
     for r in results:
         url = r.get('url', '')
-        name = r.get('title', '')[:20] or query[:20]
+        name = r.get('title', '')[:30] or query[:30]
         
+        # 1. 如果URL有效且来自已知平台，直接保留（不curl检查）
         if url and url.startswith('http'):
-            # 快速检查 URL 是否真实存在（3秒超时）
-            try:
-                check = subprocess.run(
-                    ['curl', '-s', '-I', '-m', '3', url],
-                    capture_output=True, text=True
-                )
-                if '200' in check.stdout or '301' in check.stdout or '302' in check.stdout:
-                    validated.append(r)
-                    continue
-            except:
-                pass
+            icon, cls = get_platform_icon(url)
+            r['icon'] = icon
+            r['cls'] = cls
+            r['name'] = name
+            validated.append(r)
+            continue
         
-        # URL 无效 → 用微博热搜替代
+        # 2. URL无效或缺失，才用微博热搜替代
         r['url'] = f"https://s.weibo.com/weibo?q={urllib.parse.quote(name)}"
         r['name'] = name
+        r['icon'] = 'red'
+        r['cls'] = 'pt-weibo'
         validated.append(r)
     
     return validated
@@ -328,20 +355,20 @@ def execute_searches(track_data, realtime_hot):
             fallback_count += 1
     search_results['tech'] = tech_results
     
-    # CS电竞 11组
+    # CS电竞 11组（改用中文搜索，确保内容相关性）
     cs2_results = []
     cs2_queries = [
-        f"HLTV CS2 Major tournament {TODAY}",
-        f"CS2 player transfer team {TODAY}",
-        f"钢盔杯 虎牙杯 CSBOY XSE {TODAY}",
-        f"TYLOO RA LVG MOS CS2 {TODAY}",
-        f"CS2 update patch version {TODAY}",
-        f"CS2 5E对战 国服 玩家 {TODAY}",
-        f"CS2 游戏机制 争议 {TODAY}",
-        f"CS2 B站 电竞 {TODAY}",
-        f"CS2 皮肤 市场 {TODAY}",
-        f"CS2 微博 热搜 {TODAY}",
-        f"{track_data['cs2'][0]} {track_data['cs2'][1]} {TODAY}",
+        f"CS2赛事 Major 比赛结果 {TODAY}",  # C1赛事结果
+        f"CS2选手 转会战队 {TODAY}",  # C2选手动态
+        f"钢盔杯 虎牙杯 CSBOY XSE歆赛 {TODAY}",  # C3国内赛事
+        f"TYLOO战队 RA战队 LVG战队 中国CS2 {TODAY}",  # C4中国战队
+        f"CS2版本更新 新武器 新地图 {TODAY}",  # C5游戏本体更新
+        f"CS2国服 5E平台 玩家吐槽 {TODAY}",  # C6国内玩家舆情
+        f"CS2游戏机制 争议讨论 {TODAY}",  # C7机制争议
+        f"CS2 B站电竞 热门视频 {TODAY}",  # C8 B站内容
+        f"CS2皮肤 市场 热门皮肤 {TODAY}",  # C9皮肤经济
+        f"CS2 微博热搜 电竞话题 {TODAY}",  # C10微博舆情
+        f"{track_data['cs2'][0]} {track_data['cs2'][1]} {TODAY}",  # C11追踪
     ]
     for i, q in enumerate(cs2_queries, 1):
         print(f"  C{i}: {q[:40]}...")
@@ -469,33 +496,51 @@ def process_with_gemini(search_results, realtime_hot):
     
     SYSTEM_PROMPT = f"""你是资深内容选题编辑，今日{TODAY}（{WEEKDAY}），节日档期：{FESTIVAL_NAME}（距今{DAYS_TO_FESTIVAL}天）。
 
-## 🔴 最高优先级：命中实时热榜
+## 强制约束（违反即失败）
+1. 所有内容必须使用中文输出，emotion、motivation、editorNote、summary等字段禁止使用英文
+2. 禁止使用中文引号（""「」『』等），只用普通引号或不加引号
+3. hotSection条目必须有热度等级：high（爆热）或mid（热议），不能用watch或low
+4. sources.url必须来自搜索数据，保留原始平台链接（微博/知乎/B站/小红书等），不得凭空生成
+
+## 最高优先级：命中实时热榜
 以下是今日各平台（微博/百度/头条/澎湃）的实时热搜词，共{len(realtime_hot)}条：
 {realtime_hot_str}
 
-选题必须命中热榜词之一。不在热榜的事件一律放watchSection，不得进hotSection。
+选题必须命中热榜词之一。命中热榜的条目进hotSection，level设为high或mid。未命中热榜的事件放watchSection，level设为watch。
 
-sources.url 必须直接来自搜索数据URL，不得凭空生成。
-微博来源：https://s.weibo.com/weibo?q=热榜关键词
+## 热度等级判定规则
+- high（爆热）：命中热搜榜前10位，或全网讨论量>100万
+- mid（热议）：命中热搜榜前30位，或平台讨论量>50万  
+- low（潜力股）：有话题性但热度较低（一般不用）
+- watch（观察中）：未命中热榜，有潜在价值待观察
 
-[propagation.formats] 恰好3条：第1条📊；第2条💬；第3条🗳️。不要写第4条📱。
+hotSection条目的level必须是high或mid，levelLabel对应爆热或热议。
 
-[propagation.emotion] 引用用户原声金句 + -- + 撕裂分析（80-120字）。注意：emotion字段不要使用中文引号和，只用普通标点。
+## 字段格式要求
+sources.url 必须直接来自搜索数据URL（微博/知乎/B站/小红书等真实链接），不得凭空生成。
 
-[propagation.motivation] 行为A（具体事）+ 行为B（具体事）+ 行为C（具体事）。不要使用中文引号，只用普通标点。
+[propagation.formats] 恰好3条：第1条数据对比类；第2条话题讨论类；第3条投票互动类。不要写第4条手机。
 
-[editorNote] 100-150字，说明命中了哪条热榜词，无内部编号，不使用中文引号。
+[propagation.emotion] 双引号引用用户原声金句 + -- + 撕裂分析（80-120字）。全部中文，禁止英文！
 
-[keywords] 3-6个今日核心话题词，直接来自热榜词。
+[propagation.motivation] 行为A（具体事）+ 行为B（具体事）+ 行为C（具体事）。全部中文，禁止英文！
 
-输出：完整JSON对象，hot区3-4条（必须命中热榜），watch区2条，每条formats恰好3条，纯JSON不加代码块。"""
+[editorNote] 100-150字中文，说明命中了哪条热榜词、撕裂点在哪，无内部编号
+
+[keywords] 3-6个今日核心话题词，直接来自热榜词
+
+输出：完整JSON对象，hot区3-4条（level为high/mid），watch区2条（level为watch），每条formats恰好3条，纯JSON不加代码块。"""
 
     SELF_CHECK = f"""
-自检：
-1. hotSection每条命中今日热榜词？未命中→watchSection
-2. sources.url来自搜索数据或 https://s.weibo.com/weibo?q=热榜词
-3. formats恰好3条（📊/💬/🗳️）？
-4. emotion/motivation/editorNote没有使用中文引号？（禁止使用和，用普通引号或不用）
+自检（逐条检查，失败则重写）：
+1. hotSection每条命中今日热榜词？未命中→移入watchSection
+2. hotSection每条level是high或mid？不能是watch或low
+3. emotion/motivation/editorNote是否全部中文？有英文→重写中文版
+4. sources.url来自搜索数据（保留原始平台链接），不是凭空生成的
+5. formats恰好3条（数据对比/话题讨论/投票互动）？删除手机条目
+6. emotion/motivation/editorNote没有使用中文引号？（禁止使用）
+7. 每条有完整的propagation对象（emotion/motivation/formats）？
+
 今日热榜前20词：{realtime_hot[:20]}"""
 
     category_outputs = {}
