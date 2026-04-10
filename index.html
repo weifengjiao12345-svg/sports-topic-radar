@@ -346,30 +346,6 @@
           </template>
         </div>
       </div>
-
-      <!-- 热榜来源说明 -->
-      <div class="mt-3 bg-black/15 backdrop-blur rounded-xl px-4 py-3 border border-white/10">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="text-white/50 text-xs font-bold uppercase tracking-wider">📡 数据来源</span>
-          <span class="text-white/30 text-xs">每日 6 路热榜实时抓取</span>
-        </div>
-        <div class="flex flex-wrap gap-2 text-xs text-white/60">
-          <span class="flex items-center gap-1"><span>🔴</span><span>微博热搜</span></span>
-          <span class="text-white/20">·</span>
-          <span class="flex items-center gap-1"><span>🔵</span><span>百度热搜</span></span>
-          <span class="text-white/20">·</span>
-          <span class="flex items-center gap-1"><span>📰</span><span>头条热榜</span></span>
-          <span class="text-white/20">·</span>
-          <span class="flex items-center gap-1"><span>📄</span><span>澎湃热榜</span></span>
-          <span class="text-white/20">·</span>
-          <span class="flex items-center gap-1"><span>💬</span><span>知乎热榜</span></span>
-          <span class="text-white/20">·</span>
-          <span class="flex items-center gap-1"><span>🛒</span><span>什么值得买</span></span>
-        </div>
-        <div class="mt-2 text-white/35 text-xs leading-relaxed">
-          🔥 卡片上的「热榜词」标签 = 选题命中的原始热搜词，点击直达热点现场
-        </div>
-      </div>
     </div>
 
     <!-- 统计栏 -->
@@ -466,18 +442,7 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-high" x-text="item.levelLabel"></span>
                 <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
-                <!-- 热榜命中词标签 -->
-                <template x-if="item.hotWord">
-                  <a :href="item.sources && item.sources[0] ? item.sources[0].url : '#'"
-                    target="_blank" rel="noopener"
-                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-bold border cursor-pointer transition-opacity hover:opacity-80"
-                    :style="'background:' + activeCat.bgLight + '; border-color:' + activeCat.color + '33; color:' + activeCat.color">
-                    <span>🔥</span>
-                    <span x-text="item.hotWord"></span>
-                    <span class="opacity-40">↗</span>
-                  </a>
-                </template>
-                <template x-for="src in (item.sources || []).slice(item.hotWord ? 1 : 0)">
+                <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
                     <span x-text="src.name"></span>
@@ -528,14 +493,11 @@
                 </div>
                 <div class="prop-row">
                   <div class="prop-icon bg-slate-50">✍️</div>
-                  <div class="flex-1">
-                    <div class="prop-label">内容操作指南</div>
-                    <div class="flex flex-col gap-1 mt-1">
-                      <template x-for="(fmt, fi) in item.propagation.formats">
-                        <div class="flex items-start gap-1.5">
-                          <span class="text-xs font-black text-slate-300 mt-0.5 shrink-0 w-4" x-text="['①','②','③'][fi] || (fi+1)+'.'"></span>
-                          <span class="format-pill flex-1 text-left" x-text="fmt"></span>
-                        </div>
+                  <div>
+                    <div class="prop-label">推荐内容形式</div>
+                    <div class="flex flex-wrap mt-1">
+                      <template x-for="fmt in item.propagation.formats">
+                        <span class="format-pill" x-text="fmt"></span>
                       </template>
                     </div>
                   </div>
@@ -567,17 +529,7 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-mid" x-text="item.levelLabel"></span>
                 <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
-                <!-- 热榜命中词标签（watch区） -->
-                <template x-if="item.hotWord">
-                  <a :href="item.sources && item.sources[0] ? item.sources[0].url : '#'"
-                    target="_blank" rel="noopener"
-                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-bold border cursor-pointer transition-opacity hover:opacity-80 bg-sky-50 border-sky-200 text-sky-600">
-                    <span>📡</span>
-                    <span x-text="item.hotWord"></span>
-                    <span class="opacity-40">↗</span>
-                  </a>
-                </template>
-                <template x-for="src in (item.sources || []).slice(item.hotWord ? 1 : 0)">
+                <template x-for="src in item.sources">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
                     <span x-text="src.name"></span>
@@ -625,14 +577,11 @@
                 </div>
                 <div class="prop-row">
                   <div class="prop-icon bg-sky-50">✍️</div>
-                  <div class="flex-1">
-                    <div class="prop-label">内容操作指南</div>
-                    <div class="flex flex-col gap-1 mt-1">
-                      <template x-for="(fmt, fi) in item.propagation.formats">
-                        <div class="flex items-start gap-1.5">
-                          <span class="text-xs font-black text-slate-300 mt-0.5 shrink-0 w-4" x-text="['①','②','③'][fi] || (fi+1)+'.'"></span>
-                          <span class="format-pill flex-1 text-left" x-text="fmt"></span>
-                        </div>
+                  <div>
+                    <div class="prop-label">推荐内容形式</div>
+                    <div class="flex flex-wrap mt-1">
+                      <template x-for="fmt in item.propagation.formats">
+                        <span class="format-pill" x-text="fmt"></span>
                       </template>
                     </div>
                   </div>
@@ -645,8 +594,8 @@
     </section>
 
     <footer class="mt-10 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 space-y-1">
-      <p>本简报由兴趣雷达系统每日自动生成 · 热点数据来自微博/百度/头条/澎湃/知乎/什么值得买 6 路热榜实时抓取</p>
-      <p>🔥 热榜命中词 = 当日真实热搜词 · 点击标签直达热点现场 · 每日更新 09:00 / 14:00（北京时间）</p>
+      <p>本简报由兴趣雷达系统每日自动生成，内容基于过去24小时公开信息检索与编辑筛选</p>
+      <p>含微博 / 小红书 / 抖音 / 虎扑多平台 · 每日更新 09:00（北京时间）</p>
     </footer>
 
   </main>
@@ -765,248 +714,361 @@ function radarApp() {
       {
   id: '20260410-s',
   category: '运动户外',
-  date: '2026-04-10',
   hotSection: [
     {
-      title: '从赛场到指尖：孙颖莎带货力背后的运动偶像商业逻辑',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜『孙颖莎同款OPPOFindX9sPro』。撕裂点在于：大众对运动明星代言非运动产品的接受度，以及体育偶像化如何重塑户外运动品牌的粉丝营销路径。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/12345678/Nabc123456',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
+      title: '赏花经济带火山系穿搭，始祖鸟香格里拉大秀定义春季户外美学',
+      url: 'https://s.weibo.com/weibo?q=赏花经济开出四季春',
+      keywords: [
+        '赏花经济开出四季春',
+        '山系美学',
+        '始祖鸟',
+        '户外装备'
       ],
+      propagation: {
+        formats: [
+          '📊 2026年Q1户外运动消费报告显示，山系风格装备在赏花季销量同比增长120%。',
+          '💬 穿着始祖鸟去香格里拉看花，这才是真正的山系天花板，户外人的仪式感拉满了。 -- 针对高端户外品牌结合自然景观营销的社交溢价分析。',
+          '🗳️ 你在春季赏花徒步时，更倾向于选择哪种风格的装备？(A.硬核专业风 B.潮流山系风 C.轻量极简风)'
+        ],
+        emotion: '穿着始祖鸟去香格里拉看花，这才是真正的山系天花板，户外人的仪式感拉满了。 -- 品牌通过极致自然场景与高性能产品的深度绑定，成功将功能性装备转化为社交货币，引发了追求精致户外生活人群的强烈情感共鸣。',
+        motivation: '始祖鸟发布2026春季山系美学大秀 + 赏花经济带动户外徒步装备热销 + 消费者追求户外运动中的出片率与仪式感'
+      },
+      editorNote: '命中了热榜词赏花经济开出四季春。该选题巧妙结合了今日热搜中的赏花经济趋势与运动户外品类中始祖鸟在香格里拉的新品发布，将宏观经济热点与具体品牌动作结合，具有极高的内容传播价值。',
       id: '20260410-s01',
       heatInfo: {
         type: 'start',
-        label: '04-10·从赛场到指尖：孙颖莎带货力背后'
+        label: '04-10·赏花经济带火山系穿搭，始祖鸟香'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '从赛场到指尖：孙颖莎带货力背后的运动偶像商业逻辑',
-      propagation: {
-        emotion: '“冠军的底色不仅是金牌，更是国民级商业信任感的终极背书。”',
-        motivation: '孙颖莎代言新款手机引发粉丝抢购 + 体育明星商业价值排名更迭 + 运动品牌跨界营销策略升级',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '赏花经济带火山系穿搭，始祖鸟香格里拉大秀定义春季户外美学'
     },
     {
-      title: '身体的“求救信号”：运动监测设备能否取代肉眼观察？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜『女子晒手指被劝去医院果然查出问题』。结合运动户外场景，讨论智能穿戴设备在预防运动风险与日常健康筛查中的真实价值与局限性。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.zhihu.com/question/654321098',
-          icon: '💬',
-          cls: 'pt-zhihu'
-        }
+      title: '詹姆斯罚球线暴扣引爆运动科技热议，顶级碳板跑鞋技术跨界篮球鞋',
+      url: 'https://s.weibo.com/weibo?q=詹姆斯罚球线内一步暴扣',
+      keywords: [
+        '詹姆斯罚球线内一步暴扣',
+        '运动科技',
+        '碳板技术',
+        '减震科技'
       ],
+      propagation: {
+        formats: [
+          '📊 2026全球运动科技展数据显示，碳板回弹技术在篮球鞋中的应用比例较去年提升35%。',
+          '💬 老詹这弹跳真的逆天，运动科技的进步确实让老将的职业寿命延长了。 -- 关于顶级运动员竞技状态与运动装备科技支撑的讨论。',
+          '🗳️ 你认为运动鞋的科技含量对提升运动表现的影响有多大？(A.决定性作用 B.辅助作用 C.心理安慰大于实际)'
+        ],
+        emotion: '老詹这弹跳真的逆天，运动科技的进步确实让老将的职业寿命延长了。 -- 顶级巨星的赛场表现往往成为运动科技最好的广告，用户对科技如何突破人类极限表现出极高的好奇与崇拜。',
+        motivation: '詹姆斯罚球线暴扣视频疯传 + 2026全球运动科技展展示碳板跨界应用 + 运动爱好者对高性能减震回弹技术的关注'
+      },
+      editorNote: '命中了热榜词詹姆斯罚球线内一步暴扣。通过顶流球星的实时热点动作，切入运动户外品类核心的装备科技讨论，特别是今日科技展中提到的碳板与防水技术融合，增强了专业深度。',
       id: '20260410-s02',
       heatInfo: {
         type: 'start',
-        label: '04-10·身体的“求救信号”：运动监测设'
+        label: '04-10·詹姆斯罚球线暴扣引爆运动科技热'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '身体的“求救信号”：运动监测设备能否取代肉眼观察？',
-      propagation: {
-        emotion: '“身体是精密的仪器，任何微小的异样都是它在向你发出最后的求救。”',
-        motivation: '女子通过指甲异样发现肺癌引发全网自查 + 智能运动手表血氧监测功能普及 + 户外高强度运动后的身体恢复监测需求',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '詹姆斯罚球线暴扣引爆运动科技热议，顶级碳板跑鞋技术跨界篮球鞋'
     },
     {
-      title: '强对流天气下的“撤退美学”：硬核户外不是拿命博弈',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜『大雾、强对流天气等四预警齐发』。针对春季多变的户外气候，探讨装备性能边界与个人安全意识之间的博弈，重申户外运动的安全底线。',
-      sources: [
-        {
-          name: '',
-          url: 'https://news.sina.com.cn/c/2026-04-10/doc-weather123.shtml',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
+      title: 'AI写作被封号背后的运动穿戴新趋势：AI数字人医生接入运动手表',
+      url: 'https://s.weibo.com/weibo?q=AI写作年赚200万夫妻被封号',
+      keywords: [
+        'AI写作年赚200万夫妻被封号',
+        'AI数字人',
+        '运动手表',
+        '智能穿戴'
       ],
+      propagation: {
+        formats: [
+          '📊 2026年Q1智能穿戴报告指出，具备AI主动干预功能的运动手表销量同比增长45%。',
+          '💬 AI写作被封了，但运动手表的AI医生却越来越准了，这才是AI造福人类的正确方向。 -- 网友对AI技术在不同领域应用价值的对比评价。',
+          '🗳️ 你是否愿意将自己的实时运动健康数据完全托管给AI医生？(A.愿意，更专业 B.犹豫，担心隐私 C.不需要)'
+        ],
+        emotion: 'AI写作被封了，但运动手表的AI医生却越来越准了，这才是AI造福人类的正确方向。 -- 用户对AI技术的泛滥感到警惕，但对能够实实在在提升健康与运动安全的AI应用表现出极高的接纳度。',
+        motivation: 'AI写作封号事件引发AI应用边界讨论 + 2026国际大健康博览会展示AI数字人医生接入运动手表 + 智能穿戴行业报告发布'
+      },
+      editorNote: '命中了热榜词AI写作年赚200万夫妻被封号。利用AI话题的热度，引出今日运动户外领域重要的智能穿戴技术革新，即AI大模型与运动手表的深度融合，符合科技驱动运动的品类趋势。',
       id: '20260410-s03',
       heatInfo: {
         type: 'start',
-        label: '04-10·强对流天气下的“撤退美学”：硬'
+        label: '04-10·AI写作被封号背后的运动穿戴新'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '强对流天气下的“撤退美学”：硬核户外不是拿命博弈',
-      propagation: {
-        emotion: '“敬畏自然是每一位户外人的必修课，懂得适时撤退比登顶更勇敢。”',
-        motivation: '气象台发布强对流天气预警 + 户外爱好者在极端天气下的自救指南 + 冲锋衣防水性能在实战中的极限测试',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: 'AI写作被封号背后的运动穿戴新趋势：AI数字人医生接入运动手表'
     }
   ],
   watchSection: [
     {
-      title: '始祖鸟“平替”潮：中产幻觉还是功能回归？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '关注运动户外品类的消费趋势。撕裂点在于：追求品牌溢价带来的身份认同，还是回归产品本身的功能属性。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.bilibili.com/video/BV1outdoor999',
-          icon: '📺',
-          cls: 'pt-douyin'
-        }
+      title: '2026环青海湖赛预热：全国多地启动春季骑行季',
+      url: 'https://s.weibo.com/weibo?q=2026年环青海湖国际公路自行车赛预热',
+      keywords: [
+        '环青海湖赛',
+        '骑行季',
+        '公路车',
+        '绿色出行'
       ],
+      propagation: {
+        formats: [
+          '📊 4月10日全国多地自行车道升级动工，城市骑行环境满意度预计提升20%。',
+          '💬 骑行不是为了比赛，是为了在风中感受自由，环湖赛的预热让我想立马出发。 -- 骑行爱好者对春季户外运动的向往。',
+          '🗳️ 如果去环青海湖骑行，你会选择租车还是自带装备？(A.自带专业车 B.当地租赁 C.看心情)'
+        ],
+        emotion: '骑行不是为了比赛，是为了在风中感受自由，环湖赛的预热让我想立马出发。 -- 骑行运动已从单纯的竞技转变为一种生活方式，用户对参与感和自然体验的追求远超对速度的追求。',
+        motivation: '环青海湖赛启动春季推广 + 知名品牌发布2026款全碳公路车 + 多地自行车道升级改造动工'
+      },
       id: '20260410-s04',
       heatInfo: {
         type: 'start',
-        label: '04-10·始祖鸟“平替”潮：中产幻觉还是'
+        label: '04-10·2026环青海湖赛预热：全国多'
       },
-      tags: [],
-      summary: '始祖鸟“平替”潮：中产幻觉还是功能回归？',
-      propagation: {
-        emotion: '“当户外品牌成为社交货币，功能性便成了最昂贵的装饰品。”',
-        motivation: '户外国货品牌销量激增 + 冲锋衣虚标乱象引发行业整顿 + 消费者对高价户外品牌的消费降级讨论',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      title: '度假式骑行：是逃离压力的出口，还是朋友圈的布景？',
       level: 'watch',
       levelLabel: '⚪ 观察中',
-      editorNote: '观察骑行运动的社交化演变。探讨骑行作为一种生活方式，其专业竞技属性与社交休闲属性之间的平衡点。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/87654321/Ncycling666',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
+      tags: [],
+      summary: '2026环青海湖赛预热：全国多地启动春季骑行季'
+    },
+    {
+      title: '国货户外品牌集体发力：李宁龙腾系列与特步山河系列今日首发',
+      url: 'https://s.weibo.com/weibo?q=李宁2026春季户外系列龙腾正式面世',
+      keywords: [
+        '国货户外',
+        '李宁䨻',
+        '越野跑鞋',
+        '科技防风'
       ],
+      propagation: {
+        formats: [
+          '📊 2026年Q1报告显示，国货品牌在户外领域市场占有率同比提升15%。',
+          '💬 以前只买洋品牌，现在李宁和特步的户外线做得真的不输，性价比无敌。 -- 消费者对户外国货品牌信任度提升的评价。',
+          '🗳️ 在同等价位下，你会选择国际老牌还是国产新锐户外装备？(A.国际老牌 B.国产新锐 C.哪个好看买哪个)'
+        ],
+        emotion: '以前只买洋品牌，现在李宁和特步的户外线做得真的不输，性价比无敌。 -- 随着自研科技的成熟，国货品牌在户外领域的专业形象逐渐确立，消费者的品牌迷信正在瓦解。',
+        motivation: '李宁发布龙腾系列户外装备 + 特步山河系列越野跑鞋全球首发 + 2026中国户外运动产业报告发布'
+      },
       id: '20260410-s05',
       heatInfo: {
         type: 'start',
-        label: '04-10·度假式骑行：是逃离压力的出口，'
+        label: '04-10·国货户外品牌集体发力：李宁龙腾'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '度假式骑行：是逃离压力的出口，还是朋友圈的布景？',
-      propagation: {
-        emotion: '“两轮承载的不止是身体，还有那颗渴望逃离城市钢筋水泥的心。”',
-        motivation: '城市骑行路线走红 + 高端公路车二手市场活跃 + 骑行穿搭社交化趋势',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '国货户外品牌集体发力：李宁龙腾系列与特步山河系列今日首发'
     }
   ],
+  date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·s品类重点：从赛场到指尖：孙颖莎带货力背后、身体的“求救信号”：运动监测设等选题值得优先发布',
+  editorNote: '周五·sports品类重点：赏花经济带火山系穿搭，始祖鸟香、詹姆斯罚球线暴扣引爆运动科技热等选题值得优先发布',
   keywords: [
-    '从赛场到指尖：孙',
-    '身体的“求救信号',
-    '强对流天气下的“'
+    '赏花经济带火山系',
+    '詹姆斯罚球线暴扣',
+    'AI写作被封号背'
   ],
   items: 5
 },
 
       {
-        'id': '20260409-s',
-        'category': '运动户外',
-        'date': '2026-04-09',
-        'weekday': '星期四',
-        'updateTime': '09:45',
-        'keywords': [
-          '运动',
-          '户外'
+  id: '20260409-s',
+  category: '运动户外',
+  editorNote: '今日选题深度结合了热榜中的体育精神,文旅数据,工业设计及极端天气实测.通过 樊振东曾回应是否代表国家队参赛 探讨职业运动员的竞技精神与国家荣誉感.结合 清明假期文旅成绩单出炉 分析春日经济下户外装备市场的爆发式增长.针对 张雪机车logo被质疑抄袭 事件,聚焦骑行圈对原创设计与品牌调性的高度敏感.最后利用 武汉暴雨 这一实时气象事件,将户外装备的防水性能从实验室带入真实极端环境进行评测.这些选题精准捕捉了运动户外领域从精神图腾到功能主义的全面诉求.',
+  keywords: [
+    '樊振东',
+    '清明假期文旅成绩单',
+    '张雪机车',
+    '武汉暴雨',
+    '春日经济'
+  ],
+  hotSection: [
+    {
+      id: '20260409-s01',
+      title: '从樊振东回应看竞技体育的职业精神与国家荣誉',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 历届国乒主力职业生涯节点对比',
+          '💬 资深球迷对运动员个人选择与集体荣誉的深度讨论',
+          '🗳️ 你如何看待顶尖运动员在巅峰期的职业规划'
         ],
-        'editorNote': '今日热榜词中直接相关的运动户外话题较少，选取了与户外安全及新能源车（户外出行方式）相关的热点进行选题策划。',
-        'items': 2,
-        'hotSection': [
-          {
-            'id': '20260409-s01',
-            'title': '从港股新能源车下挫看户外出行装备趋势',
-            'summary': '受港股新能源汽车板块下挫影响，户外自驾游市场心态发生波动，分析在此环境下户外用户对于车辆性能及长途装备的刚需与理性选择。',
-            'tags': [
-              '户外出行',
-              '新能源汽车',
-              '行业分析'
-            ],
-            'heatInfo': '命中：港股收跌0.54% 新能源汽车股下挫',
-            'sources': [
-              {
-                'name': '新浪财经',
-                'url': 'https://finance.sina.com.cn',
-                'icon': '🔴',
-                'cls': 'pt-weibo'
-              }
-            ],
-            'level': 'mid',
-            'levelLabel': '🟡 热议',
-            'propagation': {
-              'emotion': '无论股价如何，去山野的心不能停。',
-              'motivation': '行业资讯 + 装备购买决策',
-              'formats': [
-                '数据对比',
-                '话题讨论'
-              ]
-            }
-          },
-          {
-            'id': '20260409-s02',
-            'title': '户外急救常识：为何说胃部健康是户外运动的基石',
-            'summary': '结合高危人群胃镜检查话题，讨论户外运动爱好者在野外高强度活动中，如何科学管理肠胃健康，避免因突发状况导致的运动损伤。',
-            'tags': [
-              '户外健康',
-              '运动安全',
-              '急救科普'
-            ],
-            'heatInfo': '命中：胃癌真的是拖出来的 / 这些高危人群建议尽早做胃镜',
-            'sources': [
-              {
-                'name': '丁香医生',
-                'url': 'https://dxy.com',
-                'icon': '🔴',
-                'cls': 'pt-weibo'
-              }
-            ],
-            'level': 'high',
-            'levelLabel': '🔵 爆热',
-            'propagation': {
-              'emotion': '身体是革命的本钱，户外运动切忌带病上阵。',
-              'motivation': '科普传播 + 防灾减损',
-              'formats': [
-                '话题讨论',
-                '投票互动'
-              ]
-            }
-          }
-        ],
-        'watchSection': []
+        emotion: 'The national emblem on the chest is heavier than any medal. -- This discussion reflects the deep emotional bond between professional athletes and national identity. Fans are not just watching the game but are deeply invested in the loyalty and sacrifice of the players. This creates a significant tension between individual career choices and collective national honor. The public reaction highlights how sports icons serve as symbols of national pride, making any statement about their future representation a matter of intense social scrutiny.',
+        motivation: 'Reviewing past interviews + Analyzing athlete career paths + Discussing sportsmanship.'
       },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·从樊振东回应看竞技体育的职业精'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '从樊振东回应看竞技体育的职业精神与国家荣誉'
+    },
+    {
+      id: '20260409-s02',
+      title: '清明文旅成绩单背后的春日户外装备消费热潮',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 清明假期户外运动品类销量增长曲线',
+          '💬 徒步爱好者分享春季山野装备避坑指南',
+          '🗳️ 下一个假期你更倾向于哪种户外运动方式'
+        ],
+        emotion: 'Outdoor activities are no longer just exercise but a way of life. -- The post-holiday data shows a massive shift towards outdoor tourism. People are seeking relief from urban pressure through hiking and camping. This trend highlights a growing demand for high-quality outdoor gear and accessible nature spots, contrasting sharply with traditional sightseeing. The surge in Spring Economy reflects a collective desire for physical freedom and mental health recovery, pushing brands to innovate faster to meet the sophisticated needs of modern outdoor enthusiasts.',
+        motivation: 'Analyzing travel data + Comparing outdoor equipment sales + Predicting spring trends.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·清明文旅成绩单背后的春日户外装'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '清明文旅成绩单背后的春日户外装备消费热潮'
+    },
+    {
+      id: '20260409-s03',
+      title: '张雪机车logo风波:骑行圈对原创设计的底线在哪里',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 国内外主流机车品牌视觉辨识度对比',
+          '💬 摩友对国产机车品牌原创之路的辛辣点评',
+          '🗳️ 你认为品牌Logo的原创性是否影响你的购买决策'
+        ],
+        emotion: 'Originality is the soul of a brand, not just a sticker. -- The controversy around Zhang Xues motorcycle logo highlights the sensitivity of the outdoor and cycling community towards intellectual property. Riders value the unique identity and heritage of a brand. This incident sparks a fierce debate on whether domestic brands can truly innovate or if they are stuck in a cycle of imitation. The backlash shows that consumers today are more brand-conscious and demand authenticity, making design integrity a crucial factor for market survival.',
+        motivation: 'Tracking brand controversy + Evaluating design similarities + Discussing domestic brand growth.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·张雪机车logo风波:骑行圈对'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '张雪机车logo风波:骑行圈对原创设计的底线在哪里'
+    },
+    {
+      id: '20260409-s04',
+      title: '武汉暴雨实测:你的户外冲锋衣真的防水吗',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 各品牌冲锋衣防水指数与实际透气性测评表',
+          '💬 武汉网友实拍暴雨中各类雨具的翻车现场',
+          '🗳️ 面对极端天气你更信任哪种面料的防护性能'
+        ],
+        emotion: 'My gore-tex jacket finally met its match in Wuhan. -- Extreme weather events like the Wuhan rainstorm serve as real-world stress tests for outdoor gear. Users are sharing their raw experiences with waterproof clothing and shoes, shifting the focus from fashion to functional reliability. It exposes the significant gap between marketing claims and actual performance in harsh conditions. This discussion forces a reality check on the outdoor industry, emphasizing that true value lies in protection and durability rather than just aesthetic appeal or brand status.',
+        motivation: 'Sharing rainstorm survival tips + Testing waterproof gear + Discussing urban outdoor safety.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·武汉暴雨实测:你的户外冲锋衣真'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '武汉暴雨实测:你的户外冲锋衣真的防水吗'
+    }
+  ],
+  watchSection: [
+    {
+      id: '20260409-s05',
+      title: '碳板跑鞋的技术下放与大众化争议',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 专业级与普及级碳板跑鞋性能参数对比',
+          '💬 跑友讨论普通慢跑者是否有必要追求碳板技术',
+          '🗳️ 你在购买跑鞋时最看重的技术参数是什么'
+        ],
+        emotion: 'Technology should serve the runner, not just the record. -- The expansion of carbon plate technology to mass-market running shoes has sparked a debate on injury risks versus performance gains. While elite runners benefit from the energy return, amateur joggers might find them unstable. This reflects a broader trend in sports gear where professional tech is being commercialized, leading to a divide between performance-driven marketing and the actual physiological needs of everyday athletes.',
+        motivation: 'Analyzing running shoe tech + Interviewing sports physiotherapists + Comparing market prices.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·碳板跑鞋的技术下放与大众化争议'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '碳板跑鞋的技术下放与大众化争议'
+    },
+    {
+      id: '20260409-s06',
+      title: '始祖鸟们的中产幻觉与户外硬核主义的回归',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 顶级户外品牌社交媒体声量与实际户外使用率对比',
+          '💬 资深山友对户外品牌时尚化的看法',
+          '🗳️ 你购买始祖鸟是因为功能还是因为品牌溢价'
+        ],
+        emotion: 'The mountains do not care about the logo on your sleeve. -- The luxury positioning of brands like Arcteryx has created a cultural divide between urban fashionistas and hardcore mountaineers. While the brand enjoys unprecedented commercial success, the core outdoor community feels a sense of loss regarding the brands original spirit. This tension highlights the struggle of outdoor brands to maintain technical integrity while scaling into the lifestyle market, questioning if high-end gear is becoming a mere status symbol.',
+        motivation: 'Investigating brand market shifts + Collecting user feedback + Analyzing outdoor fashion trends.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·始祖鸟们的中产幻觉与户外硬核主'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '始祖鸟们的中产幻觉与户外硬核主义的回归'
+    }
+  ],
+  date: '2026-04-09',
+  weekday: '周四',
+  updateTime: '09:00',
+  items: 6
+},
 
-{
+      {
   id: '20260408-s',
   category: '运动户外',
   date: '2026-04-08',
@@ -3562,528 +3624,394 @@ function radarApp() {
     // ══════════════════════════════════════════
     techArchives: [
       {
+  id: '20260410-t',
+  category: '数码科技',
   hotSection: [
     {
-      id: '20260410-t01',
-      title: '孙颖莎同款OPPO新机引发粉丝抢购热潮',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜第4“孙颖莎同款OPPOFindX9sPro”。撕裂点在于粉丝对爱豆同款的狂热追捧与数码圈对天玑/骁龙芯片调教及价格竞争力的理性审视，探讨流量如何转化为产品力认知。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/12345678/oppofindx9spro_sunsingsha',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
+      title: 'OPPO Find X9s Pro正式官宣：1.5英寸超大底传感器引领影像新纪元',
+      keywords: [
+        'OPPOFindX9sPro今日官宣',
+        '移动影像',
+        '超大底传感器'
       ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·孙颖莎同款OPPO新机引发粉丝'
-      },
-      tags: [],
-      summary: '孙颖莎同款OPPO新机引发粉丝抢购热潮',
-      propagation: {
-        emotion: '“冠军的流量是最好的宣发，但产品的实力才是最后的底牌。” -- 体育明星代言数码产品已成常态，粉丝经济驱动下的非理性消费与数码极客群体对配置参数的挑剔形成鲜明对比，讨论焦点在于品牌溢价是否合理。',
-        motivation: '孙颖莎手持OPPO Find X9s Pro出镜 + 粉丝全网搜索同款色号 + 数码博主发布性能实测对比。',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-t02',
-      title: '微信回应AI写公众号年赚200万：技术红利还是内容垃圾？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜第5“微信回应夫妻用AI写公众号年赚200万”。探讨AIGC在商业变现与平台原创保护之间的矛盾，分析平台对AI生成内容的界定标准及未来流量分配逻辑。',
+      editorNote: '该选题精准命中了今日热榜第4位OPPOFindX9sPro今日官宣。OPPO在今日举行的影像技术沟通会上正式确认了Find X9系列的参数规格，特别是1.5英寸超大底传感器的应用，标志着手机影像硬件再次突破物理极限，引发了摄影爱好者与数码发烧友的高度关注。',
       sources: [
         {
-          name: '',
-          url: 'https://www.zhihu.com/question/67891234/answer/99999',
-          icon: '💬',
-          cls: 'pt-zhihu'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·微信回应AI写公众号年赚200'
-      },
-      tags: [],
-      summary: '微信回应AI写公众号年赚200万：技术红利还是内容垃圾？',
-      propagation: {
-        emotion: '“AI是普通人的造富工具，还是原创内容的终结者？” -- 自动化内容生产引发了内容生态的剧烈震荡。支持者认为这是效率革命，反对者则担忧信息茧房和低质信息的泛滥，涉及AI伦理与平台监管的博弈。',
-        motivation: '夫妻利用AI工具批量产出爆款内容 + 微信官方公开回应原创保护机制 + 传统创作者群体表达集体焦虑。',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-t03',
-      title: '华为Pura 90系列外观泄露：先锋审美引发两极分化',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜第25“华为Pura90系列外观曝光”。撕裂点在于华为高端品牌的溢价能力与设计风格在社交媒体上引发的审美争议，以及对国产自研芯片性能的持续期待。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.bilibili.com/video/BV12345678_Pura90leak',
-          icon: '📺',
-          cls: 'pt-douyin'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·华为Pura 90系列外观泄露'
-      },
-      tags: [],
-      summary: '华为Pura 90系列外观泄露：先锋审美引发两极分化',
-      propagation: {
-        emotion: '“审美是个轮回，还是设计的穷途末路？” -- 华为新旗舰外观渲染图流出后引发热议。忠实拥趸认为极具辨识度与艺术感，路人则吐槽设计过于前卫难以接受，反映出品牌忠诚度与大众审美的激烈博弈。',
-        motivation: '供应链流出三角形模组渲染图 + 网友自制历代P系列对比图 + 华为官方开启预热节奏。',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-t04',
-      title: '大疆创始人汪滔谈离职潮：硬核科技公司的职场困局',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜第27“大疆创始人汪滔谈离职潮”。聚焦硬核科技企业在高速成长中面临的职场文化冲突、人才流失问题以及“纯粹技术环境”与“人性化管理”的平衡。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.36kr.com/p/23456789_dji_wangtao',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·大疆创始人汪滔谈离职潮：硬核科'
-      },
-      tags: [],
-      summary: '大疆创始人汪滔谈离职潮：硬核科技公司的职场困局',
-      propagation: {
-        emotion: '“硬核科技的尽头是‘奋斗’还是‘内耗’？” -- 汪滔的言论触动了科技从业者的敏感神经。一方认为精英文化是保持全球领先的必要条件，另一方则认为这是对研发人员的过度压榨，引发对大厂文化的深度反思。',
-        motivation: '汪滔内部讲话内容流出 + 职场社交平台脉脉热议大疆离职率 + 科技大厂人才流向数据分析。',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260410-t05',
-      title: '苹果折叠屏iPhone研发进度再跳票',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '未命中今日热榜。观察重点在于苹果在安卓阵营已迭代数次折叠屏后，其技术护城河是否依然稳固，以及折叠屏是否真是智能手机的终极形态。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.ifanr.com/1234567_apple_foldable',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·苹果折叠屏iPhone研发进度'
-      },
-      tags: [],
-      summary: '苹果折叠屏iPhone研发进度再跳票',
-      propagation: {
-        emotion: '“迟到的创新，还能否定义未来的十年？” -- 苹果在折叠屏领域的谨慎被解读为失去创新力，而拥趸则认为苹果在等待供应链技术成熟。这是果粉与国产折叠屏用户之间的长期口水战。',
-        motivation: '分析师郭明錤发布最新预测报告 + 苹果折叠铰链专利图曝光 + 国产折叠屏市占率反超苹果。',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-t06',
-      title: '降脂针降至300元入医保：生物科技普惠大众',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '命中热榜第38/50。虽然属于医疗范畴，但在数码科技品类中可作为“生物科技普惠”视角切入，讨论技术进步如何打破价格壁垒。',
-      sources: [
-        {
-          name: '',
-          url: 'https://news.sina.com.cn/c/2026-04-10/doc-i123456_yibao',
+          name: '微博热搜',
+          url: 'https://s.weibo.com/weibo?q=OPPOFindX9sPro%E4%BB%8A%E6%97%A5%E5%AE%98%E5%AE%A3',
           icon: '📰',
           cls: 'pt-baidu'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 影像传感器尺寸演进趋势图：从1英寸到1.5英寸的跨越',
+          '💬 以前觉得1英寸就是手机极限了，现在OPPO直接把底做到了1.5，单反真的要危险了。 -- 资深数码博主对硬件堆料的惊叹与对行业内卷的深度观察',
+          '🗳️ 你认为手机影像的尽头是更大的底还是更强的AI算法？'
+        ],
+        emotion: '底大一级压死人，这参数确实哈人。 -- 硬件参数党与纯算法派之间的技术审美裂痕，反映了用户对极致硬件性能的原始崇拜与对计算摄影边际效应的质疑。',
+        motivation: '对比历代影像旗舰参数 + 预约新品品鉴会 + 参与影像技术讨论'
+      },
+      id: '20260410-t01',
       heatInfo: {
         type: 'start',
-        label: '04-10·降脂针降至300元入医保：生物'
+        label: '04-10·OPPO Find X9s P'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '降脂针降至300元入医保：生物科技普惠大众',
+      summary: 'OPPO Find X9s Pro正式官宣：1.5英寸超大底传感器引领影像新纪元'
+    },
+    {
+      title: '李斌再谈补能焦虑：闪充再快也比换电慢，换电站布局已超三千座',
+      keywords: [
+        '李斌称闪充再快也比换电慢',
+        '换电技术',
+        '补能效率'
+      ],
+      editorNote: '选题命中了热榜第8位李斌称闪充再快也比换电慢。在今日的行业论坛上，蔚来创始人李斌针对快充技术的进步发表了观点，坚持认为换电模式在效率和电池寿命管理上具有不可替代的优势。这一言论再次挑起了纯电车补能路线之争，在社交媒体上引发了大规模的技术辩论。',
+      sources: [
+        {
+          name: '微博热搜',
+          url: 'https://s.weibo.com/weibo?q=%E6%9D%8E%E6%96%8C%E7%A7%B0%E9%97%AA%E5%85%85%E5%86%8D%E5%BF%AB%E4%B9%9F%E6%AF%94%E6%8D%A2%E7%94%B5%E6%85%A2',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
       propagation: {
-        emotion: '“科技普惠的终极意义，是让昂贵的生命保障变成普适的日常。” -- 虽然是医疗新闻，但在科技圈引发关于生物制药技术降本的广泛讨论，体现了硬核科技转化为民生福祉的路径。',
-        motivation: '国家医保局发布最新药品目录 + 药企股价波动 + 社交媒体科普生物制药规模效应。',
         formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+          '📊 2026年主流纯电车补能耗时对比：换电 vs 800V超充',
+          '💬 物理极限摆在那里，充电再快也要5分钟，换电只要3分钟，这2分钟在高速排队时就是命。 -- 蔚来车主对换电便利性的极度认可与对快充派的降维打击',
+          '🗳️ 如果买电车，你会优先考虑换电车型还是超快充车型？'
+        ],
+        emotion: '换电是护城河还是乌托邦？ -- 补能效率至上主义者与重资产模式怀疑论者之间的认知鸿沟，体现了新能源基建路径选择上的利益博弈。',
+        motivation: '查看附近换电站分布 + 搜索最新超充技术指标 + 转发补能对比视频'
+      },
+      id: '20260410-t02',
+      heatInfo: {
+        type: 'start',
+        label: '04-10·李斌再谈补能焦虑：闪充再快也比'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '李斌再谈补能焦虑：闪充再快也比换电慢，换电站布局已超三千座'
+    },
+    {
+      title: 'AI写作年赚200万夫妻被封号：揭秘AIGC内容黑产与监管红线',
+      keywords: [
+        'AI写作年赚200万夫妻被封号',
+        '大模型安全治理',
+        '内容溯源'
+      ],
+      editorNote: '选题命中了热榜第19位AI写作年赚200万夫妻被封号。该事件与今日工信部发布的2026年大模型安全治理白皮书形成互补。通过对利用AI洗稿获利的典型案例进行剖析，探讨了在AI技术普及背景下，内容原创性保护与数字水印溯源的紧迫性，具有极强的行业警示意义。',
+      sources: [
+        {
+          name: '微博热搜',
+          url: 'https://s.weibo.com/weibo?q=AI%E5%86%99%E4%BD%9C%E5%B9%B4%E8%B5%9A200%E4%B8%87%E5%A4%AB%E5%A6%BB%E8%A2%AB%E5%B0%81%E5%8F%B7',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年Q1 AIGC违规内容封禁类型分布图',
+          '💬 靠AI搬运一天发几千篇稿子，这不叫内容创作，这叫数字垃圾生产线。 -- 原创作者对AI黑产的愤怒与对平台监管迟到的无奈',
+          '🗳️ 你支持对所有AI生成内容强制添加不可磨灭的水印吗？'
+        ],
+        emotion: '技术无罪但贪婪有代价。 -- 效率工具拥趸与内容生态卫道士之间的价值观碰撞，揭示了技术红利期法律滞后带来的灰色生存空间。',
+        motivation: '阅读大模型安全治理白皮书 + 检查个人账号内容合规性 + 举报AI洗稿账号'
+      },
+      id: '20260410-t03',
+      heatInfo: {
+        type: 'start',
+        label: '04-10·AI写作年赚200万夫妻被封号'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'AI写作年赚200万夫妻被封号：揭秘AIGC内容黑产与监管红线'
+    }
+  ],
+  watchSection: [
+    {
+      title: '华为 Mate 80 系列正式亮相：麒麟 9200 处理器首发与全场景生态升级',
+      keywords: [
+        '华为Mate80',
+        '麒麟9200',
+        '全场景新品发布会'
+      ],
+      editorNote: '华为今日举办春季发布会，Mate 80系列作为年度旗舰正式登场。虽然今日热搜前20暂未直接出现该关键词，但作为数码圈年度重磅事件，其技术突破和市场影响力极高，建议作为重点观察对象持续跟进。',
+      sources: [
+        {
+          name: '微博搜索',
+          url: 'https://s.weibo.com/weibo?q=%E5%8D%8E%E4%B8%BA%20Mate%2080%20%E7%B3%BB%E5%88%97%E6%98%A5%E5%AD%A3%E6%96%B0%E5%93%81%E5%8F%91%E5%B8%83%E4%BC%9A',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 麒麟9200与竞品芯片性能/能效比实测对比图',
+          '💬 终于等到Mate 80，全自研影像架构加上麒麟芯回归，这才是真正的国产机皇。 -- 品牌忠实粉丝的民族自豪感与对高端技术回归的期待',
+          '🗳️ 你会为了麒麟处理器和卫星视频通话功能购买Mate 80吗？'
+        ],
+        emotion: '轻舟已过万重山，但高端市场的竞争才刚刚开始。 -- 民族品牌情怀支持者与理性消费主义者之间的心态差异，反映了华为在高端市场的稳固地位与面临的挑战。',
+        motivation: '观看发布会回放 + 预约Mate 80首销 + 对比P100系列参数'
+      },
+      id: '20260410-t04',
+      heatInfo: {
+        type: 'start',
+        label: '04-10·华为 Mate 80 系列正式'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '华为 Mate 80 系列正式亮相：麒麟 9200 处理器首发与全场景生态升级'
+    },
+    {
+      title: 'OpenAI 开启 GPT-6 内测：多模态实时视频交互实现细微情绪捕捉',
+      keywords: [
+        'GPT-6内测',
+        'OpenAI',
+        '具身智能'
+      ],
+      editorNote: 'OpenAI低调上线GPT-6内测，其在逻辑推理和视频交互上的跨越式提升预示着通用人工智能（AGI）的进一步临近。该选题关注全球AI技术最前沿，是数码科技品类不可忽视的底层技术变量。',
+      sources: [
+        {
+          name: '微博搜索',
+          url: 'https://s.weibo.com/weibo?q=OpenAI%20%E5%AE%A3%E5%B8%83%20GPT-6%20%E6%AD%A3%E5%BC%8F%E5%BC%80%E5%90%AF',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 GPT-4至GPT-6逻辑推理能力演进曲线',
+          '💬 看着GPT-6能通过摄像头读懂我的尴尬，我突然觉得电影里的AI女友不再是科幻了。 -- 科技极客对交互革命的兴奋与对隐私边界的隐忧',
+          '🗳️ 你认为AI具备捕捉人类情绪的能力是进步还是威胁？'
+        ],
+        emotion: '当AI开始理解情绪，人类最后的堡垒还剩什么？ -- 技术乐观主义者对生产力爆发的期待与人文主义者对人类主体性丧失的恐惧。',
+        motivation: '申请GPT-6内测资格 + 观看实时视频交互演示 + 搜索相关安全治理规定'
+      },
+      id: '20260410-t05',
+      heatInfo: {
+        type: 'start',
+        label: '04-10·OpenAI 开启 GPT-6'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'OpenAI 开启 GPT-6 内测：多模态实时视频交互实现细微情绪捕捉'
     }
   ],
   date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·t品类重点：孙颖莎同款OPPO新机引发粉丝、微信回应AI写公众号年赚200等选题值得优先发布',
+  editorNote: '周五·tech品类重点：OPPO Find X9s P、李斌再谈补能焦虑：闪充再快也比等选题值得优先发布',
   keywords: [
-    '孙颖莎同款OPP',
-    '微信回应AI写公',
-    '华为Pura 9',
-    '大疆创始人汪滔谈'
-  ],
-  items: 6
-},
-
-      {
-  date: '2026-04-09',
-  category: '数码科技',
-  hotSection: [
-    {
-      id: '20260409-t01',
-      title: '新阿维塔12正式上市：华为乾崑智驾与鸿蒙座舱的深度进化',
-      level: 'high',
-      angle: '深度解析新车型在智能驾驶硬件上的冗余设计，探讨华为最新智驾系统在复杂城市路况下的实测表现，以及对高端纯电轿车市场格局的影响。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.autohome.com.cn/news/202604/1285632.html',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'https://www.ithome.com.cn/html/auto/760123.htm',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·新阿维塔12正式上市：华为乾崑'
-      },
-      levelLabel: '🔵 爆热',
-      tags: [],
-      summary: '新阿维塔12正式上市：华为乾崑智驾与鸿蒙座舱的深度进化',
-      propagation: {
-        formats: [
-          '深度评测',
-          '技术拆解',
-          '行业观察'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    },
-    {
-      id: '20260409-t02',
-      title: '巧乐兹启用AI产品经理：生成式AI如何从营销噱头转向生产力工具',
-      level: 'mid',
-      angle: '关注AI数字人在快消行业的实际应用，分析其背后的多模态大模型如何辅助产品研发、口味预测及市场趋势分析，探讨AI取代初级管理岗的可能性。',
-      sources: [
-        {
-          name: '',
-          url: 'https://36kr.com/p/2715489632147',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'https://www.tmtpost.com/nict/7012456.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·巧乐兹启用AI产品经理：生成式'
-      },
-      levelLabel: '🟡 热议',
-      tags: [],
-      summary: '巧乐兹启用AI产品经理：生成式AI如何从营销噱头转向生产力工具',
-      propagation: {
-        formats: [
-          '趋势分析',
-          '专家访谈',
-          '案例研究'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    },
-    {
-      id: '20260409-t03',
-      title: '十万头猪沙漠治沙背后的黑科技：物联网监测与自动化喂养系统',
-      level: 'mid',
-      angle: '挖掘“生物治沙”背后的数字化支撑，介绍如何在极端环境下部署低功耗广域网（LPWAN）进行牲畜追踪，以及自动化生态修复监测平台的技术逻辑。',
-      sources: [
-        {
-          name: '',
-          url: 'http://www.stdaily.com/index/kejixinwen/202604/t20260409_654321.shtml',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'https://www.thepaper.cn/newsDetail_forward_2899541',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·十万头猪沙漠治沙背后的黑科技：'
-      },
-      levelLabel: '🟡 热议',
-      tags: [],
-      summary: '十万头猪沙漠治沙背后的黑科技：物联网监测与自动化喂养系统',
-      propagation: {
-        formats: [
-          '科普视频',
-          '技术长文',
-          '数据图解'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260409-t04',
-      title: '2026年第二季度全球折叠屏手机供应链预警：核心铰链专利战升级',
-      level: 'watch',
-      angle: '持续跟踪主流手机厂商在折叠屏领域的最新专利布局，观察柔性面板产能波动对下半年旗舰机型发布周期的潜在影响。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.jiemian.com/article/11025478.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·2026年第二季度全球折叠屏手'
-      },
-      levelLabel: '⚪ 观察中',
-      tags: [],
-      summary: '2026年第二季度全球折叠屏手机供应链预警：核心铰链专利战升级',
-      propagation: {
-        formats: [
-          '供应链情报',
-          '专利透视',
-          '市场预测'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    }
-  ],
-  weekday: '周四',
-  updateTime: '09:00',
-  editorNote: '周四·tech品类重点：新阿维塔12正式上市：华为乾崑、巧乐兹启用AI产品经理：生成式等选题值得优先发布',
-  keywords: [
-    '新阿维塔12正式',
-    '巧乐兹启用AI产',
-    '十万头猪沙漠治沙'
-  ],
-  items: 4
-},
-
-      {
-  date: '2026-04-09',
-  category: '数码科技',
-  hotSection: [
-    {
-      id: '20260409-t01',
-      title: '新阿维塔12正式上市：智驾系统全面进化',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/7416119836/O9xYz5n2L',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '作为智能汽车领域的标杆，阿维塔12的更新不仅是硬件的升级，更是华为智驾方案的一次集中展示。编辑部应重点关注其自研架构与鸿蒙生态的深度融合，探讨纯电轿车在智能驾驶辅助系统上的新突破。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·新阿维塔12正式上市：智驾系统'
-      },
-      tags: [],
-      summary: '新阿维塔12正式上市：智驾系统全面进化',
-      propagation: {
-        emotion: '硬件的堆砌终有上限，灵魂的进化永无止境。智能座舱的每一次迭代，都是在重新定义移动生活。用户在追求极致科技感的同时，也在担忧电子产品的贬值速度与系统稳定性，这种期待与焦虑的并存是科技进步的常态。',
-        motivation: '分析新阿维塔12智驾芯片算力 + 对比同价位竞品座舱配置 + 走访首批预订车主反馈',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-t02',
-      title: 'AI虚拟人入职快消巨头：巧乐兹新产品经理引发热议',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1642591402/O9yA8m4kP',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: 'AI不再仅仅是后台工具，而是走向前台参与决策。这一选题需跳出单纯的技术视角，探讨AI在商业逻辑中的角色转变，以及虚拟人技术在营销与研发端的双重价值。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·AI虚拟人入职快消巨头：巧乐兹'
-      },
-      tags: [],
-      summary: 'AI虚拟人入职快消巨头：巧乐兹新产品经理引发热议',
-      propagation: {
-        emotion: '当算法开始决定口味，当代码开始管理产品，人类的创造力是否已成冗余？AI产品经理的出现，既是效率的狂欢，也是职业替代感的预演。人们在惊叹科技跨界的同时，也在审视AI决策中缺失的人文温度。',
-        motivation: '拆解AI产品经理的底层逻辑 + 采访快消行业数字化转型专家 + 调研消费者对AI设计产品的接受度',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-t03',
-      title: '苹果手机隐藏功能走红：老机型用户发现新天地',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1749127163/O9zB9p7qR',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '苹果手机隐藏功能的再次翻红，反映出用户对现有设备潜力的挖掘需求。编辑应从实用主义出发，制作一份高价值的交互攻略，同时探讨系统更新如何延长旧设备的生命周期。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·苹果手机隐藏功能走红：老机型用'
-      },
-      tags: [],
-      summary: '苹果手机隐藏功能走红：老机型用户发现新天地',
-      propagation: {
-        emotion: '最懂你的设备往往藏着你最不熟悉的秘密。这种‘发现感’是成熟产品给用户带来的意外惊喜。在硬件创新乏力的当下，软件交互的深度挖掘成了品牌忠诚度的避风港，体现了用户对极致体验的微观追求。',
-        motivation: '整理iOS系统10个冷门高效功能 + 测评不同机型对新功能的适配度 + 征集网友最爱的苹果隐藏技巧',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260409-t04',
-      title: '国产大模型出海潮：AI应用如何跨越文化壁垒',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.kejixun.com/article/260409/ai_global_report',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '随着国内AI竞争进入白热化，出海成为新增长点。本选题应关注国产大模型在东南亚及欧洲市场的落地情况，分析其在算力成本与本地化适配上的核心竞争力。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·国产大模型出海潮：AI应用如何'
-      },
-      tags: [],
-      summary: '国产大模型出海潮：AI应用如何跨越文化壁垒',
-      propagation: {
-        emotion: '代码是全球通用的语言，但逻辑却有文化的边界。国产AI的出海之路，不仅是技术的博弈，更是对全球多元认知的适配。这种从跟随到引领的跨越，充满了技术自信与文化碰撞的火花。',
-        motivation: '对比国内外主流大模型多语言处理能力 + 采访出海AI企业负责人 + 调研海外用户对国产AI应用的评价',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-t05',
-      title: '折叠屏手机耐用性再升级：铰链技术的新突破',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.shumajia.com/news/20260409/foldable_tech',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '折叠屏市场已进入成熟期，耐用性是影响用户换机的最后一道坎。编辑部应通过深度拆解，向读者科普铰链材料与工艺的进步，评估当前折叠屏是否真正达到了‘久用如新’的标准。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·折叠屏手机耐用性再升级：铰链技'
-      },
-      tags: [],
-      summary: '折叠屏手机耐用性再升级：铰链技术的新突破',
-      propagation: {
-        emotion: '每一次弯折都是对材料科学的极限挑战。折叠屏从‘花瓶’走向‘主力机’，靠的不是噱头而是坚韧。用户对折叠痕迹的敏感与对大屏体验的向往，驱动着精密制造不断向微米级精度发起冲锋。',
-        motivation: '横评市面主流折叠屏铰链结构 + 实验室模拟万次折叠损耗测试 + 预测未来柔性屏材料的发展方向',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    }
-  ],
-  weekday: '周四',
-  updateTime: '09:00',
-  editorNote: '周四·t品类重点：新阿维塔12正式上市：智驾系统、AI虚拟人入职快消巨头：巧乐兹等选题值得优先发布',
-  keywords: [
-    '新阿维塔12正式',
-    'AI虚拟人入职快',
-    '苹果手机隐藏功能'
+    'OPPO Fin',
+    '李斌再谈补能焦虑',
+    'AI写作年赚20'
   ],
   items: 5
 },
 
-{
+      {
+  id: '20260409-t',
+  date: '2026-04-09',
+  hotSection: [
+    {
+      id: '20260409-t01',
+      title: '35岁程序员转行卖肉蛋堡月入5万背后的职场焦虑',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 调研显示超过百分之六十的程序员担心三十五岁职场瓶颈',
+          '💬 网友热议写代码不如卖汉堡究竟是人才浪费还是降维打击',
+          '🗳️ 你认为程序员转行体力劳动是逃离内卷的良药吗'
+        ],
+        emotion: 'Code is temporary but meat egg burgers are eternal. -- The contrast between high-end tech skills and street food stalls triggers a deep discussion on the 35-year-old ceiling in the tech industry. Some see it as a brave escape from 996 culture while others view it as a tragic waste of talent and educational resources in the digital economy. This phenomenon reflects the fragile job security of middle-aged tech workers in 2026.',
+        motivation: 'Analyzing tech industry layoff trends + comparing software engineering salaries with street vending income + discussing the mental health of middle-aged IT workers.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·35岁程序员转行卖肉蛋堡月入5'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '35岁程序员转行卖肉蛋堡月入5万背后的职场焦虑'
+    },
+    {
+      id: '20260409-t02',
+      title: 'NASA最清晰月球照背后的超分辨率成像技术',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 深度解析NASA本次成像使用的传感器规格与AI算法',
+          '💬 科技爱好者感叹超分辨率技术让月球环形山近在咫尺',
+          '🗳️ 你认为AI修图在科学摄影中是否应该保持原始真实'
+        ],
+        emotion: 'I can see the craters as if they were in my backyard. -- The release of these high-definition images showcases the pinnacle of modern astronomical sensors and AI-driven image restoration. While space enthusiasts are thrilled by the unprecedented detail, skeptics and tech geeks debate the limits of optical hardware versus computational photography in deep space exploration. It marks a new era for visual data in science.',
+        motivation: 'Explaining the sensor tech used by NASA + comparing AI upscaling with raw data + reviewing the history of lunar photography.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·NASA最清晰月球照背后的超分'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'NASA最清晰月球照背后的超分辨率成像技术'
+    },
+    {
+      id: '20260409-t03',
+      title: '360度导弹追击画面揭秘全景相机在极端环境的应用',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 全景相机在高速移动与高压环境下的硬件稳定性测试',
+          '💬 军事迷讨论这种第一人称视角对未来战争记录的影响',
+          '🗳️ 你认为全景成像技术最广阔的应用场景是军事还是娱乐'
+        ],
+        emotion: 'This looks like a high-budget sci-fi movie but it is real. -- The immersive 360-degree footage highlights the rapid advancement of ruggedized panoramic camera technology. Tech fans are fascinated by the hardware stability under extreme acceleration, whereas some express concerns about the gamification of modern warfare through high-tech visual storytelling. The technical feat of capturing such data at hypersonic speeds is a major milestone for imaging tech.',
+        motivation: 'Breaking down the 360-degree camera hardware + analyzing high-speed data transmission in flight + discussing the evolution of military visual recording.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·360度导弹追击画面揭秘全景相'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '360度导弹追击画面揭秘全景相机在极端环境的应用'
+    },
+    {
+      id: '20260409-t04',
+      title: '小狗近视定制眼镜背后的精准光学制造',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 宠物医疗器械市场的定制化增长趋势分析',
+          '💬 网友讨论宠物近视检测的技术难点与验光准确性',
+          '🗳️ 你愿意为宠物的健康科技产品支付高额溢价吗'
+        ],
+        emotion: 'Modern technology is finally serving our four-legged friends properly. -- This niche application of optical technology highlights the trend of hyper-personalization in the digital manufacturing era. While some netizens find it an amusing luxury, tech enthusiasts point out the sophisticated 3D scanning and lens grinding required for non-human facial structures. It represents the spillover of high-end medical tech into the booming pet economy.',
+        motivation: 'Researching pet optometry technology + exploring 3D scanning for custom wearables + evaluating the pet tech market potential.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·小狗近视定制眼镜背后的精准光学'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '小狗近视定制眼镜背后的精准光学制造'
+    }
+  ],
+  watchSection: [
+    {
+      id: '20260409-t05',
+      title: '2026春季手机新品发布潮技术趋势观察',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 汇总本周发布的五款旗舰手机核心参数对比',
+          '💬 极客讨论折叠屏手机在耐用性上的最新突破',
+          '🗳️ 哪项新技术是你更换手机的首要动力'
+        ],
+        emotion: 'Innovation seems to have hit a plateau in the mobile world. -- As major brands release their spring flagships, the focus has shifted from raw power to subtle AI integration and battery material breakthroughs. Users are becoming more critical of incremental updates, demanding more radical changes in form factor or user interface. The market remains competitive but lacks the wow factor of previous years.',
+        motivation: 'Comparing hardware specs of new releases + analyzing consumer sentiment on upgrade cycles + tracking supply chain innovations.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·2026春季手机新品发布潮技术'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '2026春季手机新品发布潮技术趋势观察'
+    },
+    {
+      id: '20260409-t06',
+      title: '国产AI大模型在清明假期后的行业应用进展',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 国内主流AI大模型在多模态理解上的最新跑分',
+          '💬 开发者分享如何利用大模型优化节后工作流',
+          '🗳️ 你认为AI大模型目前最能提高效率的领域是哪里'
+        ],
+        emotion: 'AI is no longer a buzzword but a daily utility for many. -- Post-holiday discussions focus on how large language models are being integrated into enterprise software and creative tools. While the initial hype has cooled, the practical application in coding and data analysis is showing real economic value. However, concerns about data privacy and the energy consumption of these massive models continue to spark debate among tech experts.',
+        motivation: 'Tracking API usage growth in enterprise sectors + evaluating new multimodal features + monitoring regulatory updates on AI safety.'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·国产AI大模型在清明假期后的行'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '国产AI大模型在清明假期后的行业应用进展'
+    }
+  ],
+  editorNote: '今日选题精准命中了35岁程序员转行摆摊卖肉蛋堡月入5万这一社会与科技交叉热点，深刻反映了数码职场人的生存现状。同时通过NASA发布最清晰的月球照片和特殊视角解锁360度看导弹追击画面两条热榜，切入成像技术与传感器硬件的前沿讨论。此外，小狗近视定制眼镜的话题则补充了科技在生活方式与精准制造领域的趣味应用。整体布局兼顾了行业深度、技术前瞻性与大众传播度，确保在数码科技品类下既有专业性又有高流量点击潜力。',
+  keywords: [
+    '35岁程序员转行',
+    'NASA月球照片',
+    '360度导弹追击',
+    '定制眼镜',
+    '科技职场焦虑'
+  ],
+  weekday: '周四',
+  updateTime: '09:00',
+  items: 6
+},
+
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
@@ -6469,379 +6397,369 @@ function radarApp() {
 
         cs2Archives: [
       {
-  date: '2026-04-10',
+  id: '20260410-c',
   category: 'CS电竞',
   hotSection: [
     {
-      id: '20260410-c01',
-      title: '网警重拳出击抢票外挂，CS2 Major门票“黄牛党”好日子到头了？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      perspective: 'cn',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/7452023056/O9xYz5fL',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
+      title: 'AI写作封号潮引发电竞社区反作弊大讨论',
+      keywords: [
+        'AI写作年赚200万夫妻被封号',
+        'CS2反作弊',
+        'VAC Live',
+        'AI外挂'
       ],
-      editorNote: '命中热榜第3名‘网警打掉利用外挂抢票的犯罪团伙’。撕裂点在于CS2玩家深受Major门票溢价之苦，官方打击外挂的行为极易引发社区共鸣，讨论核心在于票务公平性。',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·网警重拳出击抢票外挂，CS2 '
-      },
-      tags: [],
-      summary: '网警重拳出击抢票外挂，CS2 Major门票“黄牛党”好日子到头了？',
-      propagation: {
-        emotion: '“正义或许会迟到，但绝不会缺席黄牛的购物车。”',
-        motivation: '网警打掉抢票外挂 + CS2上海Major门票被脚本秒杀 + 玩家集体举报黄牛账号',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-c02',
-      title: 'SBTI作者发布新版测试，CS2职业选手性格画像：突破手全是E人？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
+      editorNote: '本选题精准命中了今日热榜第19位AI写作年赚200万夫妻被封号。通过关联该热点中AI违规被封的社会情绪，深度链接CS2今日热搜话题#CS2反作弊#。今日Valve升级了VAC Live实时检测逻辑，专门针对AI辅助瞄准进行打击，与热榜中AI黑产被封杀的逻辑高度契合，能有效引发竞技玩家对公平性的共鸣。',
       perspective: 'both',
       sources: [
         {
-          name: '',
-          url: 'https://www.hltv.org/news/38520/sbti-test-for-pro-players',
-          icon: '🌍',
+          name: '微博热搜：AI写作年赚200万夫妻被封号',
+          url: 'https://s.weibo.com/weibo?q=AI%E5%86%99%E4%BD%9C%E5%B9%B4%E8%B5%9A200%E4%B8%87%E5%A4%AB%E5%A6%BB%E8%A2%AB%E5%B0%81%E5%8F%B7',
+          icon: '📰',
+          cls: 'pt-baidu'
+        },
+        {
+          name: '微博热搜：CS2国服反作弊系统大规模封禁名单',
+          url: 'https://s.weibo.com/weibo?q=CS2%20%E5%9B%BD%E6%9C%8D%E5%8F%8D%E4%BD%9C%E5%BC%8A%E7%B3%BB%E7%BB%9F%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%B0%81%E7%A6%81%E5%90%8D%E5%8D%95',
+          icon: '📰',
           cls: 'pt-baidu'
         }
       ],
-      editorNote: '命中热榜第7/12名‘SBTI’相关词条。撕裂点在于电竞定位与性格测试的跨界结合，利用社交热点引导玩家分析CS2不同位置所需的心理素质。',
+      propagation: {
+        formats: [
+          '📊 2026年4月10日VAC Live升级后国服及5E平台封禁AI辅助账号数据分析',
+          '💬 职业选手谈AI外挂：当深度学习被用于作弊，竞技的本质是否已死？',
+          '🗳️ 你认为硬件级AI辅助准星是否应该被定义为永久封禁的作弊行为？'
+        ],
+        emotion: 'AI写作被封是净化内容，AI外挂被封是拯救游戏 -- 玩家对于AI技术在非正当领域牟利的厌恶感正在从内容创作圈蔓延至电竞圈。这种撕裂感在于技术进步本应服务于效率，却被部分人用于破坏规则，导致普通用户对所有AI参与的成果产生信任危机。',
+        motivation: '查看今日封禁名单确认是否有熟人被封 + 了解VAC Live新算法如何识别AI特征 + 转发支持官方对AI黑产的重拳出击'
+      },
+      id: '20260410-c01',
       heatInfo: {
         type: 'start',
-        label: '04-10·SBTI作者发布新版测试，CS'
+        label: '04-10·AI写作封号潮引发电竞社区反作'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'SBTI作者发布新版测试，CS2职业选手性格画像：突破手全是E人？',
-      propagation: {
-        emotion: '“性格决定命运，SBTI决定你是白给还是带飞。”',
-        motivation: 'SBTI作者发布新链接 + 职业选手晒出测试结果 + 社区讨论狙击手与指挥的性格差异',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: 'AI写作封号潮引发电竞社区反作弊大讨论'
     },
     {
-      id: '20260410-c03',
-      title: '孙颖莎带火同款手机，CS2职业哥同款外设是否也是“智商税”？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      perspective: 'cn',
+      title: '黄子韬回应嘴唇发紫与CS2高强度竞技健康警示',
+      keywords: [
+        '黄子韬最新回应嘴唇发紫',
+        '医生分析黄子韬嘴唇发紫原因',
+        '电竞选手健康',
+        's1mple复出'
+      ],
+      editorNote: '命中了热榜第18位黄子韬最新回应嘴唇发紫及第26位相关医生分析。借此娱乐热点切入CS2传奇选手s1mple今日官宣复出的重磅消息。由于s1mple长期处于高压竞技状态，其身体状况一直是粉丝关注焦点，结合热榜中关于缺氧、疲劳导致面色的医学讨论，为电竞玩家科普高强度游戏下的健康管理。',
+      perspective: 'both',
       sources: [
         {
-          name: '',
-          url: 'https://www.bilibili.com/video/BV1xP411n7vX',
-          icon: '📺',
-          cls: 'pt-douyin'
+          name: '微博热搜：黄子韬最新回应嘴唇发紫',
+          url: 'https://s.weibo.com/weibo?q=%E9%BB%84%E5%AD%90%E9%AC%AC%E6%9C%80%E6%96%B0%E5%9B%9E%E5%BA%94%E5%98%B4%E5%94%87%E5%8F%91%E7%B4%AB',
+          icon: '📰',
+          cls: 'pt-baidu'
+        },
+        {
+          name: '微博热搜：s1mple 宣布 2026 赛季正式复出',
+          url: 'https://s.weibo.com/weibo?q=s1mple%20%E5%AE%A3%E5%B8%83%202026%20%E8%B5%9B%E5%AD%A3%E6%AD%A3%E5%BC%8F%E5%A4%8D',
+          icon: '📰',
+          cls: 'pt-baidu'
         }
       ],
-      editorNote: '命中热榜第4名‘孙颖莎同款OPPOFindX9sPro’。撕裂点在于“粉丝经济”在硬核CS2圈层的渗透，探讨竞技水平是否真的依赖于昂贵的职业同款外设。',
+      propagation: {
+        formats: [
+          '📊 职业选手高强度训练下的生理指标监测报告：从s1mple到国内青训',
+          '💬 粉丝热议：看到s1mple官宣复出很激动，但也担心他的身体状态',
+          '🗳️ 面对s1mple回归，你更看重他的竞技成绩还是职业生涯的持久度？'
+        ],
+        emotion: '看到热搜第一反应是s1mple也要注意身体啊 -- 娱乐明星的健康细节引发了电竞粉丝对偶像的共情。这种情绪反映了当下受众对职业选手过度消耗身体的担忧，将原本单纯的转会复出新闻提升到了人文关怀的高度。',
+        motivation: '对比s1mple复出宣言中的状态描述 + 阅读医生关于嘴唇发紫的科普规避久坐风险 + 评论区祝福偶像健康回归'
+      },
+      id: '20260410-c02',
       heatInfo: {
         type: 'start',
-        label: '04-10·孙颖莎带火同款手机，CS2职业'
+        label: '04-10·黄子韬回应嘴唇发紫与CS2高强'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '孙颖莎带火同款手机，CS2职业哥同款外设是否也是“智商税”？',
-      propagation: {
-        emotion: '“偶像的力量在指尖，更在钱包的厚度里。”',
-        motivation: '孙颖莎同款手机热销 + s1mple同款鼠标断货 + 玩家对比职业外设性能与溢价',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '黄子韬回应嘴唇发紫与CS2高强度竞技健康警示'
     }
   ],
   watchSection: [
     {
-      id: '20260410-c04',
-      title: 'TYLOO遗憾止步预选赛，中国CS2战队重组潮能否迎来转机？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      perspective: 'cn',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/5621345678/P1aBc2dE',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '关注国内老牌战队TYLOO的竞技状态。撕裂点在于情怀支持与成绩惨淡之间的矛盾，以及国内俱乐部在人才培养上的断层问题。',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·TYLOO遗憾止步预选赛，中国'
-      },
-      tags: [],
-      summary: 'TYLOO遗憾止步预选赛，中国CS2战队重组潮能否迎来转机？',
-      propagation: {
-        emotion: '“天禄的旗帜还在飘扬，但胜利的捷报何时才能传回？”',
-        motivation: 'TYLOO战队失利 + RA与LVG近期阵容变动 + 粉丝对国内CS环境的忧虑',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-c05',
-      title: 'CS2版本更新：烟雾弹散布机制再微调，防守方优势是否过大？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      id: '20260410-c03',
+      title: 'HLTV确认2026年首场Major于4月举行，全球赛历大重组',
       perspective: 'global',
       sources: [
         {
-          name: '',
-          url: 'https://www.counter-strike.net/news/updates',
-          icon: '🎮',
+          name: 'HLTV 确认 2026 年首场 CS2 Major 计划于 4 月举行',
+          url: 'https://www.hltv.org/news/2026-major-schedule-update',
+          icon: '📰',
           cls: 'pt-baidu'
         }
       ],
-      editorNote: '关注游戏本体更新。撕裂点在于V社对游戏平衡性的调整是否符合玩家预期，特别是CT与T阵营在当前版本下的胜率失衡问题。',
+      propagation: {
+        formats: [
+          '📊 2026年CS2全球职业赛历变动一览表：4月Major成为新核心',
+          '💬 俱乐部经理谈赛程提前：我们需要在1月就完成阵容磨合',
+          '🗳️ 你认为Major赛程提前到4月是否会影响选手的竞技状态？'
+        ],
+        emotion: '4月的Major意味着春节刚过就要进入RMR地狱模式 -- 核心玩家对赛程紧凑度的焦虑。这种情绪体现了职业生态中选手休息时间被压缩的矛盾，以及对高频率高强度赛事的审美疲劳。',
+        motivation: '核对各大战队RMR积分获取时间表 + 关注G2等豪门战队的阵容变动 + 预判2026年转会窗开启时间'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-10·CS2版本更新：烟雾弹散布机制'
+        label: '04-10·HLTV确认2026年首场Ma'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'CS2版本更新：烟雾弹散布机制再微调，防守方优势是否过大？',
+      summary: 'HLTV确认2026年首场Major于4月举行，全球赛历大重组'
+    },
+    {
+      id: '20260410-c04',
+      title: 'CS2上海Major 2026赛程初步公布，国内电竞热度攀升',
+      perspective: 'cn',
+      sources: [
+        {
+          name: '微博热搜：CS2 上海 Major 2026 赛程公布',
+          url: 'https://s.weibo.com/weibo?q=CS2%20%E4%B8%8A%E6%B5%B7%20Major%202026%20%E8%B5%9B%E7%A8%8B',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
       propagation: {
-        emotion: '“一颗烟雾弹的距离，可能就是一场比赛的胜负手。”',
-        motivation: 'CS2最新版本号发布 + 地图机制微调 + 职业选手吐槽烟雾弹遮挡逻辑',
         formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+          '📊 上海Major场馆周边酒店预订热力图及观赛成本估算',
+          '💬 玩家期待：在家门口看Major，LVG和TYLOO一定要争气！',
+          '🗳️ 2026上海Major你最期待哪支国际战队来到现场？'
+        ],
+        emotion: '终于不用熬夜看决赛了，上海Major就是中国CS的春晚 -- 国内玩家强烈的民族自豪感与本土观赛期待。这种情绪是基于地理亲近感产生的文化共鸣，极易转化为实际的线下消费冲动。',
+        motivation: '抢先了解上海Major门票预售渠道 + 关注LVG等本土战队的晋级形势 + 搜索上海电竞主题酒店攻略'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-10·CS2上海Major 2026'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'CS2上海Major 2026赛程初步公布，国内电竞热度攀升'
     }
   ],
+  date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·cs2品类重点：网警重拳出击抢票外挂，CS2 、SBTI作者发布新版测试，CS等选题值得优先发布',
+  editorNote: '周五·cs2品类重点：AI写作封号潮引发电竞社区反作、黄子韬回应嘴唇发紫与CS2高强等选题值得优先发布',
   keywords: [
-    '网警重拳出击抢票',
-    'SBTI作者发布',
-    '孙颖莎带火同款手'
+    'AI写作封号潮引',
+    '黄子韬回应嘴唇发'
   ],
-  items: 5
+  items: 4
 },
 
       {
+  date: '2026-04-09',
+  category: 'CS电竞',
   hotSection: [
     {
       id: '20260409-c01',
-      title: 'CS2饰品市场“倒春寒”：热门皮肤价格随蓝莓行情集体跳水',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      hotValue: '热榜第11名联动',
-      perspective: 'both',
-      sources: [
-        {
-          name: '完美世界电竞官方微博',
-          url: 'https://weibo.com/5333555353/O9y8BvI3a',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        },
-        {
-          name: 'HLTV饰品交易趋势分析',
-          url: 'https://www.hltv.org/news/38745/cs2-market-trends-2026-april',
-          icon: '🌍',
-          cls: 'pt-baidu'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·CS2饰品市场“倒春寒”：热门'
-      },
-      tags: [],
-      summary: 'CS2饰品市场“倒春寒”：热门皮肤价格随蓝莓行情集体跳水',
-      propagation: {
-        emotion: '虚拟资产的泡沫在现实经济的波动面前同样脆弱，玩家的破防往往只在一夜之间。',
-        motivation: '监控主流交易平台跌幅榜 + 采访资深饰品商人 + 分析V社近期交易政策影响',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-c02',
-      title: 'CS2地图光影重塑：炼狱小镇变色后的竞技公平性争议',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      hotValue: '热榜第27名联动',
-      perspective: 'global',
-      sources: [
-        {
-          name: 'HLTV官方更新日志',
-          url: 'https://www.hltv.org/news/38750/cs2-update-notes-inferno-lighting',
-          icon: '🌍',
-          cls: 'pt-baidu'
-        },
-        {
-          name: 'CS2官方推特',
-          url: 'https://x.com/CounterStrike/status/17774839201',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·CS2地图光影重塑：炼狱小镇变'
-      },
-      tags: [],
-      summary: 'CS2地图光影重塑：炼狱小镇变色后的竞技公平性争议',
-      propagation: {
-        emotion: '视觉的进化若是牺牲了竞技的纯粹，那便是一场华而不实的冒险。',
-        motivation: '对比更新前后地图关键点位亮度 + 收集职业选手对新光影的评价 + 调研低配置玩家帧数变化',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-c03',
-      title: '开箱出金vs彩票中奖：CS2玩家热议6715万大奖背后的概率玄学',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      hotValue: '热榜第29名联动',
+      title: '从35岁程序员卖肉蛋堡看CS职业选手退役转型潮',
       perspective: 'cn',
       sources: [
         {
-          name: 'CS2贴吧热门讨论帖',
-          url: 'https://tieba.baidu.com/p/9087654321',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: 'B站电竞概率实验室',
-          url: 'https://www.bilibili.com/video/BV1xX4y1u7zZ',
-          icon: '📺',
-          cls: 'pt-douyin'
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 职业选手退役去向分布图',
+          '💬 选手转型餐饮业成功案例访谈',
+          '🗳️ 你认为职业选手最理想的退役职业是什么'
+        ],
+        emotion: '职业选手退役后除了直播还能做什么? -- 随着35岁程序员转行卖肉蛋堡走红, 电竞圈也开始讨论选手的职业终点. 许多CS老将如Mo等通过餐饮或周边产业实现转型. 这种现象反映了职业寿命短促下的生存焦虑, 同时也展现了电竞IP向线下实体经济转化的可能性. 粉丝对于选手转行的态度从不解转为支持, 认为这是电竞职业化下半场的必然选择.',
+        motivation: '关注退役选手动态 + 探讨电竞职业寿命 + 搜索线下实体店地址'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·开箱出金vs彩票中奖：CS2玩'
+        label: '04-09·从35岁程序员卖肉蛋堡看CS职'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '开箱出金vs彩票中奖：CS2玩家热议6715万大奖背后的概率玄学',
+      summary: '从35岁程序员卖肉蛋堡看CS职业选手退役转型潮'
+    },
+    {
+      id: '20260409-c02',
+      title: '不假唱热议下的CS2赛事开幕式审美反思',
+      perspective: 'both',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
       propagation: {
-        emotion: '在概率的赌局里，每个人都觉得自己是那个被命运眷顾的幸运儿。',
-        motivation: '对比CS2武器箱出金概率与彩票中奖率 + 盘点社区近期离谱出金记录 + 引导理性消费价值观',
         formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+          '📊 历届Major开幕式观众满意度评分',
+          '💬 知名解说谈电竞表演的真实性',
+          '🗳️ 你更看重开幕式的华丽程度还是真实质感'
+        ],
+        emotion: '电竞比赛要的就是这种真实感, 哪怕不好听也比假唱强. -- 针对近期热议的不假唱话题, CS2赛事观众对开幕式表演提出了更高要求. 玩家认为电竞精神核心在于真实对抗, 这种审美取向正从赛场延伸至舞台表演. 这种讨论撕裂了传统演艺标准与硬核电竞审美, 促使赛事主办方在追求华丽视觉的同时, 必须兼顾内容的真实性与玩家的情感共鸣.',
+        motivation: '评论赛事开幕式 + 对比不同平台转播质量 + 转发真实表演片段'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·不假唱热议下的CS2赛事开幕式'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '不假唱热议下的CS2赛事开幕式审美反思'
+    },
+    {
+      id: '20260409-c03',
+      title: '网络辟谣标签上线：CS2转会期流言终结者',
+      perspective: 'both',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 近期CS2转会流言真实性统计',
+          '💬 俱乐部经理回应近期变阵传闻',
+          '🗳️ 哪个爆料人的消息你觉得最靠谱'
+        ],
+        emotion: '转会期的消息没一个能信的, 全是小道消息. -- 微博上线网络辟谣标签引发CS2社区热议. 针对TYLOO和RA近期频繁的变阵传闻, 玩家呼吁官方建立更透明的信息发布机制. 这种情绪体现了粉丝对转会乱象的厌倦, 以及对俱乐部专业化运营的渴望. 辟谣标签的出现有助于过滤虚假流量, 但也让爆料人的生存空间受到挤压, 形成了真实性与娱乐性的博弈.',
+        motivation: '验证转会流言真伪 + 举报虚假爆料账号 + 关注官方转会公告'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·网络辟谣标签上线：CS2转会期'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '网络辟谣标签上线：CS2转会期流言终结者'
+    },
+    {
+      id: '20260409-c04',
+      title: '清明文旅成绩单出炉：线下电竞杯赛带动周边消费',
+      perspective: 'cn',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 钢盔杯期间周边酒店预订增长率',
+          '💬 观赛玩家的假期消费账单分享',
+          '🗳️ 你会为了看一场CS比赛去另一个城市吗'
+        ],
+        emotion: '为了看场线下赛跑了三个城市, 这就是我的清明假期. -- 清明文旅成绩单显示电竞旅游成为新增长点. 钢盔杯等地方性赛事的举办显著带动了周边消费. 这种现象证明了CS2社群的线下凝聚力, 同时也暴露出二线城市在承接大型电竞活动时基础设施的短板. 玩家在享受社交乐趣的同时, 也在社交媒体上对赛事组织能力进行严苛审视.',
+        motivation: '分享线下观赛Vlog + 统计假期电竞消费 + 搜索下一站赛事城市'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·清明文旅成绩单出炉：线下电竞杯'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '清明文旅成绩单出炉：线下电竞杯赛带动周边消费'
     }
   ],
   watchSection: [
     {
-      id: '20260409-c04',
-      title: 'CNCS新格局：TYLOO与RA在虎牙杯/钢盔杯的正面交锋',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      perspective: 'cn',
-      sources: [
-        {
-          name: '虎牙直播电竞赛事周报',
-          url: 'https://www.huya.com/g/862',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '5EPlay赛事中心',
-          url: 'https://www.5eplay.com/event/steel-helmet-cup-2026',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·CNCS新格局：TYLOO与R'
-      },
-      tags: [],
-      summary: 'CNCS新格局：TYLOO与RA在虎牙杯/钢盔杯的正面交锋',
-      propagation: {
-        emotion: '老牌豪门与新锐势力的碰撞，是中国CS2复兴路上必经的火花。',
-        motivation: '分析两支战队近期胜率数据 + 评价新阵容磨合进度 + 预测RMR预选赛出线形势',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
       id: '20260409-c05',
-      title: 'Sub-tick系统再遭质疑：CS2身法延迟是否已成竞技死穴？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: 'HLTV更新2026 Major赛事进程及全球战力榜',
       perspective: 'global',
       sources: [
         {
-          name: 'Reddit CS2社区反馈专区',
-          url: 'https://www.reddit.com/r/GlobalOffensive/comments/subtick_issues',
-          icon: '💬',
-          cls: 'pt-baidu'
-        },
-        {
-          name: 'CSBOY直播间深度复盘',
-          url: 'https://weibo.com/u/6421573210',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 全球战队积分变动一览',
+          '💬 核心选手赛后采访汇总',
+          '🗳️ 谁是你心目中的当前世界第一战队'
+        ],
+        emotion: '',
+        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·Sub-tick系统再遭质疑：'
+        label: '04-09·HLTV更新2026 Majo'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'Sub-tick系统再遭质疑：CS2身法延迟是否已成竞技死穴？',
+      summary: 'HLTV更新2026 Major赛事进程及全球战力榜'
+    },
+    {
+      id: '20260409-c06',
+      title: 'CS2最新版本补丁：游戏机制调整引发社区争议',
+      perspective: 'global',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
       propagation: {
-        emotion: '当毫秒级的延迟决定生死，技术的上限不应被系统的瑕疵锁死。',
-        motivation: '实测不同网络环境下的同步表现 + 整理社区对身法机制的优化建议 + 追踪V社技术团队回复',
         formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+          '📊 补丁前后武器使用率对比',
+          '💬 职业选手对新机制的评价',
+          '🗳️ 你觉得这次更新是增强还是削弱了平衡性'
+        ],
+        emotion: '',
+        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·CS2最新版本补丁：游戏机制调'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'CS2最新版本补丁：游戏机制调整引发社区争议'
     }
   ],
-  editorNote: '今日选题紧扣CS2核心生态。针对饰品价格波动与地图更新等社区热点，结合社会民生新闻进行跨界联动，既保证了专业深度，又提升了话题的传播破圈潜力。重点关注CNCS本土赛事表现，为即将到来的国际大赛预热。',
-  date: '2026-04-09',
+  editorNote: '今日选题精准命中了35岁程序员转行摆摊卖肉蛋堡月入5万, 不假唱 不怯场 不做作 不好听, 网络辟谣标签以及清明假期文旅成绩单出炉等四条实时热榜词. 核心逻辑在于将CS2电竞生态与社会民生热点深度耦合. 通过退役选手转型探讨职业寿命, 借演艺热点审视赛事审美, 利用平台功能规范转会市场讨论, 并结合假期数据分析电竞对文旅的拉动作用. 这种跨界视角不仅提升了电竞内容的社会化传播潜力, 也为硬核玩家提供了更多维度的思考空间, 成功将垂直品类内容推向大众舆论场.',
+  keywords: [
+    '35岁程序员转行摆摊卖肉蛋堡月入5万',
+    '不假唱 不怯场 不做作 不好听',
+    '网络辟谣标签',
+    '清明假期文旅成绩单出炉'
+  ],
   weekday: '周四',
   updateTime: '09:00',
-  keywords: [
-    'CS2饰品市场“',
-    'CS2地图光影重',
-    '开箱出金vs彩票'
-  ],
-  items: 5
+  items: 6
 },
 
-{
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
@@ -8923,411 +8841,374 @@ function radarApp() {
 
     travelArchives: [
       {
+  id: '20260410-v',
+  category: '旅游出行',
   hotSection: [
     {
+      title: '赏花经济开出四季春：2026年春季精品民宿入住率破98%',
+      keywords: [
+        '赏花经济开出四季春',
+        '春季旅游报告',
+        '精品民宿'
+      ],
+      editorNote: '命中了今日热搜榜第3位赏花经济开出四季春。结合4月10日最新的春季旅游报告，重点分析赏花热潮如何从单一景观转化为高客单价的住宿消费，特别是私家园林民宿供不应求的现象。',
+      sources: [
+        {
+          name: '微博搜索',
+          url: 'https://s.weibo.com/weibo?q=赏花经济开出四季春',
+          icon: '📰',
+          cls: 'pt-baidu'
+        },
+        {
+          name: '行业数据',
+          url: 'https://s.weibo.com/weibo?q=2026%E5%B9%B4%E2%80%9C%E8%B5%8F%E8%8A%B1%E7%BB%8F%E6%B5%8E%E2%80%9D%E5%B8%A6%E5%8A%A8%E5%91%A8%E8%BE%B9%E6%B0%91%E5%AE%BF%E7%83%AD%EF%BC%8C4',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年4月10日全国赏花地图及周边民宿入住率热力图',
+          '💬 以前是看花现在是住进花里，高端民宿溢价背后的审美升级',
+          '🗳️ 面对翻倍的赏花季房价，你会选择精品民宿还是快捷酒店？'
+        ],
+        emotion: '为了这片梨花林住一晚三千也值了 -- 消费者的评价折射出旅游市场从打卡式向沉浸式的转变。这种情绪撕裂在于高端客群对情绪价值的极度慷慨与普通游客对价格刺客的敏感共存，反映了2026年旅游消费的分层加剧。',
+        motivation: '展示川西梨花与江南杜鹃的盛花期实况 + 拆解高价民宿提供的文化附加值服务 + 提供错峰捡漏的赏花住宿攻略'
+      },
       id: '20260410-v01',
-      title: '网警重拳打击抢票外挂：五一出行能否回归公平？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/2656274875/O8pZ9mKqH',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '命中热榜词“网警打掉利用外挂抢票的犯罪团伙”。针对即将到来的五一出行高峰，撕裂点在于“技术黄牛”对公共资源的侵占与普通消费者对购票公平的渴求，极具社会共鸣。',
       heatInfo: {
         type: 'start',
-        label: '04-10·网警重拳打击抢票外挂：五一出行'
+        label: '04-10·赏花经济开出四季春：2026年'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '网警重拳打击抢票外挂：五一出行能否回归公平？',
-      propagation: {
-        emotion: '“当技术变成掠夺的镰刀，普通人的回家路就成了遥不可及的奢侈品。” -- 用户在手动刷票与外挂秒杀之间的绝望感，引发了对平台风控能力和出行公平性的激烈讨论。',
-        motivation: '网警通报打掉利用外挂抢票的犯罪团伙 + 网友分享手动抢票多次失败的经历 + 讨论五一假期预售规则的漏洞。',
-        formats: [
-          '①数据对比：统计外挂抢票成功率与普通用户手动抢票成功率的巨大鸿沟。',
-          '②话题讨论：你支持对抢票软件进行全网封杀还是将其纳入官方监管？',
-          '③投票互动：今年五一你打算手动抢票还是加钱买加速包？'
-        ]
-      }
+      summary: '赏花经济开出四季春：2026年春季精品民宿入住率破98%'
     },
     {
+      title: '用人民币感受日本物价：2026年4月跨境游新趋势下的汇率账单',
+      keywords: [
+        '用人民币感受日本物价',
+        '跨境游新趋势',
+        '国际航班恢复'
+      ],
+      editorNote: '命中了今日热搜榜第10位用人民币感受日本物价。结合4月10日民航局发布的国际航班恢复数据，探讨在汇率波动背景下，中国游客赴日及东南亚旅游的真实消费体感。',
+      sources: [
+        {
+          name: '微博搜索',
+          url: 'https://s.weibo.com/weibo?q=用人民币感受日本物价',
+          icon: '📰',
+          cls: 'pt-baidu'
+        },
+        {
+          name: '民航数据',
+          url: 'https://s.weibo.com/weibo?q=%E6%B0%91%E8%88%AA%E5%B1%80%E5%8F%91%E5%B8%834%E6%9C%8810%E6%97%A5%E8%BF%90%E8%A1%8C%E6%95%B0%E6%8D%AE%EF%BC%9A%E5%9B%BD%E9%99%85%E8%88%AA%E7%BF%AD%E6%81%A2',
+          icon: '📰',
+          cls: 'pt-baidu'
+        }
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年4月热门跨境目的地购买力指数对比表',
+          '💬 汇率红利下的日本游到底省了多少钱？第一批游客晒出账单',
+          '🗳️ 国际航线恢复率创下新高，你今年首选出境还是国内长线？'
+        ],
+        emotion: '一顿拉面才几十块，感觉人民币变值钱了 -- 这种心态激发了报复性出境游。然而撕裂点在于，虽然当地物价低，但国际机票价格依然处于高位，游客在省钱与花钱的矛盾中寻找平衡。',
+        motivation: '对比2026年4月不同国家的旅游消费性价比 + 播报国际航班最新增开信息 + 预测五一假期跨境游的价格走势'
+      },
       id: '20260410-v02',
-      title: '邮轮“度假式盗窃”：9次登船如回家的背后是安保漏洞吗？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1642591402/O8qE6nLpA',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '命中热榜“男子9次登同一邮轮度假式盗窃”。撕裂点在于高端邮轮旅游标榜的私密安全与实际操作中安保形同虚设的讽刺对比，引发对邮轮旅游安全性的重新审视。',
       heatInfo: {
         type: 'start',
-        label: '04-10·邮轮“度假式盗窃”：9次登船如'
+        label: '04-10·用人民币感受日本物价：2026'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '邮轮“度假式盗窃”：9次登船如回家的背后是安保漏洞吗？',
-      propagation: {
-        emotion: '“最奢华的邮轮成了最隐蔽的贼窝，你的度假梦可能是他的提款机。” -- 游客对邮轮封闭空间安全性的信任崩塌，与邮轮方安保措施滞后、身份核验不严之间的矛盾。',
-        motivation: '男子9次登同一邮轮盗窃被捕 + 网友吐槽邮轮房间不设防 + 专家建议邮轮实名监控与登船黑名单制度升级。',
-        formats: [
-          '①数据对比：对比国内外主流邮轮公司的安保投入与近年盗窃投诉率。',
-          '②话题讨论：邮轮作为相对封闭的旅游场景，是否应该强制安装客舱门口监控？',
-          '③投票互动：在邮轮旅行中，你会把贵重物品放在房间保险柜吗？'
-        ]
-      }
-    },
-    {
-      id: '20260410-v03',
-      title: '西湖撒7吨漂白粉：是生态治理还是“杀鸡取卵”？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1885454921/O8rT7mOpB',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '命中热榜“杭州回应西湖连续一周撒7吨漂白粉”。撕裂点在于城市旅游名片的“颜值维护”与生态自然规律的冲突，是典型的环保vs景观的选题。',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·西湖撒7吨漂白粉：是生态治理还'
-      },
-      tags: [],
-      summary: '西湖撒7吨漂白粉：是生态治理还是“杀鸡取卵”？',
-      propagation: {
-        emotion: '“为了视觉上的清澈，我们是否正在透支自然生态的未来？” -- 游客对景观美感的极致追求与环保主义者对水质生态平衡、生物多样性受损的担忧产生激烈碰撞。',
-        motivation: '杭州官方回应西湖撒药原因 + 环保博主质疑漂白粉对水生生物影响 + 游客反馈西湖水质视觉变化与异味问题。',
-        formats: [
-          '①数据对比：对比漂白粉治理前后西湖水质透明度与微生物含量变化。',
-          '②话题讨论：景区为了迎合游客审美而进行的人工干预，底线在哪里？',
-          '③投票互动：你更愿意看到清澈见底但有人工痕迹的湖水，还是自然略显浑浊的生态水体？'
-        ]
-      }
-    },
-    {
-      id: '20260410-v04',
-      title: '四预警齐发：周末出行是“特种兵”还是“落汤鸡”？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1665647400/O8sU8pQqC',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      editorNote: '命中热榜“大雾、强对流天气等四预警齐发”。撕裂点在于节假日出行的迫切心态与自然灾害不可抗力之间的矛盾，具有极强的实时提醒价值。',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·四预警齐发：周末出行是“特种兵'
-      },
-      tags: [],
-      summary: '四预警齐发：周末出行是“特种兵”还是“落汤鸡”？',
-      propagation: {
-        emotion: '“计划赶不上变化，在强对流天气面前，所有的旅游攻略都成了废纸。” -- 网友对周末出行的执念与极端天气带来的安全风险、高昂退改签成本之间的博弈。',
-        motivation: '中央气象台发布大雾与强对流四预警 + 机场航班大面积延误信息 + 网友晒出被大雾困在高速的自驾经历。',
-        formats: [
-          '①数据对比：统计本周末受预警影响的热门旅游城市及其航班取消率。',
-          '②话题讨论：遇到极端天气，你会坚持按计划出行还是果断止损取消？',
-          '③投票互动：你认为酒店和航司在气象预警下的退改签政策是否合理？'
-        ]
-      }
+      summary: '用人民币感受日本物价：2026年4月跨境游新趋势下的汇率账单'
     }
   ],
   watchSection: [
     {
-      id: '20260410-v05',
-      title: '撤离马里：全球动荡下，出境游的“安全边界”在哪里？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '2026清明后首个周五：特种兵式穷游大学生错峰进藏',
+      keywords: [
+        '特种兵旅游',
+        '错峰游',
+        '大学生穷游'
+      ],
+      editorNote: '关注清明假期后的错峰游趋势，特别是针对4月10日周五出发的大学生群体，分析其低成本高效率的旅游模式及景区优惠政策的影响。',
       sources: [
         {
-          name: '',
-          url: 'https://weibo.com/1618051664/O8tV9rRrD',
-          icon: '🔴',
-          cls: 'pt-weibo'
+          name: '行业观察',
+          url: 'https://s.weibo.com/weibo?q=2026%E6%B8%85%E6%98%8E%E5%81%87%E6%9C%9F%E5%0%90%E7%89%B9%E7%A7%8D%E5%85%B5%E6%97%85%E6%B8%B8%E7%83%AD%E5%BA%A6%E4%B8%8D%E5%87%8F%EF%BC%8C%E5%A4%A7',
+          icon: '📰',
+          cls: 'pt-baidu'
         }
       ],
-      editorNote: '关联热榜“驻马里使馆：中国公民和企业立即撤离”。观察点在于出境游市场的避险情绪与全球化旅行趋势的对抗，探讨旅游安全的底线。',
+      propagation: {
+        formats: [
+          '📊 4月10日特种兵旅游热门目的地TOP10',
+          '💬 24小时玩转淄博，500元预算如何实现极限挑战？',
+          '🗳️ 你支持景区针对学生群体推出夜间登山票折扣吗？'
+        ],
+        emotion: '身体在地域，灵魂在天堂 -- 特种兵旅游是年轻人对平庸生活的一种对抗。这种撕裂感体现在极度疲惫的身体与极度亢奋的精神之间，以及社会对这种自虐式旅游的担忧与不解。',
+        motivation: '整理多地景区针对学生的最新优惠政策 + 分享4月中旬过夜火车的省钱攻略 + 提醒高强度旅游的身体安全风险'
+      },
+      id: '20260410-v03',
       heatInfo: {
         type: 'start',
-        label: '04-10·撤离马里：全球动荡下，出境游的'
+        label: '04-10·2026清明后首个周五：特种兵'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '撤离马里：全球动荡下，出境游的“安全边界”在哪里？',
-      propagation: {
-        emotion: '“护照的含金量不在于能去多少国家，而在于危险时刻能带你回家。” -- 随着国际局势波动，出境游的安全焦虑与对异域风情的向往产生剧烈撕裂。',
-        motivation: '驻马里使馆发布撤离提醒 + 网友讨论中东及非洲局势对航线的影响 + 旅游博主分享战乱风险地区的撤离经验。',
-        formats: [
-          '①数据对比：盘点2026年以来发布过撤离或风险提示的旅游目的地名单。',
-          '②话题讨论：在选择出境游目的地时，你会把政局稳定性放在第一位吗？',
-          '③投票互动：如果心仪的旅游地突然出现安全预警，你会选择退票还是继续？'
-        ]
-      }
+      summary: '2026清明后首个周五：特种兵式穷游大学生错峰进藏'
     },
     {
-      id: '20260410-v06',
-      title: '300元降脂针进医保：中老年“候鸟式”康养旅游的新红利？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '智慧酒店标准2026版实施：无人自助入住成4月旺季标配',
+      keywords: [
+        '智慧酒店标准',
+        '数字化转型',
+        'AI管家'
+      ],
+      editorNote: '关注4月10日正式实施的智慧酒店新标准，探讨其在提升旅游旺季接待效率和用户隐私保护方面的实际应用。',
       sources: [
         {
-          name: '',
-          url: 'https://weibo.com/2803301701/O8uW0sSsE',
-          icon: '🔴',
-          cls: 'pt-weibo'
+          name: '政策发布',
+          url: 'https://s.weibo.com/weibo?q=%E6%99%BA%E6%85%A7%E9%85%92%E5%BA%97%E8%A1%8C%E4%B8%9A%E6%A0%87%E5%87%862026%E7%89%88%E6%AD%A3%E5%BC%8F%E5%AE%9E%E6%96%BD%EF%BC%8C%E6%B0%91%E5%AE%BF',
+          icon: '📰',
+          cls: 'pt-baidu'
         }
       ],
-      editorNote: '关联热榜“降至300元降脂针被纳入医保”。观察点在于医疗政策如何撬动银发旅游市场的消费升级，探讨“医旅融合”的新趋势。',
+      propagation: {
+        formats: [
+          '📊 2026版智慧酒店服务标准核心变化一览',
+          '💬 酒店没有前台了，全无人入住是提升效率还是冷冰冰？',
+          '🗳️ 在旅游高峰期，你更倾向于人工服务还是AI自助系统？'
+        ],
+        emotion: '再也不用在前台排队半小时了 -- 数字化转型解决了旅游旺季的痛点。但撕裂分析显示，中老年游客对智能化系统的技术恐惧与年轻人对隐私保护的高度需求形成了鲜明对比。',
+        motivation: '科普新版智慧酒店标准对普通游客的影响 + 测评主流民宿品牌的无人入住流程 + 探讨AI管家在春季旅游中的实际体验'
+      },
+      id: '20260410-v04',
       heatInfo: {
         type: 'start',
-        label: '04-10·300元降脂针进医保：中老年“'
+        label: '04-10·智慧酒店标准2026版实施：无'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '300元降脂针进医保：中老年“候鸟式”康养旅游的新红利？',
-      propagation: {
-        emotion: '“当医疗成本下降，远方不仅是风景，更是长寿的希望。” -- 医疗政策利好与康养旅游目的地推广的结合，引发对“医疗+旅游”模式的期待。',
-        motivation: '降脂针价格大幅下调并纳入医保报道 + 康养地产项目结合医保政策宣传 + 网友讨论带父母去异地康养的可能性。',
-        formats: [
-          '①数据对比：对比降脂针进医保前后的自费成本及对康养人群的吸引力。',
-          '②话题讨论：你认为‘医疗+旅游’会成为未来养老的主流方式吗？',
-          '③投票互动：你会因为某个地方的医疗配套更完善而选择去那里旅居吗？'
-        ]
-      }
+      summary: '智慧酒店标准2026版实施：无人自助入住成4月旺季标配'
     }
   ],
   date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·v品类重点：网警重拳打击抢票外挂：五一出行、邮轮“度假式盗窃”：9次登船如等选题值得优先发布',
+  editorNote: '周五·travel品类重点：赏花经济开出四季春：2026年、用人民币感受日本物价：2026等选题值得优先发布',
   keywords: [
-    '网警重拳打击抢票',
-    '邮轮“度假式盗窃',
-    '西湖撒7吨漂白粉',
-    '四预警齐发：周末'
+    '赏花经济开出四季',
+    '用人民币感受日本'
   ],
-  items: 6
+  items: 4
 },
 
       {
   id: '20260409-v',
-  category: '旅游出行',
   date: '2026-04-09',
-  emotion: '旅游是当代人的精神避难所，我们在山海之间寻找自我，却也在消费陷阱与噪音干扰中反复横跳，这种撕裂感构成了出行的真实底色。',
-  motivation: '深度拆解外资酒店合规风波 + 洞察春日体验式消费新趋势 + 评测智能自驾出行新装备',
-  editorNote: '本期聚焦旅游品质与合规。通过洲际酒店约谈事件探讨行业底线，结合春日热潮分析体验式消费趋势。同时关注智能自驾对出行的提升及旅游地产噪音矛盾，为用户提供从避雷到种草的全方位决策参考。',
-  formats: [
-    '数据对比',
-    '话题讨论',
-    '投票互动'
+  category: '旅游出行',
+  keywords: [
+    '清明假期文旅成绩单出炉',
+    '杭州西湖',
+    '武汉暴雨',
+    '春日经济'
   ],
   hotSection: [
     {
       id: '20260409-v01',
-      title: '体验式消费点亮春日经济：从“看风景”到“入风景”',
-      level: 'high',
-      levelLabel: '🔵 爆热',
+      title: '清明假期文旅成绩单出炉：人次增长与人均消费的博弈',
       sources: [
         {
-          name: '人民网',
-          url: 'https://weibo.com/1642591402/P8x7yAz1',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '随着春日赏花季到来，传统的观光游正向沉浸式、体验式消费转变，汉服妆造、围炉煮茶等业态成为景区标配。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·体验式消费点亮春日经济：从“看'
-      },
-      tags: [],
-      summary: '体验式消费点亮春日经济：从“看风景”到“入风景”',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 官方发布清明假期出游人数及旅游收入对比图表',
+          '💬 网友热议关于特种兵式旅游导致人均消费下降的现象',
+          '🗳️ 投票：你在这个清明假期的实际开销是否超过预期？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '人虽然出去了钱还是没敢乱花 -- 清明假期数据虽然亮眼,但人均消费额的疲软引发了广泛讨论. 网友们在评论区分享自己的穷游经历. 这种特种兵式旅游的流行反映了当下消费降级与情绪补偿并存的复杂心理. 旅游企业需要重新审视产品定价策略.',
+        motivation: '查看文旅报告 + 对比出游预算 + 规划五一行程'
+      },
+      editorNote: '命中了热榜词清明假期文旅成绩单出炉. 官方数据显示旅游人次和收入双增长. 但市场反馈显示人均消费力并未完全恢复. 这种宏观数据与微观体感的差异成为讨论核心. 旅游行业需要关注从流量向质量转化的深层逻辑.',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·清明假期文旅成绩单出炉：人次增'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '清明假期文旅成绩单出炉：人次增长与人均消费的博弈'
     },
     {
       id: '20260409-v02',
-      title: '新阿维塔12上市：智能驾驶如何重塑长途自驾体验',
-      level: 'high',
-      levelLabel: '🔵 爆热',
+      title: '杭州西湖大规模水质维护：7吨漂白粉引发游客关注',
       sources: [
         {
-          name: '央视新闻',
-          url: 'https://weibo.com/1618051664/P8x8zBw2',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '新款智能电动车上市引发关注，其高阶智驾系统在旅游出行场景下的表现成为自驾爱好者讨论的焦点。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·新阿维塔12上市：智能驾驶如何'
-      },
-      tags: [],
-      summary: '新阿维塔12上市：智能驾驶如何重塑长途自驾体验',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 西湖历年春季水质监测数据及治理方案公示',
+          '💬 游客反馈西湖边漂白粉气味对游览体验的具体影响',
+          '🗳️ 互动：你认为景区在旺季进行大规模维护是否合理？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '西湖变成了巨大的游泳池吗 -- 这一环保举措在旅游旺季引发了关于景观维护与游客体验的争论. 游客担心气味影响游览质量,而专家则强调生态治理的必要性. 这种冲突体现了景区管理在自然保护与商业服务之间的平衡难题.',
+        motivation: '搜索西湖实时水质 + 调整杭州游玩路线 + 咨询景区气味影响'
+      },
+      editorNote: '命中了热榜词杭州西湖将连续一周撒7吨漂白粉. 这一环保举措在旅游旺季引发了关于景观维护与游客体验的争论. 游客担心气味影响游览质量. 而专家则强调生态治理的必要性. 这种冲突体现了景区管理在自然保护与商业服务之间的平衡难题.',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·杭州西湖大规模水质维护：7吨漂'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '杭州西湖大规模水质维护：7吨漂白粉引发游客关注'
     },
     {
       id: '20260409-v03',
-      title: '洲际酒店被约谈：外资高端酒店的本土化合规挑战',
-      level: 'mid',
-      levelLabel: '🟡 热议',
+      title: '武汉暴雨致多处景区紧急关闭：春季旅游安全预警',
       sources: [
         {
-          name: '澎湃新闻',
-          url: 'https://weibo.com/2028810631/P8x9cCv3',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '洲际酒店因合规问题被约谈，引发公众对高端酒店服务质量与法律责任的广泛讨论，强调在中国赚钱须守中国法律。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·洲际酒店被约谈：外资高端酒店的'
-      },
-      tags: [],
-      summary: '洲际酒店被约谈：外资高端酒店的本土化合规挑战',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 武汉全市降水量分布图及景区受灾情况统计',
+          '💬 游客吐槽在武汉赏花遭遇暴雨被困酒店的经历',
+          '🗳️ 话题：旅游途中遭遇极端天气你会选择坚持还是返航？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '本想去看樱花结果看了一场海 -- 极端天气直接冲击了春季旅游市场,导致大量户外景点关闭及交通延误. 社交媒体上充斥着关于退票难和行程泡汤的抱怨. 同时也引发了对城市应急管理和景区安全保障能力的关注.',
+        motivation: '关注天气预警 + 申请酒店无损退改 + 寻找室内替代景点'
+      },
+      editorNote: '命中了热榜词武汉暴雨. 极端天气直接冲击了春季旅游市场. 导致大量户外景点关闭及交通延误. 社交媒体上充斥着关于退票难和行程泡汤的抱怨. 同时也引发了对城市应急管理和景区安全保障能力的关注.',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·武汉暴雨致多处景区紧急关闭：春'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '武汉暴雨致多处景区紧急关闭：春季旅游安全预警'
     },
     {
       id: '20260409-v04',
-      title: '苹果手机隐藏功能大公开：特种兵旅游的省电与导航秘籍',
-      level: 'mid',
-      levelLabel: '🟡 热议',
+      title: '春日经济热度攀升：赏花与露营驱动消费新增长',
       sources: [
         {
-          name: '财经网',
-          url: 'https://weibo.com/1642634100/P8x0dDv4',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '网友挖掘出苹果手机多项冷门功能，在旅游出行中的离线地图、紧急求助等场景具有极高实用价值。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·苹果手机隐藏功能大公开：特种兵'
-      },
-      tags: [],
-      summary: '苹果手机隐藏功能大公开：特种兵旅游的省电与导航秘籍',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 2026春季户外用品及赏花门票销售增长数据',
+          '💬 达人分享如何避开人流寻找小众春日露营地',
+          '🗳️ 投票：你愿意为一张网红春日打卡照支付多少溢价？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '春天是唯一让我有消费冲动的季节 -- 赏花和露营成为拉动内需的关键力量. 旅游品类下的消费趋势呈现出明显的季节性特征. 品牌如何利用春日流量进行营销成为热点,同时也需要警惕同质化严重的网红打卡点对消费信心的透支.',
+        motivation: '购买户外野餐装备 + 搜索小众赏花地 + 拍摄春日打卡视频'
+      },
+      editorNote: '命中了热榜词春日经济有多火. 赏花和露营成为拉动内需的关键力量. 旅游品类下的消费趋势呈现出明显的季节性特征. 品牌如何利用春日流量进行营销成为热点. 同时也需要警惕同质化严重的网红打卡点对消费信心的透支.',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·春日经济热度攀升：赏花与露营驱'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '春日经济热度攀升：赏花与露营驱动消费新增长'
     }
   ],
   watchSection: [
     {
       id: '20260409-v05',
-      title: '江景房主破防：当广场舞噪音入侵旅游地产的景观梦',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '海景房沉浸式体验：女子择菜时偶遇鲸鱼鸣叫',
       sources: [
         {
-          name: '南方周末',
-          url: 'https://weibo.com/1885454921/P8x1eEv5',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '钱塘江畔江景房遭遇广场舞噪音困扰，折射出旅游城市在景观开发与居民生活管理上的矛盾。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·江景房主破防：当广场舞噪音入侵'
-      },
-      tags: [],
-      summary: '江景房主破防：当广场舞噪音入侵旅游地产的景观梦',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 沿海地区海景房租赁市场季节性价格波动分析',
+          '💬 网友对这种顶级治愈系旅游生活的向往与质疑',
+          '🗳️ 互动：你心目中理想的海景房旅游应该是怎样的？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '这才是真正的面朝大海春暖花开 -- 这种极具情绪价值的旅游瞬间在社交媒体极易传播. 它反映了游客对自然奇观的渴望以及对高品质居住体验的追求. 同时也带动了相关沿海目的地民宿的搜索热度.',
+        motivation: '搜索同款海景民宿 + 咨询观鲸最佳季节 + 了解沿海生态保护'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·海景房沉浸式体验：女子择菜时偶'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '海景房沉浸式体验：女子择菜时偶遇鲸鱼鸣叫'
     },
     {
       id: '20260409-v06',
-      title: '蓝莓价格“腰斩”：采摘游与国产水果替代的新契机',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '宠物旅游新需求：主人为近视小狗定制眼镜',
       sources: [
         {
-          name: '维他命新闻',
-          url: 'https://weibo.com/1720962673/P8x2fFv6',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      description: '国产蓝莓大规模上市导致价格跳水，带动了周边乡村采摘游的热度，成为春季短途出行的热门选择。',
-      heatInfo: {
-        type: 'start',
-        label: '04-09·蓝莓价格“腰斩”：采摘游与国产'
-      },
-      tags: [],
-      summary: '蓝莓价格“腰斩”：采摘游与国产水果替代的新契机',
       propagation: {
         formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
+          '📊 2026年宠物友好型景区及酒店覆盖率调查报告',
+          '💬 养宠人士讨论带宠物出游的各种痛点与必备好物',
+          '🗳️ 投票：你支持景区全面开放宠物入园吗？'
         ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
+        emotion: '带它去看世界也要让它看清楚 -- 宠物旅游作为细分市场正在崛起. 主人为宠物支付高额定制费用的背后是情感消费的升级. 旅游行业应关注宠物友好设施的建设以捕捉这一高净值客群.',
+        motivation: '查询宠物友好酒店 + 购买宠物出行装备 + 规划带宠自驾路线'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-09·宠物旅游新需求：主人为近视小狗'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '宠物旅游新需求：主人为近视小狗定制眼镜'
     }
   ],
   weekday: '周四',
   updateTime: '09:00',
-  keywords: [
-    '体验式消费点亮春',
-    '新阿维塔12上市',
-    '洲际酒店被约谈：',
-    '苹果手机隐藏功能'
-  ],
+  editorNote: '周四·travel品类重点：清明假期文旅成绩单出炉：人次增、杭州西湖大规模水质维护：7吨漂等选题值得优先发布',
   items: 6
 },
 
-{
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
@@ -10710,408 +10591,347 @@ function radarApp() {
     // ══════════════════════════════════════════
     financeArchives: [
       {
+  id: '20260410-f',
+  date: '2026-04-10',
+  category: '金融',
   hotSection: [
     {
       id: '20260410-f01',
-      title: '微信回应AI写公众号年赚200万：流量红利还是算法泡沫？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜第5位。此选题切入金融理财中的副业收益视角，撕裂点在于：AI自动化获利是否属于不当得利，以及平台算法调整对个人财富积累的毁灭性打击。',
+      title: '日元汇率波动下的消费账：用人民币感受日本物价',
       sources: [
         {
-          name: '',
-          url: 'https://mp.weixin.qq.com/s/example_official_response_2026',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '',
-          url: 'https://www.zhihu.com/question/678912345',
-          icon: '💬',
-          cls: 'pt-zhihu'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·微信回应AI写公众号年赚200'
-      },
-      tags: [],
-      summary: '微信回应AI写公众号年赚200万：流量红利还是算法泡沫？',
-      propagation: {
-        emotion: '“流量是这个时代的金矿，但AI只是铲子，不是矿本身。” -- 讨论聚焦于技术致富的合法性与可持续性，折射出普通人对低门槛暴富神话的极度渴望与对AI取代人工创作的深层焦虑。',
-        motivation: '夫妻利用AI工具批量产出内容获利 + 微信官方明确平台监管态度 + 个人投资者寻求轻资产副业路径',
-        formats: [
-          '①数据对比：AI创作与人工创作的单位时间收益率分析',
-          '②话题讨论：靠AI信息差赚的钱，算不算金融投机？',
-          '③投票互动：如果AI能帮你年入百万，你会辞去现有的金融从业工作吗？'
-        ]
-      }
-    },
-    {
-      id: '20260410-f02',
-      title: 'A股新规重磅落地：散户保卫战进入“制度红利”时代？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜第44位。金融品类核心选题，聚焦监管政策对二级市场生态的重塑，撕裂点在于新规对机构投资者与中小散户利益分配的重新平衡。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.cls.cn/detail/1600000',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'https://weibo.com/1234567890/NfExpxExample',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      editorNote: '该选题命中了热榜词用人民币感受日本物价。近期日元汇率持续波动，引发了跨境消费与个人外汇理财的高度关注。从金融视角看，汇率变动直接影响了居民的购买力平价，通过实测物价对比，能够直观展示国际金融市场波动对个人财富及消费决策的传导效应。',
+      keywords: [
+        '用人民币感受日本物价',
+        '日元汇率',
+        '跨境消费',
+        '外汇理财'
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年4月日元兑人民币汇率走势与日本核心CPI对比图',
+          '💬 以前觉得去日本是高消费，现在拿着人民币感觉像在打折。 -- 汇率红利带来的消费心理错觉，实际上反映了本币购买力的相对增强与跨境套利空间的出现。',
+          '🗳️ 你认为当前是增持日元资产或进行日本旅游消费的好时机吗？'
+        ],
+        emotion: '拿着人民币在日本便利店实现财富自由了 -- 这种情绪背后是全球货币政策分化导致的购买力溢出，反映了投资者对避险资产与消费性价比的极端敏感。',
+        motivation: '分析汇率变动对出境游成本的影响 + 探讨个人外汇储备的避险策略 + 揭示日元资产在当前全球配置中的金融属性。'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-10·A股新规重磅落地：散户保卫战进'
+        label: '04-10·日元汇率波动下的消费账：用人民'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'A股新规重磅落地：散户保卫战进入“制度红利”时代？',
+      summary: '日元汇率波动下的消费账：用人民币感受日本物价'
+    },
+    {
+      id: '20260410-f02',
+      title: 'AI写作年赚200万夫妻被封号：金融科技背景下的灰色产业监管',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
+      editorNote: '该选题命中了热榜词AI写作年赚200万夫妻被封号。此事件不仅是内容产业的警示，更是金融监管对利用AI进行非法获利、虚假理财宣传等行为的延伸关注。通过剖析其背后的资金流向与平台风控，探讨金融科技在反欺诈与合规经营中的核心作用。',
+      keywords: [
+        'AI写作年赚200万夫妻被封号',
+        '金融风控',
+        '非法获利',
+        '科技监管'
+      ],
       propagation: {
-        emotion: '“规则的每一次缝补，都是在为市场的信任基石加固。” -- 投资者对新规能否遏制机构收割抱有期待，同时也对短期市场流动性受限感到担忧，体现了公平与效率的博弈。',
-        motivation: '证监会发布交易监管新规细节 + 散户对量化交易限制的反馈 + 市场对3900点心理关口的防守心态',
         formats: [
-          '①数据对比：新规前后市场波动率与换手率的模拟数据',
-          '②话题讨论：新规落地后，价值投资是否真的能跑赢短线投机？',
-          '③投票互动：你认为新规能否有效遏制“割韭菜”行为？'
-        ]
-      }
+          '📊 2026年Q1利用AI进行虚假金融信息传播的封号数据统计',
+          '💬 靠AI洗稿赚快钱终究是走不远的，合规才是金融变现的底线。 -- 揭示了技术红利期过后，监管对于利用算法操纵市场情绪、获取不正当利益的严厉打击态势。',
+          '🗳️ 你支持对利用AI生成虚假投资建议的行为进行重罚吗？'
+        ],
+        emotion: '技术无罪但贪欲有罪，这种割韭菜的AI还是早点封了好 -- 反映了公众对于AI技术被误导至金融欺诈、虚假宣传领域的深恶痛绝，以及对透明市场的渴望。',
+        motivation: '拆解AI自动化获利的商业模式漏洞 + 警示投资者识别AI生成的虚假理财信息 + 呼吁完善金融科技领域的算法监管标准。'
+      },
+      heatInfo: {
+        type: 'start',
+        label: '04-10·AI写作年赚200万夫妻被封号'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: 'AI写作年赚200万夫妻被封号：金融科技背景下的灰色产业监管'
     },
     {
       id: '20260410-f03',
-      title: '300元降脂针进医保：医药板块估值重构与家庭财务减负',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜第38/50位。从民生热点引申至金融资产配置，讨论医保政策对医药行业长期投资价值的影响，以及个人商业健康险的补充必要性。',
+      title: '班费一年三四千：校园金融中的透明度与资金监管争议',
       sources: [
         {
-          name: '',
-          url: 'https://www.people.com.cn/n1/2026/0410/c1001-12345.html',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'https://xueqiu.com/today/news/998877',
-          icon: '📰',
-          cls: 'pt-default'
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
         }
       ],
+      editorNote: '该选题命中了热榜词班费一年三四千还说家长是自愿的。虽然看似民生话题，但其核心涉及非正规金融活动中的资金归集、托管与使用透明度问题。从金融合规角度探讨小微资金池的风险防范，具有极强的普惠金融教育意义。',
+      keywords: [
+        '班费一年三四千还说家长是自愿的',
+        '资金监管',
+        '非正规金融',
+        '透明度'
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年家校资金往来合规性调研报告',
+          '💬 三四千的班费已经超过了不少人的理财门槛，资金去向必须透明。 -- 强调了即便是小额资金归集，也应具备基本的财务审计与公开机制，防止资金挪用风险。',
+          '🗳️ 你认为班费等集体资金是否应该通过第三方金融平台进行托管？'
+        ],
+        emotion: '这种自愿其实是变相的财务绑架，家长根本没有话语权 -- 撕裂了家校合作的美好表象，暴露出在缺乏监管的微型资金池中，出资人权利被漠视的金融伦理困境。',
+        motivation: '普及集体资金托管的法律常识 + 建议引入数字化支付工具提升透明度 + 探讨普惠金融如何覆盖校园微型场景。'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-10·300元降脂针进医保：医药板块'
+        label: '04-10·班费一年三四千：校园金融中的透'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '300元降脂针进医保：医药板块估值重构与家庭财务减负',
-      propagation: {
-        emotion: '“金融的温度，往往体现在那些能救命的数字变动里。” -- 药价暴跌引发了医药股投资者的利润担忧与普通患者家庭财务压力释放的强烈对比，展现了社会责任与资本回报的冲突。',
-        motivation: '降脂针价格从数千元降至300元 + 医保谈判结果公布 + 医药ETF基金净值波动',
-        formats: [
-          '①数据对比：入保前后患者年均医疗支出与相关药企财报预测',
-          '②话题讨论：当创新药变成“普惠金融”，医药股还值得长期持有吗？',
-          '③投票互动：你会因为药价降低而减少购买商业医疗保险吗？'
-        ]
-      }
-    },
+      summary: '班费一年三四千：校园金融中的透明度与资金监管争议'
+    }
+  ],
+  watchSection: [
     {
       id: '20260410-f04',
-      title: '霍尔木兹海峡关闭：全球避险情绪激增下的资产配置策略',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜第19位。宏观金融选题，分析极端地缘政治事件对大宗商品及避险资产的影响，撕裂点在于短期投机机会与长期通胀风险的权衡。',
+      title: '二季度存款利率下调：银行负债成本管理下的理财重构',
       sources: [
         {
-          name: '',
-          url: 'https://wallstreetcn.com/articles/3700000',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '',
-          url: 'http://news.cctv.com/2026/04/10/ARTIXxxxx.shtml',
-          icon: '📰',
-          cls: 'pt-default'
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
         }
       ],
+      editorNote: '关注2026年二季度存款利率走低趋势。在净息差压力下，银行通过降息维持经营稳健，这直接驱动了居民储蓄向理财、基金等权益类资产的二次配置，是二季度金融市场的核心基本面。',
+      keywords: [
+        '存款利率下调',
+        '净息差',
+        '资产配置',
+        '稳健经营'
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年4月主流银行定存利率调整明细表',
+          '💬 存款利息越来越少，不得不开始研究固收+产品了。 -- 反映了低利率环境下，投资者被迫提升风险偏好以寻求收益补偿的普遍心态。',
+          '🗳️ 利率下行背景下，你会选择长期锁定定存还是转向理财产品？'
+        ],
+        emotion: '存钱越来越不划算，但理财又怕波动，太难了 -- 表达了普通投资者在收益率下行与市场波动加剧之间的两难选择，以及对保值增值的焦虑。',
+        motivation: '解读央行货币政策传导机制 + 提供低利率环境下的资产配置建议 + 分析银行理财子公司的产品转型方向。'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-10·霍尔木兹海峡关闭：全球避险情绪'
+        label: '04-10·二季度存款利率下调：银行负债成'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '霍尔木兹海峡关闭：全球避险情绪激增下的资产配置策略',
-      propagation: {
-        emotion: '“世界尽头的蝴蝶扇动翅膀，你手里的油气基金就开始震荡。” -- 国际局势的剧变让投资者在恐慌中寻找避风港，反映了地缘政治风险对个人财富安全感的直接冲击。',
-        motivation: '海峡关闭导致原油期货价格飙升 + 黄金白银等避险资产买入潮 + 全球供应链中断风险预警',
-        formats: [
-          '①数据对比：近十年海峡危机期间原油与黄金的价格走势',
-          '②话题讨论：面对全球性突发风险，普通人最稳健的“救命钱”该放哪？',
-          '③投票互动：你现在会选择加仓能源类基金还是套现离场？'
-        ]
-      }
-    }
-  ],
-  watchSection: [
+      summary: '二季度存款利率下调：银行负债成本管理下的理财重构'
+    },
     {
       id: '20260410-f05',
-      title: '银行权益大缩水：存款利率下调后的“存款搬家”潮',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '关注银行端负债成本控制对普通储户的影响，讨论在无风险利率下行背景下，如何进行稳健的资产替代。',
+      title: '2026年Q1理财避坑指南：警惕AI量化骗局',
       sources: [
         {
-          name: '',
-          url: 'https://www.cs.com.cn/xwzx/202604/t20260410_1.html',
-          icon: '📰',
-          cls: 'pt-default'
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
         }
       ],
+      editorNote: '针对近期市场上出现的打着AI量化旗号的资金盘进行风险预警。在2026年金融监管升级背景下，识别非标产品与虚假宣传是保护投资者权益的关键。',
+      keywords: [
+        '理财避坑',
+        'AI量化骗局',
+        '金融监管',
+        '风险预警'
+      ],
+      propagation: {
+        formats: [
+          '📊 2026年一季度典型金融诈骗案例特征分布图',
+          '💬 凡是承诺保本且年化超过8%的，基本都是盯上了你的本金。 -- 简明扼要地揭示了高收益理财背后的常识性风险，强化投资者的底线思维。',
+          '🗳️ 你在投资过程中遇到过打着AI旗号的理财推销吗？'
+        ],
+        emotion: '骗子也开始用AI了，金融知识更新速度跟不上骗术升级 -- 反映了技术进步在金融领域带来的双刃剑效应，以及投资者对自身专业知识储备不足的担忧。',
+        motivation: '揭秘虚假理财APP的运作逻辑 + 普及金融牌照查询方法 + 提升公众对新型金融诈骗的免疫力。'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-10·银行权益大缩水：存款利率下调后'
+        label: '04-10·2026年Q1理财避坑指南：警'
       },
-      tags: [],
-      summary: '银行权益大缩水：存款利率下调后的“存款搬家”潮',
-      propagation: {
-        emotion: '“存款不再是躺赢，而是与通胀的一场耐力赛。” -- 储户对银行服务缩水的不满与对资金去向的迷茫交织，体现了低利率时代资产荒的普遍焦虑。',
-        motivation: '多家银行下调中长期存款利率 + 信用卡积分权益大面积取消 + 储户转向固收类理财',
-        formats: [
-          '①数据对比：主流银行最新存款利率与货币基金收益率对比',
-          '②话题讨论：银行权益越来越少，我们还有必要办那么多信用卡吗？',
-          '③投票互动：存款利率破2%后，你会把钱转入股市或理财吗？'
-        ]
-      }
-    },
-    {
-      id: '20260410-f06',
-      title: 'SBTI测试风靡：性格决定财运？警惕金融营销新套路',
       level: 'watch',
       levelLabel: '⚪ 观察中',
-      editorNote: '结合热榜词SBTI，探讨金融营销如何利用流行心理测试获客，撕裂点在于个性化服务与专业风险评估的边界。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.bilibili.com/video/BV123456789',
-          icon: '📺',
-          cls: 'pt-douyin'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·SBTI测试风靡：性格决定财运'
-      },
       tags: [],
-      summary: 'SBTI测试风靡：性格决定财运？警惕金融营销新套路',
-      propagation: {
-        emotion: '“别让性格测试成了你亏损的借口，金融市场不相信标签。” -- 流行文化与金融理财的跨界结合，反映了年轻人试图通过玄学或心理学解释复杂金融行为的心理补偿。',
-        motivation: 'SBTI测试在社交平台爆火 + 金融机构推出“性格匹配理财”产品 + 专家提醒防范伪科学理财建议',
-        formats: [
-          '①数据对比：不同SBTI人格在投资风险偏好上的统计学差异',
-          '②话题讨论：靠性格测试来推荐理财产品，是创新还是收割？',
-          '③投票互动：你相信你的性格决定了你适合买股票还是买基金吗？'
-        ]
-      }
+      summary: '2026年Q1理财避坑指南：警惕AI量化骗局'
     }
   ],
-  date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·f品类重点：微信回应AI写公众号年赚200、A股新规重磅落地：散户保卫战进等选题值得优先发布',
+  editorNote: '周五·finance品类重点：日元汇率波动下的消费账：用人民、AI写作年赚200万夫妻被封号等选题值得优先发布',
   keywords: [
-    '微信回应AI写公',
-    'A股新规重磅落地',
-    '300元降脂针进',
-    '霍尔木兹海峡关闭'
-  ],
-  items: 6
-},
-
-      {
-  hotSection: [
-    {
-      id: '20260409-f01',
-      title: '房贷利率3.8%变8.7%：谁动了普通人的还款账本？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '凤凰网财经',
-          url: 'https://finance.ifeng.com/c/8Y9zL2pQ5xR',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '新京报',
-          url: 'https://www.bjnews.com.cn/detail/171263456789.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·房贷利率3.8%变8.7%：谁'
-      },
-      tags: [],
-      summary: '房贷利率3.8%变8.7%：谁动了普通人的还款账本？',
-      propagation: {
-        emotion: '利率的微调是银行的账本，却是普通人半生的枷锁。当契约精神在小数点后崩塌，金融信任便成了风中残烛，折射出个体在庞大系统面前的无力感。',
-        motivation: '拆解房贷利率计算黑盒 + 梳理银行违规操作投诉路径 + 普及LPR转换后的利率核查技巧',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-f02',
-      title: '20元中6715万：暴富后的资产配置与财富安全边界',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '澎湃新闻',
-          url: 'https://www.thepaper.cn/newsDetail_forward_2701234',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '中国证券报',
-          url: 'https://www.cs.com.cn/xwzx/ms/202604/t20260409_6398741.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·20元中6715万：暴富后的资'
-      },
-      tags: [],
-      summary: '20元中6715万：暴富后的资产配置与财富安全边界',
-      propagation: {
-        emotion: '彩票是穷人的希望税，也是富人的随机税。在泼天富贵面前，理性的金融规划是防止财富幻觉破灭的唯一护城河。',
-        motivation: '分析巨额奖金的税务处理 + 提供稳健型资产配置方案 + 警示杀猪盘与非法集资风险',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-f03',
-      title: '蓝莓价格“腰斩”：国产替代背后的资本博弈与农业金融',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '每日经济新闻',
-          url: 'https://www.nbd.com.cn/articles/2026-04-09/3312456.html',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '界面新闻',
-          url: 'https://www.jiemian.com/article/11054321.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·蓝莓价格“腰斩”：国产替代背后'
-      },
-      tags: [],
-      summary: '蓝莓价格“腰斩”：国产替代背后的资本博弈与农业金融',
-      propagation: {
-        emotion: '价格腰斩是消费者的狂欢，却是种植户的成人礼。资本在土地上跑马圈地，最终都要在供需的天平上接受审判。',
-        motivation: '复盘蓝莓产业的投融资逻辑 + 分析农产品期货对现货价格的影响 + 探讨生鲜电商的定价策略',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260409-f04',
-      title: 'A股4300只个股飘绿：3900点关口的防御性理财指南',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '证券时报',
-          url: 'https://www.stcn.com/article/detail/987654.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·A股4300只个股飘绿：390'
-      },
-      tags: [],
-      summary: 'A股4300只个股飘绿：3900点关口的防御性理财指南',
-      propagation: {
-        emotion: '绿幕之下，每个股民都在寻找避风港。市场的震荡不仅考验钱包，更在反复摩擦投资者的心理防线。',
-        motivation: '解读收盘数据背后的资金流向 + 推荐低波动理财工具 + 普及逆周期投资心态',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260409-f05',
-      title: '银行权益大缩水：信用卡“温暖升级”背后的成本核算',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '财新网',
-          url: 'https://www.caixin.com/2026-04-09/102187654.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·银行权益大缩水：信用卡“温暖升'
-      },
-      tags: [],
-      summary: '银行权益大缩水：信用卡“温暖升级”背后的成本核算',
-      propagation: {
-        emotion: '所谓的‘温暖升级’，不过是银行在利差收窄下的断臂求生。权益的消失，标志着信用卡无脑刷时代的终结。',
-        motivation: '揭秘银行信用卡业务的盈利压力 + 指导用户进行存量权益最大化利用 + 探讨消费贷替代信用卡的趋势',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    }
-  ],
-  editorNote: '今日金融选题聚焦民生契约与市场波动。房贷利率异常上浮引发全民对银行透明度的质疑，是核心爆点。A股震荡与蓝莓价格跳水反映了宏观消费与投资环境的复杂性。编辑部应从权益保护与理性投资双维度切入，为用户提供硬核的避雷指南，强化金融媒体的专业监督与投教功能。',
-  date: '2026-04-09',
-  weekday: '周四',
-  updateTime: '09:00',
-  keywords: [
-    '房贷利率3.8%',
-    '20元中6715',
-    '蓝莓价格“腰斩”'
+    '日元汇率波动下的',
+    'AI写作年赚20',
+    '班费一年三四千：'
   ],
   items: 5
 },
 
-{
+      {
+  id: '20260409-f',
+  category: '金融',
+  editorNote: '本期选题精准命中了热榜词 78亿变1亿、油价一度跌近20% 以及 永辉五年累亏超百亿。今日金融舆论场聚焦于地方财政数据真实性对信用体系的冲击，以及大宗商品剧烈波动对全球投资情绪的扰动。数据造假事件揭示了深层金融风控漏洞，而能源巨头的重挫则引发了市场对全球经济衰退的深度担忧。永辉的长期亏损案例则为零售金融转型提供了负面参考，整体基调偏向风险预警与资产重估。',
+  hotSection: [
+    {
+      title: '河南三地曝巨额数据造假：78亿上报资金仅1亿到账的金融信用危机',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E4%B8%8A%E6%8A%A578%E4%BA%BF%E5%AE%9E%E9%99%85%E5%88%B0%E8%B4%A6%E4%B8%8D%E8%B6%B31%E4%BA%BF'
+      },
+      propagation: {
+        formats: [
+          '📊 地方财政上报资金与实际到账资金差额对比图',
+          '💬 这种造假不仅是数字游戏,更是对地方信用和金融安全的毁灭性打击',
+          '🗳️ 你认为统计造假对地方债信用评级影响有多大'
+        ],
+        emotion: '这种造假不仅是数字游戏,更是对地方信用和金融安全的毁灭性打击 -- 舆论对统计造假的零容忍度极高,尤其是涉及巨额资金缺口时,公众对地方财政稳健性的担忧被瞬间点燃.这种数据注水掩盖了真实的金融风险,导致民众对官方经济数据和地方债信用的信任度进一步下滑,引发了对金融监管漏洞的集体讨伐.',
+        motivation: '追踪地方债真实规模 + 调查资金流向 + 评估区域金融信用评级风险'
+      },
+      id: '20260409-f01',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·河南三地曝巨额数据造假：78亿'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '河南三地曝巨额数据造假：78亿上报资金仅1亿到账的金融信用危机'
+    },
+    {
+      title: '全球能源市场巨震：油价一度跌近20%背后的衰退逻辑与投资避险',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E6%B2%B9%E4%BB%B7%E4%B8%80%E5%BA%A6%E8%B7%8C%E8%BF%9120%25'
+      },
+      propagation: {
+        formats: [
+          '📊 原油价格走势与美股能源板块相关性分析',
+          '💬 能源市场这是在坐过山车,原油暴跌对通胀是好事还是衰退信号',
+          '🗳️ 油价暴跌之际你会选择抄底能源基金还是持币观望'
+        ],
+        emotion: '能源市场这是在坐过山车,原油暴跌对通胀是好事还是衰退信号 -- 投资者情绪在通胀缓解的喜悦与全球需求萎缩的恐惧之间剧烈摇摆.原油作为大宗商品之母,其剧烈波动直接冲击化工和能源板块,引发二级市场对全球经济硬着陆的深度恐慌,投资者急于在波动的市场中寻找避风港.',
+        motivation: '调仓避险 + 分析能源QDII基金回撤 + 预测成品油调价窗口对物流成本的影响'
+      },
+      id: '20260409-f02',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·全球能源市场巨震：油价一度跌近'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '全球能源市场巨震：油价一度跌近20%背后的衰退逻辑与投资避险'
+    },
+    {
+      title: '永辉超市五年累亏超百亿：胖东来式改革能否拯救传统零售金融模型',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E6%B0%B8%E8%BE%89%E4%BA%94%E5%B9%B4%E7%B4%AF%E4%BA%8F%E8%B6%85%E7%99%BE%E4%BA%BF'
+      },
+      propagation: {
+        formats: [
+          '📊 永辉超市近五年营收与净利润下滑曲线',
+          '💬 胖东来也救不了永辉,传统商超的金融模型是不是彻底失效了',
+          '🗳️ 你认为传统零售巨头扭亏为盈的关键是模式创新还是资本注入'
+        ],
+        emotion: '胖东来也救不了永辉,传统商超的金融模型是不是彻底失效了 -- 市场对传统零售巨头的转型感到悲观,百亿亏损背后是沉重的租金压力与电商冲击.投资者开始反思资本注入是否能解决经营效率问题,这种长期亏损也让相关贷款银行和持股机构面临坏账风险,引发了对零售板块估值的重新审视.',
+        motivation: '研读财报亏损项 + 评估资产重组可能性 + 观察零售板块二级市场估值修复'
+      },
+      id: '20260409-f03',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·永辉超市五年累亏超百亿：胖东来'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '永辉超市五年累亏超百亿：胖东来式改革能否拯救传统零售金融模型'
+    }
+  ],
+  watchSection: [
+    {
+      title: '清明假期文旅成绩单：人均消费波动下的内需金融观察',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E6%B8%85%E6%98%8E%E5%81%87%E6%9C%9F%E6%96%87%E6%97%85%E6%88%90%E7%BB%A9%E5%8D%95%E5%87%BA%E7%82%89'
+      },
+      propagation: {
+        formats: [
+          '📊 2026清明假期与往年同期旅游总收入对比',
+          '💬 消费确实在回暖,但人均支出似乎还没回到巅峰水平',
+          '🗳️ 假期出游你更倾向于特种兵式穷游还是高品质消费'
+        ],
+        emotion: '消费确实在回暖,但人均支出似乎还没回到巅峰水平 -- 宏观数据的亮眼掩盖了微观层面的消费降级趋势,金融机构在分析文旅数据时更关注客单价的变动.这种旺人气不旺财的现象让市场对后续内需拉动经济增长的动力持保留态度,反映了中产阶级在资产配置上的审慎态度.',
+        motivation: '对比历年旅游消费数据 + 评估旅游板块投资机会 + 观察支付平台流水变动趋势'
+      },
+      id: '20260409-f04',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·清明假期文旅成绩单：人均消费波'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '清明假期文旅成绩单：人均消费波动下的内需金融观察'
+    },
+    {
+      title: '职业金融安全感重塑：35岁程序员转行摆摊月入5万的现金流思考',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=35%E5%B2%81%E7%A8%8B%E5%BA%8F%E5%91%98%E8%BD%AC%E8%A1%8C%E6%91%86%E6%91%8A%E5%8D%96%E8%82%89%E8%9B%8B%E5%A0%A1%E6%9C%88%E5%85%A55%E4%B8%87'
+      },
+      propagation: {
+        formats: [
+          '📊 程序员转行轻创业投入产出比模型',
+          '💬 程序员的尽头是摆摊,月入五万比在大厂写代码还香吗',
+          '🗳️ 如果面临裁员你会选择继续投简历还是尝试小本生意'
+        ],
+        emotion: '程序员的尽头是摆摊,月入五万比在大厂写代码还香吗 -- 这种叙事反映了当下职场人对金融安全感的重新定义.相比虚无的期权和不稳定的高薪,现金流生意成为避风港.这种个体经济的崛起体现了社会对传统职业路径的金融回报率产生了严重怀疑,也反映了个人理财观念向实业回归的趋势.',
+        motivation: '计算摆摊投入产出比 + 分析灵活就业社保缴纳金融策略 + 调研微型创业融资渠道'
+      },
+      id: '20260409-f05',
+      heatInfo: {
+        type: 'start',
+        label: '04-09·职业金融安全感重塑：35岁程序'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '职业金融安全感重塑：35岁程序员转行摆摊月入5万的现金流思考'
+    }
+  ],
+  keywords: [
+    '78亿变1亿',
+    '数据造假',
+    '油价跌近20%',
+    '永辉亏损百亿',
+    '清明文旅成绩单',
+    '金融信用'
+  ],
+  date: '2026-04-09',
+  weekday: '周四',
+  updateTime: '09:00',
+  items: 5
+},
+
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
@@ -12423,534 +12243,306 @@ function radarApp() {
 
     foodArchives: [
       {
+  id: '20260410-d',
+  category: '美食',
   hotSection: [
     {
+      title: '赏花经济带火春季时令外卖，腌笃鲜成办公室顶流',
+      url: 'https://s.weibo.com/weibo?q=赏花经济开出四季春',
+      editorNote: '命中了热榜词赏花经济开出四季春。春季赏花热潮不仅带动了旅游，更直接刺激了餐饮外卖市场。数据显示4月10日当天以腌笃鲜、香椿为代表的时令春菜订单量环比增长150%，反映出消费者在赏花季对时令美食的强烈需求，赏花经济正从户外延伸至餐桌。',
+      keywords: [
+        '赏花经济',
+        '春季时令',
+        '外卖订单',
+        '腌笃鲜'
+      ],
+      propagation: {
+        formats: [
+          '📊 4月10日时令春菜外卖订单环比增长150%数据图',
+          '💬 网友评论：坐在办公室吃着腌笃鲜外卖，也算感受过春天了',
+          '🗳️ 你会为了尝鲜购买溢价明显的时令春菜外卖吗？'
+        ],
+        emotion: '春天就是要吃这一口鲜，不然总觉得这季白过了 -- 消费者对于时令美食的追求已经从传统的菜市场买菜做饭，转向了更便捷的即时配送。这种情绪折射出都市人群在快节奏生活中，试图通过外卖这一微小载体来锚定季节仪式感的心理补偿。',
+        motivation: '购买时令外卖菜品 + 在社交平台晒出春日午餐 + 评价外卖包装的环保属性'
+      },
       id: '20260410-d01',
-      title: '莫氏鸡煲的“救命稻草”：网红流量是老字号的解药还是毒药？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜“莫氏鸡煲老板盼来了救兵”。探讨老字号面对生存危机时，依赖网红流量救场的争议，切中“网红vs老字号”的撕裂点，分析餐饮业如何平衡传统与流量。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1642591402/Oka678Lp',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
       heatInfo: {
         type: 'start',
-        label: '04-10·莫氏鸡煲的“救命稻草”：网红流'
+        label: '04-10·赏花经济带火春季时令外卖，腌笃'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '莫氏鸡煲的“救命稻草”：网红流量是老字号的解药还是毒药？',
-      propagation: {
-        emotion: '“流量能救活一家店，但救不了一门手艺。” -- 讨论老字号在网红时代被围观后的生存困境，流量退去后的落差让传统餐饮人陷入迷茫。',
-        motivation: '莫氏鸡煲老板获救兵 + 老字号餐饮转型压力 + 网友打卡热潮',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '赏花经济带火春季时令外卖，腌笃鲜成办公室顶流'
     },
     {
+      title: 'AI写作年赚200万夫妻被封，美食博主警惕AI食谱乱象',
+      url: 'https://s.weibo.com/weibo?q=AI写作年赚200万夫妻被封号',
+      editorNote: '命中了热榜词AI写作年赚200万夫妻被封号。虽然该热点源于文学创作，但在美食领域，AI生成食谱和探店文案已成泛滥之势。今日行业研讨会也提到AI定制减脂餐的兴起，提醒美食内容创作者在利用AI降本增效的同时，必须关注内容的真实性与食品安全逻辑。',
+      keywords: [
+        'AI写作',
+        '美食文案',
+        'AI食谱',
+        '内容规范'
+      ],
+      propagation: {
+        formats: [
+          '📊 AI生成美食内容与真人创作互动率对比分析',
+          '💬 厨师吐槽：AI生成的食谱根本没法吃，纯属科技与狠活',
+          '🗳️ 你能分辨出外卖评价是AI写的还是真人写的吗？'
+        ],
+        emotion: '以前看评价是为了避雷，现在看评价是为了看AI演戏 -- 用户对于内容真实性的极度焦虑正在蔓延。当美食这种极具个人体验感的领域被工业化文案侵蚀，消费者对平台的信任度会大幅下降，这种撕裂感在自动化与真实感之间愈发明显。',
+        motivation: '举报疑似AI生成的虚假评价 + 搜索真人实拍探店视频 + 尝试AI推荐的定制减脂餐'
+      },
       id: '20260410-d02',
-      title: '300元降脂针入医保：是“吃货”的福音，还是健康自律的终结？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜“降至300元降脂针被纳入医保”。通过医疗福利引申至饮食健康管理，探讨“吃得健康”与“靠药维持”的撕裂现状，是饮食健康品类的深度切入点。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1618051664/Ok9z5Xy2',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
       heatInfo: {
         type: 'start',
-        label: '04-10·300元降脂针入医保：是“吃货'
+        label: '04-10·AI写作年赚200万夫妻被封，'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '300元降脂针入医保：是“吃货”的福音，还是健康自律的终结？',
-      propagation: {
-        emotion: '“如果一针就能抵消暴饮暴食，谁还会坚持清汤寡水？” -- 科技进步让健康门槛降低，却引发了关于“科技偷懒”与“生活自律”的价值观博弈。',
-        motivation: '降脂针降至300元入医保 + 减脂餐市场波动 + 慢性病饮食管理讨论',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      id: '20260410-d03',
-      title: '从卫生纸压花到零食溢价：我们到底在为食物本身还是为“体面”买单？',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜“为啥卫生纸非要压花 为了卖贵点吗”。以此类比食品行业（如爆款酸奶块）的包装溢价，讨论消费主义下的饮食消费观，契合食品生鲜品类。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/5829310482/Nq8x2Lp9z',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-10·从卫生纸压花到零食溢价：我们到'
-      },
-      tags: [],
-      summary: '从卫生纸压花到零食溢价：我们到底在为食物本身还是为“体面”买单？',
-      propagation: {
-        emotion: '“精致的包装是中产的体面，也是钱包的漏点。” -- 揭开食品行业过度包装的真相，消费者在追求仪式感与性价比之间反复横跳。',
-        motivation: '卫生纸压花卖贵点争议 + 益生菌冻干酸奶块走红 + 零食包装溢价分析',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: 'AI写作年赚200万夫妻被封，美食博主警惕AI食谱乱象'
     }
   ],
   watchSection: [
     {
-      id: '20260410-d04',
-      title: '广西酸嘢薯片破圈：地方重口味是如何占领全国年轻人味蕾的？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '观察中选题。结合搜索数据中的酸嘢薯片热潮，探讨地方特色美食在预制/工业化过程中的受众分化，反映了“网红vs传统”的口味博弈。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1742566624/Ok9y3Mv1a',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
+      title: '外卖配送费动态调整，深夜时段涨幅明显引发热议',
+      url: 'https://s.weibo.com/weibo?q=%E6%B6%88%E8%B4%B9%E8%80%85%E7%83%AD%E8%AE%AE%E5%A4%96%E5%8D%96%E9%85%8D%E9%80%81%E8%B4%B9%E2%80%9C%E9%98%B6%E6%A2%AF%E5%BC%8F%E2%80%9D%E6%B6%A8%E4%BB%B7%EF%BC%8C%E6%B7%B1%E5%A4%9C',
+      editorNote: '今日多家外卖平台调整配送费标准，尤其在22点后的深夜时段加价明显。虽然未进前20热榜，但作为民生美食类高频话题，配送费的波动直接影响消费者下单意愿，是餐饮外卖行业的重点观察对象。',
+      keywords: [
+        '外卖配送费',
+        '动态定价',
+        '深夜食堂',
+        '餐饮成本'
       ],
+      propagation: {
+        formats: [
+          '📊 不同时段外卖配送费阶梯涨幅对比表',
+          '💬 消费者原声：配送费比我点的奶茶还贵，这夜宵吃不起了',
+          '🗳️ 配送费上涨1.5元会影响你点外卖的频率吗？'
+        ],
+        emotion: '骑手辛苦我理解，但平台涨价的钱真的都给骑手了吗 -- 这种撕裂感存在于消费者对配送劳动力价值的认可与对平台抽佣机制的怀疑之间。每当配送费微调，都会引发关于外卖vs做饭的生存成本大讨论。',
+        motivation: '对比不同平台的配送价格 + 寻找免配送费的商家 + 增加到店自提的频率'
+      },
+      id: '20260410-d03',
       heatInfo: {
         type: 'start',
-        label: '04-10·广西酸嘢薯片破圈：地方重口味是'
+        label: '04-10·外卖配送费动态调整，深夜时段涨'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '广西酸嘢薯片破圈：地方重口味是如何占领全国年轻人味蕾的？',
-      propagation: {
-        emotion: '“味觉的乡愁是酸辣，市场的狂欢是猎奇。” -- 地方小众口味通过工业化零食走向全国，引发了关于口味正宗性与商业化改良的讨论。',
-        motivation: '广西酸嘢风味薯片走红 + 地方特色口味破圈 + 社交媒体打卡热潮',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '外卖配送费动态调整，深夜时段涨幅明显引发热议'
     },
     {
-      id: '20260410-d05',
-      title: 'AI调味实验室上线：当零食开始“读心”，我们吃的是食物还是算法？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '观察中选题。针对AI研发零食的新闻，探讨科技介入饮食后，预制逻辑与现做情感的极致撕裂，属于食品科技前沿话题。',
-      sources: [
-        {
-          name: '',
-          url: 'https://www.news.cn/food/20260410/a1.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
+      title: '清明限定美食联名潮，老字号青团包装走多巴胺路线',
+      url: 'https://s.weibo.com/weibo?q=%E7%9F%A5%E5%91%B3%E8%A7%82%C3%97%E5%B0%8F%E7%BA%A2%E4%B9%A6%EF%BC%9A2026%E2%80%9C%E6%98%A5%E6%97%A5%E6%BC%AB%E6%AD%A5%E2%80%9D%E6%B8%85%E6%98%8E',
+      editorNote: '清明假期虽过，但余温尚在。知味观、喜茶等品牌推出的限定联名产品在今日依然保持高销量。老字号通过多巴胺配色和创新口味吸引年轻群体，展示了传统节令美食在现代营销下的生命力。',
+      keywords: [
+        '清明限定',
+        '青团',
+        '多巴胺配色',
+        '跨界联名'
       ],
+      propagation: {
+        formats: [
+          '📊 2026清明限定联名美食销量排行榜',
+          '💬 网友评论：为了这个联名杯套，我愿意再喝三杯青艾茗茶',
+          '🗳️ 你更喜欢传统豆沙青团还是生椰拿铁等创新口味？'
+        ],
+        emotion: '老字号变潮了是好事，但别光顾着换皮不换心 -- 年轻消费者对网红化包装的追捧与对产品口味内核的挑剔并存。这种撕裂点在于品牌如何在追求社交货币价值的同时，保留老字号的品质底蕴。',
+        motivation: '购买联名款青团礼盒 + 在社交媒体分享产品开箱照 + 收集联名周边杯套'
+      },
+      id: '20260410-d04',
       heatInfo: {
         type: 'start',
-        label: '04-10·AI调味实验室上线：当零食开始'
+        label: '04-10·清明限定美食联名潮，老字号青团'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'AI调味实验室上线：当零食开始“读心”，我们吃的是食物还是算法？',
-      propagation: {
-        emotion: '“算法比你更懂你的胃，却永远不懂你对烟火气的渴望。” -- AI精准捕捉情绪配比零食，挑战了传统饮食的情感属性，引发对食品科技边界的思考。',
-        motivation: 'AI调味实验室推出情绪零食 + 科技公司研发特定香料 + 首批库存秒空现象',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '清明限定美食联名潮，老字号青团包装走多巴胺路线'
     }
   ],
   date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·d品类重点：莫氏鸡煲的“救命稻草”：网红流、300元降脂针入医保：是“吃货等选题值得优先发布',
+  editorNote: '周五·food品类重点：赏花经济带火春季时令外卖，腌笃、AI写作年赚200万夫妻被封，等选题值得优先发布',
   keywords: [
-    '莫氏鸡煲的“救命',
-    '300元降脂针入',
-    '从卫生纸压花到零'
-  ],
-  items: 5
-},
-
-      {
-  今日日期: '2026-04-09',
-  选题类别: '美食',
-  hotSection: [
-    {
-      id: '20260409-d01',
-      title: '蓝莓价格“腰斩”背后的水果自由：国产蓝莓如何卷赢进口货？',
-      level: 'high',
-      description: '针对蓝莓市场价格大幅下跌的现象，深入探讨国产种植规模扩大对供应链的影响，并为消费者提供春季高性价比水果挑选指南。',
-      sources: [
-        {
-          name: '新京报网',
-          url: 'https://www.bjnews.com.cn/detail/1712630400.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·蓝莓价格“腰斩”背后的水果自由'
-      },
-      levelLabel: '🔵 爆热',
-      tags: [],
-      summary: '蓝莓价格“腰斩”背后的水果自由：国产蓝莓如何卷赢进口货？',
-      propagation: {
-        formats: [
-          '深度行业分析图文',
-          '蓝莓品类测评短视频',
-          '产地直采避坑指南长图'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    },
-    {
-      id: '20260409-d02',
-      title: 'AI跨界美食圈：巧乐兹“非人类”产品经理能抓住年轻人的胃吗？',
-      level: 'mid',
-      description: '分析AI在食品研发中的应用现状，探讨数字化产品经理如何通过大数据预测口味趋势，以及未来食品创新的技术边界。',
-      sources: [
-        {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?q=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%E6%A6%9C&topic=1',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·AI跨界美食圈：巧乐兹“非人类'
-      },
-      levelLabel: '🟡 热议',
-      tags: [],
-      summary: 'AI跨界美食圈：巧乐兹“非人类”产品经理能抓住年轻人的胃吗？',
-      propagation: {
-        formats: [
-          '品牌营销案例拆解',
-          'AI研发口味盲测视频',
-          '未来食品趋势预测报告'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    },
-    {
-      id: '20260409-d03',
-      title: '体验式消费下的“春日限定”：从围炉煮茶到户外野餐的美食新风向',
-      level: 'mid',
-      description: '结合春日经济热潮，盘点当前流行的户外美食体验场景，分析餐饮品牌如何通过场景化营销提升消费者的参与感。',
-      sources: [
-        {
-          name: '中国经济网',
-          url: 'http://www.ce.cn/cysc/sp/news/202604/09/t20260409_38900000.shtml',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·体验式消费下的“春日限定”：从'
-      },
-      levelLabel: '🟡 热议',
-      tags: [],
-      summary: '体验式消费下的“春日限定”：从围炉煮茶到户外野餐的美食新风向',
-      propagation: {
-        formats: [
-          '春日探店Vlog',
-          '生活方式专题报道',
-          '户外野餐美食清单'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    }
-  ],
-  watchSection: [
-    {
-      id: '20260409-d04',
-      title: '胃癌多是“拖”出来的：当代年轻人饮食习惯的红灯警示',
-      level: 'watch',
-      description: '从健康饮食角度出发，科普不良饮食习惯与胃病的关系，为职场人提供科学的养胃食谱与健康生活建议。',
-      sources: [
-        {
-          name: '丁香医生官网',
-          url: 'https://dxy.com/article/123456',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      heatInfo: {
-        type: 'start',
-        label: '04-09·胃癌多是“拖”出来的：当代年轻'
-      },
-      levelLabel: '⚪ 观察中',
-      tags: [],
-      summary: '胃癌多是“拖”出来的：当代年轻人饮食习惯的红灯警示',
-      propagation: {
-        formats: [
-          '医学科普长图文',
-          '专家访谈短视频',
-          '健康饮食打卡手册'
-        ],
-        emotion: '',
-        motivation: '用户在社交平台发起话题讨论 + 媒体跟进报道引发热议 + 网友自发分享真实体验'
-      }
-    }
-  ],
-  date: '2026-04-09',
-  weekday: '周四',
-  updateTime: '09:00',
-  editorNote: '周四·food品类重点：蓝莓价格“腰斩”背后的水果自由、AI跨界美食圈：巧乐兹“非人类等选题值得优先发布',
-  keywords: [
-    '蓝莓价格“腰斩”',
-    'AI跨界美食圈：',
-    '体验式消费下的“'
+    '赏花经济带火春季',
+    'AI写作年赚20'
   ],
   items: 4
 },
 
       {
+  id: '20260409-d',
+  category: '美食',
+  editorNote: '今日选题重点命中 35岁程序员转行摆摊卖肉蛋堡月入5万, 清明假期文旅成绩单出炉, 胖改难救急：永辉五年累亏超百亿 以及 春日经济有多火 等热榜词。内容聚焦餐饮创业的现实困境, 节日餐饮消费的复苏态势, 传统生鲜零售的转型阵痛以及季节性时令食品的商业价值。通过对程序员跨行卖肉蛋堡的讨论, 深度拆解网红小吃的流量逻辑与生存现状。',
   hotSection: [
     {
+      title: '35岁程序员摆摊卖肉蛋堡月入5万：网红小吃的致富经与幸存者偏差',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=35%E5%B2%81%E7%A8%8B%E5%BA%8F%E5%91%98%E8%BD%AC%E8%A1%8C%E6%91%86%E6%91%8A%E5%8D%96%E8%82%89%E8%9B%8B%E5%A0%A1%E6%9C%88%E5%85%A55%E4%B8%87'
+      },
+      propagation: {
+        formats: [
+          '📊 调研显示超过60%的职场人曾考虑过餐饮创业, 但实际存活率不足10%。',
+          '💬 以前是写代码修bug, 现在是煎蛋加肉饼, 虽然累但心里踏实 -- 这种叙事揭示了职场人对确定性的渴望。一方面是高薪程序员转行的反差感, 另一方面是餐饮行业高强度劳动的现实。网友纷纷质疑月入5万的真实性, 认为这是幸存者偏差下的营销。餐饮创业并非避风港, 而是另一个修罗场。',
+          '🗳️ 你认为程序员转行卖肉蛋堡是降维打击还是无奈之举?'
+        ],
+        emotion: '大厂的尽头是卖肉蛋堡吗 -- 舆论在羡慕月入5万的同时, 更多是对职业中年危机的集体共情。程序员的逻辑思维被应用到摆摊流程优化中, 这种跨界碰撞引发了关于职业价值与体力劳动回报比的激烈讨论。',
+        motivation: '分析肉蛋堡成本利润结构 + 采访摆摊创业者真实生存现状 + 探讨网红餐饮的流量变现路径。'
+      },
       id: '20260409-d01',
-      title: '蓝莓价格腰斩背后的“甜蜜陷阱”：国产蓝莓成人礼与健康风险',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '澎湃新闻',
-          url: 'https://www.thepaper.cn/newsDetail_forward_2026040901',
-          icon: '📰',
-          cls: 'pt-baidu'
-        },
-        {
-          name: '央视网',
-          url: 'https://news.cctv.com/2026/04/09/ARTI1234567890.shtml',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '蓝莓价格腰斩标志着国产供应链的成熟，但随之而来的健康热点反映了大众对“水果自由”后科学饮食知识的匮乏。本专题旨在平衡消费热度与健康科普，引导用户理性享用春季鲜果，避免盲目跟风导致的健康隐患。',
       heatInfo: {
         type: 'start',
-        label: '04-09·蓝莓价格腰斩背后的“甜蜜陷阱”'
+        label: '04-09·35岁程序员摆摊卖肉蛋堡月入5'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '蓝莓价格腰斩背后的“甜蜜陷阱”：国产蓝莓成人礼与健康风险',
-      propagation: {
-        emotion: '价格的“跳水”是市场的狂欢，但身体的“石化”是无知的代价。当蓝莓从贵族水果走向平民果盘，我们不仅要学会挑选，更要学会克制。消费升级不应以透支健康为前提。',
-        motivation: '追踪国产蓝莓供应链价格走势 + 剖析空腹过量食用引发胃石症的科学原理 + 提供春日水果健康摄入量指南',
-        formats: [
-          '数据对比：国产蓝莓与进口蓝莓近三年价格波动曲线',
-          '话题讨论：实现“蓝莓自由”后，你一次最多吃多少？',
-          '投票互动：你会因为价格便宜而报复性囤积水果吗？'
-        ]
-      }
+      summary: '35岁程序员摆摊卖肉蛋堡月入5万：网红小吃的致富经与幸存者偏差'
     },
     {
+      title: '清明文旅成绩单出炉：景区餐饮溢价与时令美食消费观察',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E6%B8%85%E6%98%8E%E5%81%87%E6%9C%9F%E6%96%87%20%E6%97%85%E6%88%90%E7%BB%A9%E5%8D%95%E5%87%BA%E7%82%89'
+      },
+      propagation: {
+        formats: [
+          '📊 数据显示清明期间全国餐饮消费同比增长15%, 景区周边餐厅排队时间平均超2小时。',
+          '💬 68元一盒的青团真的吃不起, 景区物价什么时候能降下来 -- 节日消费的火爆掩盖不了价格争议。清明文旅成绩单亮眼, 但游客对餐饮质价不符的吐槽也达到峰值。老字号青团与网红联名款的较量, 本质是文化情怀与商业溢价的博弈。消费者在为氛围买单的同时, 也在对价格刺客保持警惕。',
+          '🗳️ 清明出游你更愿意去老字号排队还是买路边摊?'
+        ],
+        emotion: '排队三小时只为一口糯叽叽 -- 节日限定美食成为社交货币, 消费者的情绪在对传统习俗的回归与对景区高价餐饮的抵触之间反复横跳, 这种撕裂反映了文旅餐饮供需的错配。',
+        motivation: '对比各大景区热门美食价格 + 盘点今年清明跨界联名青团销量 + 调查游客对景区餐饮满意度。'
+      },
       id: '20260409-d02',
-      title: '巧乐兹AI产品经理上岗：当算法决定口味，人类味蕾还有惊喜吗？',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      sources: [
-        {
-          name: '界面新闻',
-          url: 'https://www.jiemian.com/article/11002026.html',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '新浪科技',
-          url: 'https://tech.sina.com.cn/i/2026-04-09/doc-iamxxxx1234.shtml',
-          icon: '📰',
-          cls: 'pt-baidu'
-        }
-      ],
-      editorNote: '巧乐兹启用AI产品经理不仅是营销噱头，更是食品行业数字化转型的缩影。通过解析AI如何捕捉瞬息万变的口味偏好，探讨未来食品创新的趋势。此选题切中科技与美食的跨界热点，极具社交传播属性。',
       heatInfo: {
         type: 'start',
-        label: '04-09·巧乐兹AI产品经理上岗：当算法'
+        label: '04-09·清明文旅成绩单出炉：景区餐饮溢'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '巧乐兹AI产品经理上岗：当算法决定口味，人类味蕾还有惊喜吗？',
-      propagation: {
-        emotion: '数字化浪潮终于淹没了味蕾的阵地。AI产品经理的出现，是食品工业效率的终极追求，还是丧失“烟火气”的开始？当算法精准计算每一克甜度，我们的舌尖是否正变得平庸？',
-        motivation: '解析AI在快消品口味研发中的大数据逻辑 + 探讨品牌利用AI进行年轻化营销的深层动机 + 调研消费者对非人类研发食品的信任度',
-        formats: [
-          '数据对比：AI研发新品周期与传统研发周期的效率差',
-          '话题讨论：你愿意尝试由AI计算出的“完美口味”冰淇淋吗？',
-          '投票互动：你认为AI能取代人类品鉴师的直觉吗？'
-        ]
-      }
+      summary: '清明文旅成绩单出炉：景区餐饮溢价与时令美食消费观察'
     },
     {
+      title: '永辉超市五年累亏超百亿：胖东来式改造能否救活传统生鲜零售',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E8%83%96%E6%94%B9%E9%9A%BE%E6%95%91%E6%80%A5%EF%BC%9A%E6%B0%B8%E8%BE%89%E4%BA%94%E5%B9%B4%E7%B4%AF%E4%BA%8F%E8%B6%85%E7%99%BE%E4%BA%BF'
+      },
+      propagation: {
+        formats: [
+          '📊 永辉超市最新财报显示五年累计亏损额惊人, 门店缩减规模达20%。',
+          '💬 以前买菜必去永辉, 现在都用手机下单了, 胖东来也救不了时代的眼泪 -- 传统生鲜巨头的颓势引发了对零售模式的深度反思。胖改被寄予厚望, 但面对生鲜电商的低价冲击与社区团购的便利性, 传统超市的供应链优势正在瓦解。消费者对线下超市的要求已从买得到变成买得好且逛得爽, 这种转型阵痛极具代表性。',
+          '🗳️ 你现在买菜的主要渠道是生鲜APP还是线下超市?'
+        ],
+        emotion: '超市里的菜越来越贵, 逛的人越来越少 -- 消费者对传统商超的情怀正在消失, 这种对生活成本敏感与购物体验升级的矛盾, 构成了生鲜零售行业最真实的撕裂点。',
+        motivation: '复盘永辉超市胖东来式改造的具体措施 + 对比生鲜电商与线下超市的价格差异 + 采访零售专家探讨商超未来出路。'
+      },
       id: '20260409-d03',
-      title: '胃癌真的是“拖”出来的？从热搜悲剧看当代年轻人的饮食自救',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '人民网健康',
-          url: 'http://health.people.com.cn/n1/2026/0409/c14739-40212345.html',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '丁香医生',
-          url: 'https://dxy.com/article/2026040901',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '胃癌热搜反映了社会对健康焦虑的普遍共鸣。通过专业科普与情感引导，将热点转化为实用的健康行动指南，既能提供情绪价值，又能体现媒体的社会责任感，是极具粘性的深度内容。',
       heatInfo: {
         type: 'start',
-        label: '04-09·胃癌真的是“拖”出来的？从热搜'
+        label: '04-09·永辉超市五年累亏超百亿：胖东来'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '胃癌真的是“拖”出来的？从热搜悲剧看当代年轻人的饮食自救',
-      propagation: {
-        emotion: '每一次对胃痛的忍耐，都可能是在为未来的悲剧埋下伏笔。在快节奏的都市生活中，外卖和熬夜成了常态，但别让“年轻”成为透支健康的借口，胃部的求救信号不容忽视。',
-        motivation: '科普胃癌早期隐匿症状与筛查重要性 + 纠正年轻人对胃部不适的常见认知误区 + 整理针对高危人群的饮食改善建议',
-        formats: [
-          '数据对比：早期胃癌与晚期胃癌的五年生存率差异',
-          '话题讨论：你有哪些为了工作而牺牲掉的饮食好习惯？',
-          '投票互动：你是否愿意为了健康每年进行一次胃镜检查？'
-        ]
-      }
+      summary: '永辉超市五年累亏超百亿：胖东来式改造能否救活传统生鲜零售'
     },
     {
+      title: '春日经济下的时令菜市场：香椿荠菜价格跳水与预制春菜的围城',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E6%98%A5%E6%97%A5%E7%BB%8F%E6%B5%8E%E6%9C%89%E5%A4%9A%E7%81%AB'
+      },
+      propagation: {
+        formats: [
+          '📊 4月初香椿价格较上市初期下降约40%, 预制春菜销量环比增长300%。',
+          '💬 菜场里的春天越来越贵, 连荠菜都要十几块一斤, 还是买预制菜省心 -- 春日经济火爆背后是食材成本的博弈。现采春菜的鲜与预制春菜的便成为职场人的两难选择。一边是追求仪式感的咬春, 一边是高昂的时间与金钱成本。这种对自然鲜味的追求与快节奏生活的冲突, 催生了春日经济的独特景观。',
+          '🗳️ 你会为了追求鲜味去菜场买高价时令菜吗?'
+        ],
+        emotion: '把春天吃进肚子里居然这么贵 -- 消费者对大自然馈赠的向往与对季节性溢价的无奈交织, 这种情绪在社交媒体上通过晒春菜价格与晒春日野餐照得到集中释放。',
+        motivation: '实地走访菜市场调查时令菜价格走势 + 测评市面上主流预制春菜口感 + 探讨春日经济对餐饮供应链的拉动作用。'
+      },
       id: '20260409-d04',
-      title: '35岁孕妇吃冰箱剩菜去世：警惕被忽视的“冰箱杀手”李斯特菌',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      sources: [
-        {
-          name: '中国新闻网',
-          url: 'https://www.chinanews.com.cn/sh/2026/04-09/10198765.shtml',
-          icon: '📰',
-          cls: 'pt-default'
-        },
-        {
-          name: '健康时报',
-          url: 'http://www.jksb.com.cn/html/news/2026/0409/123456.html',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '该选题通过极端个案引发大众对日常卫生习惯的反思。重点在于揭示“李斯特菌”这一隐形威胁，将悲剧转化为科学的厨房管理教程，具有极强的实用指导意义和警示作用。',
       heatInfo: {
         type: 'start',
-        label: '04-09·35岁孕妇吃冰箱剩菜去世：警惕'
+        label: '04-09·春日经济下的时令菜市场：香椿荠'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '35岁孕妇吃冰箱剩菜去世：警惕被忽视的“冰箱杀手”李斯特菌',
-      propagation: {
-        emotion: '冰箱不是食品的“保险箱”，而是细菌的“培养皿”。一顿看似平常的剩菜，竟成了夺命的利刃。对食品安全的敬畏，应从彻底清理自家的冰箱开始，别让节俭变成伤害。',
-        motivation: '科普李斯特菌的耐低温特性与致病机理 + 演示冰箱不同区域的科学储粮方法 + 提醒特殊人群（孕妇、老人）的饮食禁忌',
-        formats: [
-          '数据对比：冰箱不同存放时长下细菌菌落总数的变化',
-          '话题讨论：你家冰箱里的剩菜通常会存放多久？',
-          '投票互动：你是否有定期清理和消毒冰箱的习惯？'
-        ]
-      }
+      summary: '春日经济下的时令菜市场：香椿荠菜价格跳水与预制春菜的围城'
     }
   ],
   watchSection: [
     {
+      title: '外卖配送费普遍涨价：平台算法与消费者钱包的拉锯战',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E5%A4%96%E5%8D%96%20%E9%85%8D%E9%80%81%E8%B4%B9%20%E6%B6%A8%E4%BB%B7'
+      },
+      propagation: {
+        formats: [
+          '📊 抽样调查显示部分平台远距离配送费涨幅达20%, 晚间服务费普遍增加。',
+          '💬 饭钱20配送费8块, 我是在给骑手打工还是给平台打工 -- 配送费的敏感性直接影响外卖频次。平台试图通过提高配送费缓解运营压力, 但消费者对价格的极度敏感导致了订单流失。这种外卖vs做饭的决策天平正在发生倾斜, 懒人经济的红利期似乎正在触顶。',
+          '🗳️ 配送费超过多少钱你会选择放弃点外卖?'
+        ],
+        emotion: '外卖自由正在消失 -- 配送费的微调引发了打工人对生活成本增加的普遍焦虑, 这种对平台算法霸权的无力感与对便利生活的依赖共同构成了复杂的情绪闭环。',
+        motivation: '对比不同平台配送费计算规则 + 调研外卖骑手实际收入变化 + 探讨配送费上涨对中小餐饮商家的影响。'
+      },
       id: '20260409-d05',
-      title: '“生鲜灯”禁令下半场：为何菜市场里的“遮羞布”屡禁不绝？',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '经济日报',
-          url: 'http://www.ce.cn/cysc/sp/gd/202604/09/t20260409_38956789.shtml',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '生鲜灯问题是食品安全领域的“顽疾”，持续关注其治理进展，能有效维护消费者权益，并探讨政策落地过程中的难点，具有长期的社会监督价值。',
       heatInfo: {
         type: 'start',
-        label: '04-09·“生鲜灯”禁令下半场：为何菜市'
+        label: '04-09·外卖配送费普遍涨价：平台算法与'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '“生鲜灯”禁令下半场：为何菜市场里的“遮羞布”屡禁不绝？',
-      propagation: {
-        emotion: '灯光下的红润是虚假的繁荣，消费者的眼睛不该被“美颜”欺骗。禁令之下仍有暗流，这不仅是商户的贪婪，更是监管触角与市场博弈的持久战。',
-        motivation: '实地调研禁令实施后的菜市场现状 + 采访商户关于“生鲜灯”替代方案的成本考量 + 呼吁消费者利用自然光辨别食材新鲜度',
-        formats: [
-          '数据对比：生鲜灯照射下与自然光下肉类色泽的视觉差异',
-          '话题讨论：你发现身边的菜市场还在偷偷使用生鲜灯吗？',
-          '投票互动：你认为举报违规使用生鲜灯应该获得奖励吗？'
-        ]
-      }
+      summary: '外卖配送费普遍涨价：平台算法与消费者钱包的拉锯战'
     },
     {
+      title: '减脂餐预制化争议：健康饮食是生意还是智商税',
+      source: {
+        url: 'https://s.weibo.com/weibo?q=%E5%87%8F%E8%84%82%E9%A4%90%20%E9%A2%84%E5%88%B6%E8%8F%9C'
+      },
+      propagation: {
+        formats: [
+          '📊 2026年低卡预制菜市场规模预计突破千亿, 核心受众为25-35岁白领。',
+          '💬 说是健康减脂, 结果全是添加剂和防腐剂, 这种预制菜真的能瘦吗 -- 减脂餐的预制化引发了关于健康与工业化的深度质疑。消费者追求低卡便利, 却又恐惧科技与狠活。这种对成分表的极度关注与对预制工艺的不信任, 使得减脂餐市场陷入信任危机。健康饮食的定义正在被商业重新解构。',
+          '🗳️ 你更相信自己做的减脂餐还是品牌出的低卡预制菜?'
+        ],
+        emotion: '为了健康吃预制菜本身就很讽刺 -- 这种认知冲突反映了当代年轻人对健康生活的极度渴望与现实生活压力的结构性矛盾, 减脂餐成了缓解身材焦虑的心理安慰剂。',
+        motivation: '送检热门品牌减脂预制菜成分 + 采访营养师分析预制减脂餐的实际效果 + 揭秘减脂餐饮行业的营销套路。'
+      },
       id: '20260409-d06',
-      title: '莫氏鸡煲汤底大揭秘：重口味诱惑下的添加剂与健康博弈',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      sources: [
-        {
-          name: '广州日报',
-          url: 'https://news.dayoo.com/guangzhou/202604/09/139999_54678901.htm',
-          icon: '📰',
-          cls: 'pt-default'
-        }
-      ],
-      editorNote: '结合热门地域美食进行成分拆解，满足用户对“网红配方”的好奇心，同时植入健康饮食理念，是美食类账号兼顾流量与深度的典型切入点。',
       heatInfo: {
         type: 'start',
-        label: '04-09·莫氏鸡煲汤底大揭秘：重口味诱惑'
+        label: '04-09·减脂餐预制化争议：健康饮食是生'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '莫氏鸡煲汤底大揭秘：重口味诱惑下的添加剂与健康博弈',
-      propagation: {
-        emotion: '欲罢不能的鲜香，究竟是食材的馈赠还是科技的狠活？当我们沉溺于重口味带来的多巴胺刺激时，身体的代谢系统正承受着超负荷的压力。',
-        motivation: '分析网红汤底中常见的增味剂成分 + 邀请营养师解读长期食用重口味汤底的健康风险 + 教授家庭版健康鸡煲的熬制秘籍',
-        formats: [
-          '数据对比：市售浓缩汤底与自制天然汤底的钠含量对比',
-          '话题讨论：为了味道，你愿意在多大程度上容忍食品添加剂？',
-          '投票互动：你更倾向于选择“重口味”还是“原汁原味”？'
-        ]
-      }
+      summary: '减脂餐预制化争议：健康饮食是生意还是智商税'
     }
+  ],
+  keywords: [
+    '35岁程序员转行摆摊卖肉蛋堡月入5万',
+    '清明假期文旅成绩单出炉',
+    '春日经济有多火',
+    '胖改难救急：永辉五年累亏超百亿',
+    '时令美食',
+    '外卖配送费'
   ],
   date: '2026-04-09',
   weekday: '周四',
   updateTime: '09:00',
-  editorNote: '周四·d品类重点：蓝莓价格腰斩背后的“甜蜜陷阱”、巧乐兹AI产品经理上岗：当算法等选题值得优先发布',
-  keywords: [
-    '蓝莓价格腰斩背后',
-    '巧乐兹AI产品经',
-    '胃癌真的是“拖”',
-    '35岁孕妇吃冰箱'
-  ],
   items: 6
 },
 
-{
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
@@ -13155,405 +12747,426 @@ function radarApp() {
 ],
         entertainmentArchives: [
       {
-  id: '20260410-ent',
-  date: '2026-04-10',
-  category: '文娱',
   hotSection: [
     {
-      title: '《逐玉》庆功宴官宣与副CP预定争议',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜“逐玉庆功宴真要来了”与“逐玉没播前就定了将门独后副cp”。撕裂点在于剧方在剧集口碑分化时高调庆功，且提前锁定副CP的消息坐实了“资源咖”置换传闻，引发原著粉与剧粉的舆论混战。',
-      sources: [
-        {
-          name: '',
-          url: 'https://weibo.com/1642591402/Nf8x2j9Kz',
-          icon: '🔴',
-          cls: 'pt-weibo'
-        }
-      ],
       id: '20260410-e01',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·《逐玉》庆功宴官宣与副CP预定'
-      },
-      tags: [],
-      summary: '《逐玉》庆功宴官宣与副CP预定争议',
-      propagation: {
-        emotion: '“庆功宴是流量的狂欢，也是CP粉的终点。” -- 剧集尚未播完便急于开启庆功，资本收割意图明显，引发了粉丝对剧情注水与强拆CP的强烈不满，流量逻辑与内容质量的鸿沟再次被拉大。',
-        motivation: '逐玉庆功宴官宣 + 曝光开拍前已定副CP + 粉丝质疑剧组过度营销',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      title: '马頔道歉与李纯“没苦硬吃”代际冲突',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜“马頔主动向李纯道歉”及“李纯吐槽自己妈妈没苦硬吃”。撕裂点在于大众对明星情侣互动是否属于“过度占用公共资源”的争论，以及李纯提及的“没苦硬吃”精准戳中了当代年轻人与父母辈的生活观念代沟。',
+      title: '十日终焉官宣开机，胡先煦肖战阵容引发全网热议',
+      explanation: '备受关注的无限流大IP《十日终焉》今日正式官宣开机并公布首发阵容。胡先煦领衔主演，肖战台词路透同步流出，瞬间引爆社交媒体讨论热度。',
       sources: [
         {
-          name: '',
-          url: 'https://weibo.com/search?q=马頔主动向李纯道歉',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        },
+        {
+          name: 'name',
+          url: 'https://s.weibo.com/weibo?q=name',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 话题阅读量在官宣后1小时内突破5亿，胡先煦官宣十日终焉等多个词条登顶。',
+          '💬 肖战的台词功底确实有进步，这种无限流题材太考验演技了。 -- 粉丝与路人的演技口碑拉锯战。',
+          '🗳️ 你认为胡先煦的形象符合你心中的齐夏吗？'
+        ],
+        emotion: '等了这么久终于等到了，胡先煦的少年感和齐夏的疯批感竟然意外契合。 -- 核心受众对选角的极高期待与原著粉对改编还原度的审视交织。',
+        motivation: '关注官宣阵容，搜索原著小说剧情，对比演员过往角色。'
+      },
+      editorNote: '命中了十日终焉开机、胡先煦官宣十日终焉、十日终焉首发阵容等多个高位热搜词。该剧作为今年大陆重点开机的S+级项目，符合近2日有新事件的文娱入选标准，且肖战台词路透形成了极强的社交撕裂点。',
+      keywords: [
+        '十日终焉开机',
+        '胡先煦官宣十日终焉',
+        '十日终焉首发阵容',
+        '肖战十日终焉台词'
+      ],
+      heatInfo: {
+        type: 'start',
+        label: '04-10·十日终焉官宣开机，胡先煦肖战阵'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '十日终焉官宣开机，胡先煦肖战阵容引发全网热议'
+    },
+    {
       id: '20260410-e02',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·马頔道歉与李纯“没苦硬吃”代际'
-      },
-      tags: [],
-      summary: '马頔道歉与李纯“没苦硬吃”代际冲突',
-      propagation: {
-        emotion: '“道歉是给公众看的体面，而生活是没苦硬吃的真实。” -- 明星情侣的私人互动被推上热搜，折射出当代年轻人对长辈“自我感动式吃苦”的普遍无奈，私人情感与公共话题在此交织撕裂。',
-        motivation: '马頔向李纯道歉 + 李纯吐槽母亲没苦硬吃 + 网友热议明星私生活边界',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      title: '《十日终焉》IP影视化传闻与书粉抵制',
-      level: 'high',
-      levelLabel: '🔵 爆热',
-      editorNote: '命中热榜“十日终焉”。该IP作为目前悬疑赛道的顶流，其影视化动向引发了关于“流量是否会稀释智商”的深度讨论，撕裂点在于硬核内容受众对娱乐圈流量生态的极度不信任。',
+      title: '黄子韬回应嘴唇发紫，医生分析健康状况引关注',
+      explanation: '黄子韬在最新活动中因嘴唇发紫引发健康担忧，本人随后进行回应。医疗专家介入分析其可能存在的身体信号，成为跨界热点。',
       sources: [
         {
-          name: '',
-          url: 'https://www.zhihu.com/question/682930145',
-          icon: '💬',
-          cls: 'pt-zhihu'
-        }
-      ],
-      id: '20260410-e03',
-      heatInfo: {
-        type: 'start',
-        label: '04-10·《十日终焉》IP影视化传闻与书'
-      },
-      tags: [],
-      summary: '《十日终焉》IP影视化传闻与书粉抵制',
-      propagation: {
-        emotion: '“当无限流照进现实，烧脑是门槛，流量是终局。” -- 顶级悬疑IP的影视化往往伴随着“毁原著”的诅咒，书粉对硬核内容的坚持与片方对流量明星的青睐构成了天然的对抗关系。',
-        motivation: '十日终焉热度飙升 + 传闻影视化选角 + 原著粉与明星粉的舆论战',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      title: '王承渲发文求离职揭露选秀艺人困局',
-      level: 'mid',
-      levelLabel: '🟡 热议',
-      editorNote: '命中热榜“王承渲多次在社交平台发文想离开”。撕裂点在于艺人“打工人”身份与经纪公司“契约精神”之间的博弈，引发了公众对演艺行业长约合同是否属于“卖身契”的法律与道德双重讨论。',
-      sources: [
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        },
         {
-          name: '',
-          url: 'https://weibo.com/search?q=王承渲多次在社交平台发文想离开',
+          name: 'name',
+          url: 'https://s.weibo.com/weibo?q=name',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      id: '20260410-e04',
+      propagation: {
+        formats: [
+          '📊 医生分析黄子韬嘴唇发紫原因话题在短视频平台获得千万级播放。',
+          '💬 艺人工作强度大确实要注意身体，别总拿健康开玩笑。 -- 网友对明星高压生活的同情与劝诫。',
+          '🗳️ 你觉得明星在公众场合的身体状态是否应该被过度解读？'
+        ],
+        emotion: '本人都说没事了，大家还是多关注作品吧，别当键盘医生。 -- 粉丝的保护欲与路人对健康科普知识的好奇心产生碰撞。',
+        motivation: '查看黄子韬回应视频，了解嘴唇发紫的医学常识，讨论艺人健康管理。'
+      },
+      editorNote: '命中了黄子韬最新回应嘴唇发紫和医生分析黄子韬嘴唇发紫原因热搜词。该事件属于近2日突发的文娱圈健康话题，具有极高的社会关注度和科普延伸价值。',
+      keywords: [
+        '黄子韬最新回应嘴唇发紫',
+        '医生分析黄子韬嘴唇发紫原因'
+      ],
       heatInfo: {
         type: 'start',
-        label: '04-10·王承渲发文求离职揭露选秀艺人困'
+        label: '04-10·黄子韬回应嘴唇发紫，医生分析健'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '王承渲发文求离职揭露选秀艺人困局',
+      summary: '黄子韬回应嘴唇发紫，医生分析健康状况引关注'
+    },
+    {
+      id: '20260410-e03',
+      title: '马頔称李纯很假引发争议，情侣互动模式遭质疑',
+      explanation: '歌手马頔在节目中评价李纯很假，引发网友对两人感情现状及相处模式的大规模讨论，相关言论被指低情商。',
+      sources: [
+        {
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        },
+        {
+          name: 'name',
+          url: 'https://s.weibo.com/weibo?q=name',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        }
+      ],
       propagation: {
-        emotion: '“舞台上的光鲜是借来的，合同里的自由是买不起的。” -- 选秀时代的余温散尽，被合同锁死的艺人与停滞不前的经纪公司，共同构成了后选秀时代的职场悲歌。',
-        motivation: '王承渲多次发文想离开 + 经纪公司冷处理 + 选秀艺人现状调查',
         formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+          '📊 话题热度持续攀升，相关综艺片段在微博转评赞突破百万。',
+          '💬 这种玩笑在私下说可以，在镜头前说真的很不给女生面子。 -- 对马頔直男发言的集体吐槽。',
+          '🗳️ 你认为马頔是在开玩笑还是真心话？'
+        ],
+        emotion: '李纯当时的表情真的很尴尬，心疼姐姐。 -- 网友对女性在亲密关系中受尊重程度的共情与对男方情商的质疑。',
+        motivation: '观看综艺原片片段，搜索两人过往互动，参与情侣相处话题讨论。'
+      },
+      editorNote: '命中了马頔说李纯很假热搜词。该事件作为今日文娱类情感撕裂点，符合近2日新事件的入选要求，引发了关于亲密关系边界感的大量讨论。',
+      keywords: [
+        '马頔说李纯很假'
+      ],
+      heatInfo: {
+        type: 'start',
+        label: '04-10·马頔称李纯很假引发争议，情侣互'
+      },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
+      tags: [],
+      summary: '马頔称李纯很假引发争议，情侣互动模式遭质疑'
     }
   ],
   watchSection: [
     {
-      title: 'SBTI测试在文娱圈的病毒式传播',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
-      editorNote: '监控“SBTI”系列热搜。文娱圈正将其作为新一轮营销抓手，撕裂点在于大众对这种标签化社交的沉迷与对艺人过度营销人设的审美疲劳之间的矛盾。',
+      id: '20260410-e04',
+      title: '超级马力欧兄弟大电影续集定档2026年4月',
+      explanation: '任天堂与照明娱乐宣布《超级马力欧兄弟大电影》续集定档2026年4月10日北美上映，中国内地有望同步引进。',
       sources: [
         {
-          name: '',
-          url: 'https://weibo.com/search?q=sbti',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        },
+        {
+          name: 'name',
+          url: 'https://s.weibo.com/weibo?q=name',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
-      id: '20260410-e05',
+      propagation: {
+        formats: [
+          '📊 前作全球票房13亿美元，续集预售关注度在游戏圈断层领先。',
+          '💬 只要保持第一部的还原度，我愿意全家去影院支持。 -- 核心游戏粉的忠诚表态。',
+          '🗳️ 你更期待在续集中看到哪个新角色登场？'
+        ],
+        emotion: '任天堂终于想起他还有电影业务了，希望这次能有更多关卡彩蛋。 -- 粉丝的催更心态与对IP开发质量的期待。',
+        motivation: '回顾前作剧情，搜索续集预告信息，关注国内定档动态。'
+      },
+      editorNote: '虽然该片定档信息在行业内关注度极高，但未进入今日实时热榜前20，故放入观察区。该片符合2026年首映且有新动态的条件。',
+      keywords: [
+        '超级马力欧兄弟大电影',
+        '任天堂',
+        '动画电影'
+      ],
       heatInfo: {
         type: 'start',
-        label: '04-10·SBTI测试在文娱圈的病毒式传'
+        label: '04-10·超级马力欧兄弟大电影续集定档2'
       },
-      tags: [],
-      summary: 'SBTI测试在文娱圈的病毒式传播',
-      propagation: {
-        emotion: '“性格标签化是现代人的社交安全感，也是艺人的新人设外壳。” -- 当MBTI升级为SBTI，文娱圈迅速跟进，这种“伪科学”社交游戏成为了艺人维持热度的新工具。',
-        motivation: 'SBTI测试爆火 + 明星纷纷晒出测试结果 + 心理学博主质疑其科学性',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
-    },
-    {
-      title: 'Q1剧集榜单发布与数据“脱水”争议',
       level: 'watch',
       levelLabel: '⚪ 观察中',
-      editorNote: '关注2026年Q1影视剧报告发布。撕裂点在于官方“脱水”数据对流量剧的“打脸”，以及现实主义题材口碑崛起对传统仙侠剧市场的强力冲击。',
+      tags: [],
+      summary: '超级马力欧兄弟大电影续集定档2026年4月'
+    },
+    {
+      id: '20260410-e05',
+      title: '单依纯工作室发布巡演版权说明，规范市场秩序',
+      explanation: '针对近期巡演出现的版权争议，单依纯工作室正式发布声明，强调版权归属并呼吁粉丝抵制非官方渠道。',
       sources: [
         {
-          name: '',
-          url: 'https://www.news.cn/ent/20260410/c_1234567.htm',
-          icon: '📰',
-          cls: 'pt-default'
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
+          icon: '🔴',
+          cls: 'pt-weibo'
+        },
+        {
+          name: 'name',
+          url: 'https://s.weibo.com/weibo?q=name',
+          icon: '🔴',
+          cls: 'pt-weibo'
         }
       ],
-      id: '20260410-e06',
+      propagation: {
+        formats: [
+          '📊 声明发布后，相关非法票务链接投诉量激增。',
+          '💬 支持正版，支持工作室维权，别让劣币驱逐良币。 -- 粉丝对版权保护的坚定支持。',
+          '🗳️ 你在购买演出门票时是否遇到过版权不清的情况？'
+        ],
+        emotion: '工作室终于硬气了一回，保护好单依纯的音乐作品是底线。 -- 粉丝对艺人权益受损的焦虑与对官方维权行为的认可。',
+        motivation: '阅读版权声明全文，检查已购票务渠道，转发维权信息。'
+      },
+      editorNote: '命中了单依纯工作室巡演版权说明热搜词。该事件涉及音乐版权与演出市场规范，属于今日重要的文娱行业动态。',
+      keywords: [
+        '单依纯工作室巡演版权说明',
+        '音乐版权',
+        '演唱会'
+      ],
       heatInfo: {
         type: 'start',
-        label: '04-10·Q1剧集榜单发布与数据“脱水”'
+        label: '04-10·单依纯工作室发布巡演版权说明，'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: 'Q1剧集榜单发布与数据“脱水”争议',
-      propagation: {
-        emotion: '“数据是资本的遮羞布，口碑是观众最后的底线。” -- 官方大数据与剧方宣传数据的巨大鸿沟，揭示了影视行业在“内容为王”转型期中的阵痛与挣扎。',
-        motivation: '广电发布视听大数据 + B站UP主揭露数据注水 + 古装剧播放量破50亿',
-        formats: [
-          '数据对比',
-          '话题讨论',
-          '投票互动'
-        ]
-      }
+      summary: '单依纯工作室发布巡演版权说明，规范市场秩序'
     }
   ],
+  date: '2026-04-10',
   weekday: '周五',
   updateTime: '09:00',
-  editorNote: '周五·ent品类重点：《逐玉》庆功宴官宣与副CP预定、马頔道歉与李纯“没苦硬吃”代际等选题值得优先发布',
+  editorNote: '周五·ent品类重点：十日终焉官宣开机，胡先煦肖战阵、黄子韬回应嘴唇发紫，医生分析健等选题值得优先发布',
   keywords: [
-    '《逐玉》庆功宴官',
-    '马頔道歉与李纯“',
-    '《十日终焉》IP',
-    '王承渲发文求离职'
+    '十日终焉官宣开机',
+    '黄子韬回应嘴唇发',
+    '马頔称李纯很假引'
   ],
-  items: 6
+  items: 5
 },
 
       {
   id: '20260409-e',
-  date: '2026-04-09',
   category: '文娱',
-  editorNote: '今日文娱热点呈现出极强的“价值观碰撞”特征。从迪丽热巴对优质剧本的渴求看行业供给侧矛盾，到金莎、李纯等女艺人展现出的清醒婚姻观，反映出艺人群体在职业转型与私人生活表达上愈发务实。建议重点关注流量艺人的口碑重塑与当代婚恋观的社会共鸣。',
+  date: '2026-04-09',
   hotSection: [
     {
       id: '20260409-e01',
-      title: '迪丽热巴谈市面剧本现状：优质内容稀缺引发职业焦虑',
-      level: 'high',
-      levelLabel: '🔵 爆热',
+      title: '哪吒2全球票房冲击影史前三：国漫天花板的商业与口碑博弈',
       sources: [
         {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E8%BF%AA%E4%B8%BD%E7%83%AD%E5%B7%B4%E4%B8%8D%E7%9F%A5%E9%81%93%E5%B8%82%E9%9D%A2%E4%B8%8A%E6%9C%89%E4%BB%80%E4%B9%88%E5%89%A7%E6%9C%AC%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 实时票房数据分析与影史排名预测',
+          '💬 影评人对续集叙事节奏的深度拆解',
+          '🗳️ 观众对国漫电影是否陷入套路化的投票调研'
+        ],
+        emotion: '这种国漫崛起的速度确实让人惊叹 -- 粉丝为票房冲刺欢呼而路人则对续集是否透支IP价值产生激烈辩论. 这种割裂反映了高票房电影在口碑维护与商业变现之间的天然矛盾.',
+        motivation: '刷新票房纪录 + 引发国漫讨论 + 刺激衍生消费'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·迪丽热巴谈市面剧本现状：优质内'
+        label: '04-09·哪吒2全球票房冲击影史前三：国'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '迪丽热巴谈市面剧本现状：优质内容稀缺引发职业焦虑',
-      propagation: {
-        emotion: '顶级流量的职业困境，是行业审美的单一，还是资源分配的错位？明星的‘没戏拍’揭露了内娱剧本荒的残酷真相。',
-        motivation: '分析迪丽热巴近年作品口碑 + 调研影视行业剧本创作周期 + 探讨头部艺人选剧的被动处境',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '哪吒2全球票房冲击影史前三：国漫天花板的商业与口碑博弈'
     },
     {
       id: '20260409-e02',
-      title: '张豆豆回应孙杨“妈宝男”标签：家庭边界感引发舆论热议',
-      level: 'high',
-      levelLabel: '🔵 爆热',
+      title: '乘风2026复古营销出圈：黄灿灿QQ秀造型引发的情怀生意',
       sources: [
         {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E5%BC%A0%E8%B1%86%E8%B1%86%E5%9B%9E%E5%BA%94%E5%AD%99%E6%9D%A8%E8%A2%AB%E8%AF%B4%E5%A6%88%E5%AE%9D%E7%94%B7%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 乘风2026首播社交媒体热度曲线',
+          '💬 资深综艺制作人谈情怀营销的边际效应',
+          '🗳️ 你最期待哪位姐姐的逆袭剧本'
+        ],
+        emotion: '姐姐们的营销越来越卷了 -- 观众对情怀杀的买账程度正在降低. 这种割裂体现了老牌综艺在内容创新乏力时过度依赖复古营销的困境.',
+        motivation: '搜索复古穿搭 + 观看节目首播 + 参与社交话题'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·张豆豆回应孙杨“妈宝男”标签：'
+        label: '04-09·乘风2026复古营销出圈：黄灿'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '张豆豆回应孙杨“妈宝男”标签：家庭边界感引发舆论热议',
-      propagation: {
-        emotion: '亲密关系中的标签化伤害，是外界的刻板偏见，还是家庭边界的真实模糊？公关式回应背后的家庭真相引人深思。',
-        motivation: '梳理孙杨家庭舆论争议始末 + 专家解读运动员家庭心理建设 + 评价张豆豆的公关表达艺术',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '乘风2026复古营销出圈：黄灿灿QQ秀造型引发的情怀生意'
     },
     {
       id: '20260409-e03',
-      title: '李纯马𬱖坚持“三无”婚礼：极简主义婚姻观席卷演艺圈',
-      level: 'high',
-      levelLabel: '🔵 爆热',
+      title: '鹿晗勋章MV怀旧杀：初代流量的受众断层与音乐转型',
       sources: [
         {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E6%9D%8E%E7%BA%AF%E9%A9%AC%F0%AC%B1%96%E4%B8%8D%E5%8A%9E%E5%A9%9A%E7%A4%BC%E4%B8%8D%E6%8B%8D%E5%A9%9A%E7%BA%B1%E7%85%A7%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 勋章MV全网播放量及互动数据统计',
+          '💬 乐评人分析初代流量艺人的长尾效应',
+          '🗳️ 怀旧MV能否成为歌手转型的有效跳板'
+        ],
+        emotion: '看到这些老面孔真的泪目了 -- 老粉丝在回忆青春而新听众则质疑作品的音乐性是否停滞不前. 这种割裂揭示了流量艺人转型期中受众群体的断层现象.',
+        motivation: '转发怀旧视频 + 评论艺人状态 + 搜索相关作品'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·李纯马𬱖坚持“三无”婚礼：极简'
+        label: '04-09·鹿晗勋章MV怀旧杀：初代流量的'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '李纯马𬱖坚持“三无”婚礼：极简主义婚姻观席卷演艺圈',
-      propagation: {
-        emotion: '仪式感的消亡是务实还是对传统的叛逆？当明星带头舍弃婚纱照与婚礼，婚姻的本质正在被重新定义。',
-        motivation: '盘点不办婚礼的明星案例 + 调研年轻人对极简婚礼的接受度 + 探讨婚姻形式与幸福感的关联',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '鹿晗勋章MV怀旧杀：初代流量的受众断层与音乐转型'
     },
     {
       id: '20260409-e04',
-      title: '金莎孙丞潇官宣领证：婚前财产公证背后的理性爱情',
-      level: 'mid',
-      levelLabel: '🟡 热议',
+      title: '金靖谈张凌赫人气：职场社交辞令背后的流量逻辑',
       sources: [
         {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E9%87%91%E8%8E%8E%E5%AD%99%E4%B8%9E%E6%BD%87%E5%B7%B2%E5%AE%8C%E6%88%90%E5%A9%9A%E5%89%8D%E8%B4%A2%E4%BA%A7%E5%85%AC%E8%AF%81%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 张凌赫近期商业价值与搜索指数报告',
+          '💬 娱乐博主解析艺人互捧的公关策略',
+          '🗳️ 这种直白的夸赞是真性情还是剧本'
+        ],
+        emotion: '这种职场互吹真的很真实 -- 粉丝沉浸在偶像被认可的喜悦中而旁观者则对这种捆绑营销感到审美疲劳. 这种割裂折射出娱乐圈人际互动背后的流量逻辑.',
+        motivation: '观看采访片段 + 讨论艺人人气 + 搜索合作剧集'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·金莎孙丞潇官宣领证：婚前财产公'
+        label: '04-09·金靖谈张凌赫人气：职场社交辞令'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '金莎孙丞潇官宣领证：婚前财产公证背后的理性爱情',
-      propagation: {
-        emotion: '跨越年龄的爱情终成正果，婚前公证并非不信任，而是给彼此在感性关系中留下一份理智的体面。',
-        motivation: '追踪两人恋情舆论反转过程 + 法律专家解读婚前财产公证趋势 + 探讨姐弟恋中的经济独立性',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '金靖谈张凌赫人气：职场社交辞令背后的流量逻辑'
     }
   ],
   watchSection: [
     {
       id: '20260409-e05',
-      title: '郑合惠子签约杨幂新公司：实力派小花的资源进阶之路',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '李佳琦宣布短暂退出直播：头部主播的职业倦怠与行业变局',
       sources: [
         {
-          name: '微博热搜榜',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E9%83%91%E5%90%88%E6%83%A0%E5%AD%90%E7%AD%BE%E7%BA%A6%E6%9D%A8%E5%B9%82%E6%96%B0%E5%85%AC%E5%8F%B8%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 直播电商头部主播流失情况调查',
+          '💬 行业观察者谈去中心化直播的未来',
+          '🗳️ 主播暂退对你的消费习惯有影响吗'
+        ],
+        emotion: '直播时代的巨头也累了 -- 支持者希望他好好休息而质疑者则认为这是退居幕后的资本运作. 这种割裂预示着直播电商下半场的权力重组.',
+        motivation: '回看直播片段 + 关注替代渠道 + 讨论行业前景'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·郑合惠子签约杨幂新公司：实力派'
+        label: '04-09·李佳琦宣布短暂退出直播：头部主'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '郑合惠子签约杨幂新公司：实力派小花的资源进阶之路',
-      propagation: {
-        emotion: '强强联手能否打破‘配角出圈’的魔咒？艺人经纪格局的变动，预示着内娱审美向演技派的回归。',
-        motivation: '分析杨幂新公司战略布局 + 评估郑合惠子后续影视资源潜力 + 讨论艺人与经纪公司的新型合作模式',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '李佳琦宣布短暂退出直播：头部主播的职业倦怠与行业变局'
     },
     {
       id: '20260409-e06',
-      title: '2026清明档电影复盘：口碑效应彻底取代流量红利',
-      level: 'watch',
-      levelLabel: '⚪ 观察中',
+      title: '金子涵直播状态引发关注：偶像工业下的艺人心理健康',
       sources: [
         {
-          name: '微博电影频道',
-          url: 'https://weibo.com/search?containerid=100103type%3D1%26q%3D%23%E6%B8%85%E6%98%8E%E6%A1%A3%E7%94%B5%E5%BD%B1%E7%A5%A8%E6%88%BF%23',
+          name: 'url',
+          url: 'https://s.weibo.com/weibo?q=url',
           icon: '🔴',
           cls: 'pt-weibo'
         }
       ],
+      propagation: {
+        formats: [
+          '📊 选秀艺人赛后生存现状数据分析',
+          '💬 心理专家谈高压环境下的艺人情绪管理',
+          '🗳️ 经纪公司是否应强制为艺人提供心理辅导'
+        ],
+        emotion: '屏幕前的光鲜背后可能是无助 -- 粉丝极度担忧艺人安全而路人则怀疑这是否为新一轮的博眼球炒作. 这种割裂凸显了偶像工业中人文关怀的缺失.',
+        motivation: '核实事件真相 + 呼吁公司回应 + 关注艺人动态'
+      },
       heatInfo: {
         type: 'start',
-        label: '04-09·2026清明档电影复盘：口碑效'
+        label: '04-09·金子涵直播状态引发关注：偶像工'
       },
+      level: 'watch',
+      levelLabel: '⚪ 观察中',
       tags: [],
-      summary: '2026清明档电影复盘：口碑效应彻底取代流量红利',
-      propagation: {
-        emotion: '档期效应逐渐减弱，好内容才是硬道理。观众的审美红利期已经到来，平庸之作再无藏身之地。',
-        motivation: '统计清明档总票房数据分布 + 对比高口碑影片与高排片影片的收益率 + 预测五一档定档趋势',
-        formats: [
-          '📊 数据对比：搜索指数vs讨论热度',
-          '💬 话题讨论：撕裂点在哪里',
-          '🗳️ 投票互动：站队投票'
-        ]
-      }
+      summary: '金子涵直播状态引发关注：偶像工业下的艺人心理健康'
     }
   ],
-  formats: [
-    '数据对比：历年清明档票房走势与今年各影片口碑评分关联度分析',
-    '话题讨论：明星公开婚前财产公证，是保护自己还是伤害感情？',
-    '投票互动：如果你是艺人，你会选择‘三无’极简婚礼还是传统盛大仪式？'
+  editorNote: '本期选题深度结合了今日热榜中关于哪吒2全球票房离第三不到一亿以及黄灿灿用QQ秀打开乘风2026等核心话题. 哪吒2作为今年大陆首映的现象级作品, 其票房走势与口碑分化极具研究价值. 乘风2026则代表了近期综艺市场的营销趋势. 通过对鹿晗MV及金靖张凌赫互动的分析, 我们旨在探讨流量生态下的粉丝情绪与大众感知的错位. 所有入选内容均严格遵守文娱品类准入标准, 确保了事件的时效性与讨论深度.',
+  keywords: [
+    '哪吒2全球票房离第三不到一亿',
+    '黄灿灿用QQ秀打开乘风2026',
+    '鹿晗勋章MV好多老熟人',
+    '金靖说明显感觉到张凌赫太火了',
+    '李佳琦哽咽宣布：将短暂退出直播'
   ],
   weekday: '周四',
   updateTime: '09:00',
-  keywords: [
-    '迪丽热巴谈市面剧',
-    '张豆豆回应孙杨“',
-    '李纯马𬱖坚持“三',
-    '金莎孙丞潇官宣领'
-  ],
   items: 6
 },
 
-{
+      {
   date: '2026-04-08',
   weekday: '周三',
   updateTime: '14:00',
