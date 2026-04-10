@@ -346,6 +346,30 @@
           </template>
         </div>
       </div>
+
+      <!-- 热榜来源说明 -->
+      <div class="mt-3 bg-black/15 backdrop-blur rounded-xl px-4 py-3 border border-white/10">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-white/50 text-xs font-bold uppercase tracking-wider">📡 数据来源</span>
+          <span class="text-white/30 text-xs">每日 6 路热榜实时抓取</span>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs text-white/60">
+          <span class="flex items-center gap-1"><span>🔴</span><span>微博热搜</span></span>
+          <span class="text-white/20">·</span>
+          <span class="flex items-center gap-1"><span>🔵</span><span>百度热搜</span></span>
+          <span class="text-white/20">·</span>
+          <span class="flex items-center gap-1"><span>📰</span><span>头条热榜</span></span>
+          <span class="text-white/20">·</span>
+          <span class="flex items-center gap-1"><span>📄</span><span>澎湃热榜</span></span>
+          <span class="text-white/20">·</span>
+          <span class="flex items-center gap-1"><span>💬</span><span>知乎热榜</span></span>
+          <span class="text-white/20">·</span>
+          <span class="flex items-center gap-1"><span>🛒</span><span>什么值得买</span></span>
+        </div>
+        <div class="mt-2 text-white/35 text-xs leading-relaxed">
+          🔥 卡片上的「热榜词」标签 = 选题命中的原始热搜词，点击直达热点现场
+        </div>
+      </div>
     </div>
 
     <!-- 统计栏 -->
@@ -442,7 +466,18 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(idx+1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-high" x-text="item.levelLabel"></span>
                 <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
-                <template x-for="src in item.sources">
+                <!-- 热榜命中词标签 -->
+                <template x-if="item.hotWord">
+                  <a :href="item.sources && item.sources[0] ? item.sources[0].url : '#'"
+                    target="_blank" rel="noopener"
+                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-bold border cursor-pointer transition-opacity hover:opacity-80"
+                    :style="'background:' + activeCat.bgLight + '; border-color:' + activeCat.color + '33; color:' + activeCat.color">
+                    <span>🔥</span>
+                    <span x-text="item.hotWord"></span>
+                    <span class="opacity-40">↗</span>
+                  </a>
+                </template>
+                <template x-for="src in (item.sources || []).slice(item.hotWord ? 1 : 0)">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
                     <span x-text="src.name"></span>
@@ -493,11 +528,14 @@
                 </div>
                 <div class="prop-row">
                   <div class="prop-icon bg-slate-50">✍️</div>
-                  <div>
-                    <div class="prop-label">推荐内容形式</div>
-                    <div class="flex flex-wrap mt-1">
-                      <template x-for="fmt in item.propagation.formats">
-                        <span class="format-pill" x-text="fmt"></span>
+                  <div class="flex-1">
+                    <div class="prop-label">内容操作指南</div>
+                    <div class="flex flex-col gap-1 mt-1">
+                      <template x-for="(fmt, fi) in item.propagation.formats">
+                        <div class="flex items-start gap-1.5">
+                          <span class="text-xs font-black text-slate-300 mt-0.5 shrink-0 w-4" x-text="['①','②','③'][fi] || (fi+1)+'.'"></span>
+                          <span class="format-pill flex-1 text-left" x-text="fmt"></span>
+                        </div>
                       </template>
                     </div>
                   </div>
@@ -529,7 +567,17 @@
                 <span class="text-xs font-black text-slate-300 tabular-nums" x-text="'#' + String(hotItems.length + idx + 1).padStart(2,'0')"></span>
                 <span class="text-xs px-2.5 py-0.5 rounded-full badge-mid" x-text="item.levelLabel"></span>
                 <span x-show="item.isNew" class="badge-new">🌅 下午新增</span>
-                <template x-for="src in item.sources">
+                <!-- 热榜命中词标签（watch区） -->
+                <template x-if="item.hotWord">
+                  <a :href="item.sources && item.sources[0] ? item.sources[0].url : '#'"
+                    target="_blank" rel="noopener"
+                    class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-bold border cursor-pointer transition-opacity hover:opacity-80 bg-sky-50 border-sky-200 text-sky-600">
+                    <span>📡</span>
+                    <span x-text="item.hotWord"></span>
+                    <span class="opacity-40">↗</span>
+                  </a>
+                </template>
+                <template x-for="src in (item.sources || []).slice(item.hotWord ? 1 : 0)">
                   <a :href="src.url" target="_blank" rel="noopener" class="platform-tag" :class="src.cls">
                     <span x-text="src.icon"></span>
                     <span x-text="src.name"></span>
@@ -577,11 +625,14 @@
                 </div>
                 <div class="prop-row">
                   <div class="prop-icon bg-sky-50">✍️</div>
-                  <div>
-                    <div class="prop-label">推荐内容形式</div>
-                    <div class="flex flex-wrap mt-1">
-                      <template x-for="fmt in item.propagation.formats">
-                        <span class="format-pill" x-text="fmt"></span>
+                  <div class="flex-1">
+                    <div class="prop-label">内容操作指南</div>
+                    <div class="flex flex-col gap-1 mt-1">
+                      <template x-for="(fmt, fi) in item.propagation.formats">
+                        <div class="flex items-start gap-1.5">
+                          <span class="text-xs font-black text-slate-300 mt-0.5 shrink-0 w-4" x-text="['①','②','③'][fi] || (fi+1)+'.'"></span>
+                          <span class="format-pill flex-1 text-left" x-text="fmt"></span>
+                        </div>
                       </template>
                     </div>
                   </div>
@@ -594,8 +645,8 @@
     </section>
 
     <footer class="mt-10 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 space-y-1">
-      <p>本简报由兴趣雷达系统每日自动生成，内容基于过去24小时公开信息检索与编辑筛选</p>
-      <p>含微博 / 小红书 / 抖音 / 虎扑多平台 · 每日更新 09:00（北京时间）</p>
+      <p>本简报由兴趣雷达系统每日自动生成 · 热点数据来自微博/百度/头条/澎湃/知乎/什么值得买 6 路热榜实时抓取</p>
+      <p>🔥 热榜命中词 = 当日真实热搜词 · 点击标签直达热点现场 · 每日更新 09:00 / 14:00（北京时间）</p>
     </footer>
 
   </main>
