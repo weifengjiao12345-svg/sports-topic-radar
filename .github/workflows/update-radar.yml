@@ -1,0 +1,103 @@
+# ⚡ 热点雷达 - 每日自动更新
+# 9:00 全量更新（--full） | 14:00 增量补跑（--search）
+# 更新后自动推送到 main 分支，触发 GitHub Pages 部署
+
+name: 热点雷达自动更新
+
+on:
+  # 每天 9:00 北京时间（UTC+8）→ UTC 1:00
+  schedule:
+    - cron: '0 1 * * *'
+    - cron: '0 6 * * *'
+
+  # 允许手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update-radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 检出代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 安装依赖
+        run: pip install pytz requests
+
+      - name: 🔍 判断运行模式（全量 / 增量补跑）
+        id: mode
+        run: |
+          HOUR=$(TZ='Asia/Shanghai' date +%H)
+          echo "当前北京时间: ${HOUR}点"
+          if [ "$HOUR" -lt "12" ]; then
+            echo "mode=full" >> $GITHUB_OUTPUT
+            echo "label=🌅 早间全量更新 (9:00)" >> $GITHUB_OUTPUT
+          else
+            echo "mode=supplement" >> $GITHUB_OUTPUT
+            echo "label=☀️ 下午增量补跑 (14:00)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🌅 运行全量更新 (--full)
+        if: steps.mode.outputs.mode == 'full'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python update_radar.py --full
+          echo "✅ 全量更新完成"
+
+      - name: ☀️ 运行增量补跑 (--search)
+        if: steps.mode.outputs.mode == 'supplement'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python update_radar.py --search
+          echo "✅ 增量补跑完成"
+
+      - name: 📊 检查是否有变更
+        id: check_changes
+        run: |
+          if git diff --quiet index.html; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ 无数据变更，跳过提交"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "📝 检测到 index.html 变更"
+            git diff --stat index.html
+          fi
+
+      - name: 🚀 提交并推送变更
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          TZ='Asia/Shanghai'
+          DATE=$(TZ='Asia/Shanghai' date '+%Y-%m-%d')
+          TIME=$(TZ='Asia/Shanghai' date '+%H:%M')
+          MODE="${{ steps.mode.outputs.label }}"
+          
+          git config user.name "radar-bot"
+          git config user.email "radar-bot@users.noreply.github.com"
+          
+          git add index.html track_keywords.json
+          git commit -m "🤖 ${MODE} | ${DATE} ${TIME}"
+          
+          git push origin main
+          echo "✅ 已推送到 main，GitHub Pages 将自动部署"
+
+      - name: ✅ 无变更通知
+        if: steps.check_changes.outputs.changed == 'false'
+        run: |
+          echo "📋 今日无新热榜数据或 Gemini 提炼结果无变化"
+          echo "跳过提交，等待下次定时任务"
