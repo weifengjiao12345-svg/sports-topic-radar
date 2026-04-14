@@ -34,7 +34,8 @@ COMPACT = NOW.strftime('%Y%m%d')
 YEAR_MONTH = NOW.strftime('%Y年%m月')
 YEAR = NOW.year
 
-WORKSPACE = '/Users/jiaojiao/WorkBuddy/20260413150055/topic-radar'
+# 动态获取工作目录（兼容本地和 GitHub Actions）
+WORKSPACE = os.path.dirname(os.path.abspath(__file__))
 HTML_PATH = f'{WORKSPACE}/index.html'
 TRACK_PATH = f'{WORKSPACE}/track_keywords.json'
 TMP_DIR = f'{WORKSPACE}/tmp'
@@ -44,7 +45,7 @@ HOT_API_BASE = 'https://hot-api.codebanana.app'
 HOT_PLATFORMS = ['weibo', 'douyin', 'baidu', 'thepaper', 'toutiao', 'bilibili']
 
 # Gemini API（只用于提炼，不用于搜索）
-GEMINI_API_KEY = '1sGK0Ye0792JMtNQD4D59770-0859-4958-bBdA-F451De4d'
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 GEMINI_ENDPOINT = 'https://api.modelverse.cn/v1/chat/completions'
 GEMINI_MODEL = 'gemini-3-flash-preview'
 
