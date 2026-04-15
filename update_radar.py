@@ -588,15 +588,31 @@ def validate_html():
         f.write(js)
         tmp = f.name
 
-    # 尝试多个 node 路径
+    # 尝试多个 node 路径（绝对路径用 isfile，命令名用 shutil.which）
+    import shutil
     node_cmd = None
-    for candidate in ['node', '/usr/local/bin/node', '/opt/homebrew/bin/node',
-                      os.path.expanduser('~/.workbuddy/binaries/node/versions/22.12.0/bin/node')]:
-        if os.path.isfile(candidate) or candidate == 'node':
-            node_cmd = candidate
-            break
+    for candidate in [
+        os.path.expanduser('~/.workbuddy/binaries/node/versions/22.12.0/bin/node'),
+        '/usr/local/bin/node',
+        '/opt/homebrew/bin/node',
+        'node',
+    ]:
+        if os.path.isabs(candidate):
+            if os.path.isfile(candidate):
+                node_cmd = candidate
+                break
+        else:
+            if shutil.which(candidate):
+                node_cmd = candidate
+                break
 
-    r = subprocess.run([node_cmd or 'node', '--check', tmp], capture_output=True, text=True)
+    if not node_cmd:
+        # node 不可用，跳过 JS 验证（GitHub Actions 有 node，本地可能没有）
+        print('⚠️ 未找到 node，跳过 JS 语法验证')
+        os.unlink(tmp)
+        return
+
+    r = subprocess.run([node_cmd, '--check', tmp], capture_output=True, text=True)
     os.unlink(tmp)
 
     if r.returncode != 0:
