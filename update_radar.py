@@ -18,6 +18,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta
@@ -246,7 +247,7 @@ def load_track_keywords():
 
 # ============ Gemini API ============
 def call_gemini(system_prompt, user_content, max_tokens=7000, temperature=0.5):
-    """调用 Gemini API（仅用于提炼，不用于搜索）"""
+    """调用 Gemini API（仅用于提炼，不用于搜索），失败自动重试3次"""
     payload = json.dumps({
         'model': GEMINI_MODEL,
         'messages': [
@@ -267,9 +268,18 @@ def call_gemini(system_prompt, user_content, max_tokens=7000, temperature=0.5):
         method='POST',
     )
 
-    with urllib.request.urlopen(req, timeout=90) as resp:
-        result = json.loads(resp.read().decode())
-        return result['choices'][0]['message']['content']
+    last_err = None
+    for attempt in range(1, 4):  # 最多重试3次
+        try:
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                result = json.loads(resp.read().decode())
+                return result['choices'][0]['message']['content']
+        except Exception as e:
+            last_err = e
+            if attempt < 3:
+                print(f'    ⚠️ Gemini 调用失败（第{attempt}次），{5}秒后重试... ({e})')
+                time.sleep(5)
+    raise last_err
 
 
 # ============ Gemini 提炼 ============
