@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-选题雷达更新脚本 v3（Hot API 真实热榜版）
+选题雷达更新脚本 v4（本地热点采集版）
 
 架构：
-  Hot API（真实热榜）→ 按品类关键词匹配 → Gemini 提炼 → 写入 HTML
+  crawl-all.js（34平台热榜）→ 按品类关键词匹配 → Gemini 提炼 → 写入 HTML
 
 用法：
   python update_radar.py --full      # 完整流程（推荐）
@@ -41,9 +41,31 @@ HTML_PATH = f'{WORKSPACE}/index.html'
 TRACK_PATH = f'{WORKSPACE}/track_keywords.json'
 TMP_DIR = f'{WORKSPACE}/tmp'
 
-# Hot API（真实热榜聚合）
-HOT_API_BASE = 'https://hot-api.codebanana.app'
-HOT_PLATFORMS = ['weibo', 'douyin', 'baidu', 'thepaper', 'toutiao', 'bilibili']
+# 热点采集脚本路径（34平台，免费，无需 API Key）
+import shutil
+CRAWL_SCRIPT = os.path.join(os.path.expanduser('~/.workbuddy/skills/hot/scripts'), 'crawl-all.js')
+# GitHub Actions 中的路径
+CRAWL_SCRIPT_CI = os.path.join(WORKSPACE, 'scripts', 'crawl-all.js')
+# 优先使用 CI 路径（部署时 crawl-all.js 在仓库内），其次用本地 skill 路径
+CRAWL_SCRIPT_ACTIVE = CRAWL_SCRIPT_CI if os.path.isfile(CRAWL_SCRIPT_CI) else CRAWL_SCRIPT
+
+# 需要采集的平台（按品类相关性分组，全量采集）
+CRAWL_PLATFORMS = [
+    # 社交媒体
+    'weibo', 'xiaohongshu', 'douyin', 'kuaishou', 'qq', 'quark',
+    # 搜索/问答
+    'baidu', 'baidutieba', 'zhihu',
+    # 视频/二次元
+    'bilibili', 'lol',
+    # 新闻/科技
+    'toutiao', 'netease', 'thepaper', 'ithome', 'huxiu', 'ifanr', '36kr',
+    # 技术社区
+    'juejin', 'csdn', 'github',
+    # 豆瓣
+    'douban', 'douban-movie',
+    # 其他
+    'hupu', 'dongchedi',
+]
 
 # Gemini API（只用于提炼，不用于搜索）
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
@@ -128,46 +150,84 @@ CATEGORY_KEYWORDS = {
 }
 
 
-# ============ Hot API 调用 ============
-def fetch_hot_api(platform):
-    """从 Hot API 拉取单个平台热榜，返回 [{title, desc, hot, url}]"""
-    try:
-        url = f'{HOT_API_BASE}/api/{platform}'
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode())
-            items = data.get('data', [])
-            # 每条加上平台标记
-            for item in items:
-                item['platform'] = platform
-            return items
-    except Exception as e:
-        print(f'  ⚠️ Hot API [{platform}] 失败: {e}')
-        return []
+# ============ Node.js 热点采集 ============
+def find_node():
+    """查找可用的 node 命令"""
+    if shutil.which('node'):
+        return 'node'
+    candidates = [
+        '/usr/local/bin/node', '/opt/homebrew/bin/node',
+        os.path.expanduser('~/.workbuddy/binaries/node/versions/22.12.0/bin/node'),
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return c
+    return None
+
+
+def crawl_hot_data():
+    """通过 crawl-all.js 逐平台采集热榜数据"""
+    if not os.path.isfile(CRAWL_SCRIPT_ACTIVE):
+        print(f'  ⚠️ 采集脚本不存在: {CRAWL_SCRIPT_ACTIVE}')
+        return {}
+
+    node_cmd = find_node()
+    if not node_cmd:
+        print('  ⚠️ 未找到 node，无法运行采集脚本')
+        return {}
+
+    all_results = {}
+    for platform in CRAWL_PLATFORMS:
+        cmd = [node_cmd, CRAWL_SCRIPT_ACTIVE, f'--platform={platform}', '--limit=50']
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
+            if result.returncode == 0 and result.stdout.strip():
+                data = json.loads(result.stdout.strip())
+                if data.get('status') == 'ok':
+                    all_results.update(data.get('results', {}))
+        except subprocess.TimeoutExpired:
+            print(f'  ⚠️ {platform}: 超时')
+        except Exception as e:
+            print(f'  ⚠️ {platform}: {str(e)[:50]}')
+
+    return all_results
 
 
 def fetch_all_hot():
-    """拉取所有平台热榜，返回合并去重后的列表"""
-    print(f'\n🔥 拉取 Hot API 热榜（{len(HOT_PLATFORMS)} 个平台）...')
-    all_items = []
-    platform_icons = {
-        'weibo': '🔴', 'douyin': '🎵', 'baidu': '📺',
-        'thepaper': '📰', 'toutiao': '📰', 'bilibili': '🎬',
+    """采集所有平台热榜，返回合并去重后的列表"""
+    print(f'\n🔥 采集热榜数据（{len(CRAWL_PLATFORMS)} 个平台）...')
+    raw_results = crawl_hot_data()
+
+    # 平台图标和名称映射
+    platform_meta = {
+        'weibo': ('🔴', '微博'), 'xiaohongshu': ('📕', '小红书'), 'douyin': ('🎵', '抖音'),
+        'kuaishou': ('📹', '快手'), 'qq': ('💬', 'QQ'), 'quark': ('🔍', '夸克'),
+        'baidu': ('📺', '百度'), 'baidutieba': ('📋', '贴吧'), 'zhihu': ('💬', '知乎'),
+        'bilibili': ('🎬', 'B站'), 'lol': ('🎮', '英雄联盟'),
+        'toutiao': ('📰', '头条'), 'netease': ('📰', '网易'), 'thepaper': ('📰', '澎湃'),
+        'ithome': ('💻', 'IT之家'), 'huxiu': ('🐯', '虎嗅'), 'ifanr': ('✨', '爱范儿'),
+        '36kr': ('💰', '36kr'), 'juejin': ('⭐', '掘金'), 'csdn': ('💻', 'CSDN'),
+        'github': ('🐙', 'GitHub'), 'douban': ('🎬', '豆瓣'), 'douban-movie': ('🎥', '豆瓣电影'),
+        'hupu': ('🏀', '虎扑'), 'dongchedi': ('🚗', '懂车帝'),
     }
 
-    for platform in HOT_PLATFORMS:
-        items = fetch_hot_api(platform)
-        icon = platform_icons.get(platform, '📰')
+    all_items = []
+    for name, result in raw_results.items():
+        if not result.get('success'):
+            icon, label = platform_meta.get(name, ('📰', name))
+            print(f'  ⚠️ {label}: 失败 ({result.get("error", "未知")[:40]})')
+            continue
+        icon, label = platform_meta.get(name, ('📰', name))
+        items = result.get('data', {}).get('sj', [])
         for item in items:
+            item['platform'] = name
             item['icon'] = icon
-            item['platform_name'] = {
-                'weibo': '微博', 'douyin': '抖音', 'baidu': '百度',
-                'thepaper': '澎湃', 'toutiao': '头条', 'bilibili': 'B站',
-            }.get(platform, platform)
-        all_items.extend(items)
-        print(f'  ✅ {platform}: {len(items)}条 | Top3: {[v["title"][:15] for v in items[:3]]}')
+            item['platform_name'] = label
+            all_items.append(item)
+        top3 = [v.get('title', '')[:15] for v in items[:3]]
+        print(f'  ✅ {label}: {len(items)}条 | Top3: {top3}')
 
-    # 按 hot 值排序（hot 可能是字符串，统一转 int）
+    # 按 hot 值排序
     for item in all_items:
         try:
             item['hot'] = int(str(item.get('hot', 0)).replace(',', ''))
@@ -656,14 +716,14 @@ def update_track_keywords():
 
 # ============ 主流程 ============
 def main():
-    parser = argparse.ArgumentParser(description='选题雷达更新脚本 v3（Hot API 真实热榜版）')
+    parser = argparse.ArgumentParser(description='选题雷达更新脚本 v4（本地热点采集版）')
     parser.add_argument('--search',  action='store_true', help='仅拉取热榜，保存 search_results.json')
     parser.add_argument('--process', action='store_true', help='读取已保存热榜，执行提炼+写入')
     parser.add_argument('--full',    action='store_true', help='完整流程（推荐）')
     args = parser.parse_args()
 
     print(f'\n{"="*60}')
-    print(f'选题雷达更新 v3 | {TODAY} {WEEKDAY} | 节日：{FESTIVAL_NAME}（距今{DAYS_TO_FESTIVAL}天）')
+    print(f'选题雷达更新 v4 | {TODAY} {WEEKDAY} | 节日：{FESTIVAL_NAME}（距今{DAYS_TO_FESTIVAL}天）')
     print(f'{"="*60}\n')
 
     track_data = load_track_keywords()
@@ -729,10 +789,8 @@ def main():
         print('✅ 更新完成！')
         print(f'{"="*60}')
 
-        print('\n📝 部署指令：')
-        print(f"  deploy_to_vercel(workspace='{WORKSPACE}/运动户外选题雷达')")
-        print(f"  vercel alias set <部署URL> interest-radar-daily.codebanana.app")
-        print(f"  GitHub 同步: repos/weifengjiao12345-svg/sports-topic-radar")
+        print('\n📝 部署：')
+        print(f'  GitHub Pages 自动部署: weifengjiao12345-svg.github.io/sports-topic-radar')
 
 
 if __name__ == '__main__':
